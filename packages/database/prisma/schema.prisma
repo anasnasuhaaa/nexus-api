@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  schemas  = ["core", "nexus", "tevo"]
+}
+
+enum UnitType {
+  BPH
+  BIRO
+  DEPARTEMEN
+
+  @@schema("core")
+}
+
+model CabinetPeriod {
+  id        String   @id @default(uuid())
+  name      String
+  slug      String   @unique
+  startDate DateTime @db.Date
+  endDate   DateTime @db.Date
+  isActive  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  birdeps Birdep[]
+
+  @@schema("core")
+}
+
+model Birdep {
+  id              String   @id @default(uuid())
+  cabinetPeriodId String
+  name            String
+  code            String
+  slug            String
+  unitType        UnitType
+  description     String   @db.Text
+  focusArea       String   @db.Text
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  cabinetPeriod CabinetPeriod @relation(fields: [cabinetPeriodId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  @@unique([cabinetPeriodId, code])
+  @@unique([cabinetPeriodId, slug])
+  @@schema("core")
+}
