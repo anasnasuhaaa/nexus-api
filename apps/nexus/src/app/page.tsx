@@ -2,6 +2,7 @@ import { ShieldCheck } from "lucide-react";
 
 import { ModeToggle } from "@/components/theme/mode-toggle";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function HomePage() {
   return (
@@ -41,9 +42,11 @@ export default function HomePage() {
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
-              Theme Primary Berhasil
-            </Button>
+            <Link href="/login">
+              <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+                Masuk ke Nexus
+              </Button>
+            </Link>
 
             <Button variant="outline">
               Dashboard Segera Tersedia

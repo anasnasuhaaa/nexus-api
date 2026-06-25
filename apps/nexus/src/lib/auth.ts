@@ -9,7 +9,7 @@ export const auth = betterAuth({
 
   emailAndPassword: {
     enabled: true,
-    disableSignUp: true,
+    disableSignUp: process.env.ALLOW_AUTH_SEED_SIGNUP !== "true",
   },
 
   user: {
