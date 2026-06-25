@@ -1,10 +1,8 @@
 import "dotenv/config";
 
+import crypto from "node:crypto";
 import { PrismaPg } from "@prisma/adapter-pg";
-import {
-  PrismaClient,
-  UnitType,
-} from "../src/generated/prisma/client";
+import { PrismaClient, UnitType } from "../src/generated/prisma/client";
 
 const connectionString = process.env.DATABASE_URL;
 
@@ -28,50 +26,40 @@ const birdeps = [
     slug: "bph",
     name: "Badan Pengurus Harian",
     unitType: UnitType.BPH,
-    description:
-      "Badan Pengurus Harian Ormawa Eksekutif PKU IPB.",
-    focusArea:
-      "Koordinasi, pengawasan, dan pengambilan keputusan organisasi.",
+    description: "Badan Pengurus Harian Ormawa Eksekutif PKU IPB.",
+    focusArea: "Koordinasi, pengawasan, dan pengambilan keputusan organisasi.",
   },
   {
     code: "INTERNAL",
     slug: "internal",
     name: "Biro Internal",
     unitType: UnitType.BIRO,
-    description:
-      "Biro Internal Ormawa Eksekutif PKU IPB.",
-    focusArea:
-      "Akan dilengkapi melalui modul pengelolaan profil Birdep.",
+    description: "Biro Internal Ormawa Eksekutif PKU IPB.",
+    focusArea: "Akan dilengkapi melalui modul pengelolaan profil Birdep.",
   },
   {
     code: "MEDBRAND",
     slug: "medbrand",
     name: "Biro Media Branding",
     unitType: UnitType.BIRO,
-    description:
-      "Biro Media Branding Ormawa Eksekutif PKU IPB.",
-    focusArea:
-      "Akan dilengkapi melalui modul pengelolaan profil Birdep.",
+    description: "Biro Media Branding Ormawa Eksekutif PKU IPB.",
+    focusArea: "Akan dilengkapi melalui modul pengelolaan profil Birdep.",
   },
   {
     code: "RISTEK",
     slug: "ristek",
     name: "Biro Riset dan Teknologi",
     unitType: UnitType.BIRO,
-    description:
-      "Biro Riset dan Teknologi Ormawa Eksekutif PKU IPB.",
-    focusArea:
-      "Akan dilengkapi melalui modul pengelolaan profil Birdep.",
+    description: "Biro Riset dan Teknologi Ormawa Eksekutif PKU IPB.",
+    focusArea: "Akan dilengkapi melalui modul pengelolaan profil Birdep.",
   },
   {
     code: "KOMIT",
     slug: "komit",
     name: "Biro Kolaborasi dan Kemitraan",
     unitType: UnitType.BIRO,
-    description:
-      "Biro Kolaborasi dan Kemitraan Ormawa Eksekutif PKU IPB.",
-    focusArea:
-      "Akan dilengkapi melalui modul pengelolaan profil Birdep.",
+    description: "Biro Kolaborasi dan Kemitraan Ormawa Eksekutif PKU IPB.",
+    focusArea: "Akan dilengkapi melalui modul pengelolaan profil Birdep.",
   },
   {
     code: "ADKESMAH",
@@ -80,18 +68,15 @@ const birdeps = [
     unitType: UnitType.DEPARTEMEN,
     description:
       "Departemen Advokasi dan Kesejahteraan Mahasiswa Ormawa Eksekutif PKU IPB.",
-    focusArea:
-      "Akan dilengkapi melalui modul pengelolaan profil Birdep.",
+    focusArea: "Akan dilengkapi melalui modul pengelolaan profil Birdep.",
   },
   {
     code: "AKPRES",
     slug: "akpres",
     name: "Departemen Akademik dan Prestasi",
     unitType: UnitType.DEPARTEMEN,
-    description:
-      "Departemen Akademik dan Prestasi Ormawa Eksekutif PKU IPB.",
-    focusArea:
-      "Akan dilengkapi melalui modul pengelolaan profil Birdep.",
+    description: "Departemen Akademik dan Prestasi Ormawa Eksekutif PKU IPB.",
+    focusArea: "Akan dilengkapi melalui modul pengelolaan profil Birdep.",
   },
   {
     code: "KASTRAT",
@@ -100,18 +85,15 @@ const birdeps = [
     unitType: UnitType.DEPARTEMEN,
     description:
       "Departemen Kajian dan Aksi Strategis Ormawa Eksekutif PKU IPB.",
-    focusArea:
-      "Akan dilengkapi melalui modul pengelolaan profil Birdep.",
+    focusArea: "Akan dilengkapi melalui modul pengelolaan profil Birdep.",
   },
   {
     code: "PERAGA",
     slug: "peraga",
     name: "Departemen Pemuda dan Olahraga",
     unitType: UnitType.DEPARTEMEN,
-    description:
-      "Departemen Pemuda dan Olahraga Ormawa Eksekutif PKU IPB.",
-    focusArea:
-      "Akan dilengkapi melalui modul pengelolaan profil Birdep.",
+    description: "Departemen Pemuda dan Olahraga Ormawa Eksekutif PKU IPB.",
+    focusArea: "Akan dilengkapi melalui modul pengelolaan profil Birdep.",
   },
   {
     code: "PSDM",
@@ -120,18 +102,15 @@ const birdeps = [
     unitType: UnitType.DEPARTEMEN,
     description:
       "Departemen Pengembangan Sumber Daya Mahasiswa Ormawa Eksekutif PKU IPB.",
-    focusArea:
-      "Akan dilengkapi melalui modul pengelolaan profil Birdep.",
+    focusArea: "Akan dilengkapi melalui modul pengelolaan profil Birdep.",
   },
   {
     code: "SENBUD",
     slug: "senbud",
     name: "Departemen Seni dan Budaya",
     unitType: UnitType.DEPARTEMEN,
-    description:
-      "Departemen Seni dan Budaya Ormawa Eksekutif PKU IPB.",
-    focusArea:
-      "Akan dilengkapi melalui modul pengelolaan profil Birdep.",
+    description: "Departemen Seni dan Budaya Ormawa Eksekutif PKU IPB.",
+    focusArea: "Akan dilengkapi melalui modul pengelolaan profil Birdep.",
   },
   {
     code: "SLH",
@@ -140,18 +119,15 @@ const birdeps = [
     unitType: UnitType.DEPARTEMEN,
     description:
       "Departemen Sosial dan Lingkungan Hidup Ormawa Eksekutif PKU IPB.",
-    focusArea:
-      "Akan dilengkapi melalui modul pengelolaan profil Birdep.",
+    focusArea: "Akan dilengkapi melalui modul pengelolaan profil Birdep.",
   },
   {
     code: "EKRAF",
     slug: "ekraf",
     name: "Departemen Ekonomi Kreatif",
     unitType: UnitType.DEPARTEMEN,
-    description:
-      "Departemen Ekonomi Kreatif Ormawa Eksekutif PKU IPB.",
-    focusArea:
-      "Akan dilengkapi melalui modul pengelolaan profil Birdep.",
+    description: "Departemen Ekonomi Kreatif Ormawa Eksekutif PKU IPB.",
+    focusArea: "Akan dilengkapi melalui modul pengelolaan profil Birdep.",
   },
 ] as const;
 
@@ -207,6 +183,51 @@ async function main() {
       },
     });
   }
+  const superAdminMember = await prisma.member.upsert({
+    where: {
+      nim: "0000000000",
+    },
+    update: {
+      fullName: "Super Admin Nexus",
+      instagram: null,
+      isActive: true,
+    },
+    create: {
+      fullName: "Super Admin Nexus",
+      nim: "0000000000",
+      instagram: null,
+      isActive: true,
+    },
+  });
+
+  await prisma.user.upsert({
+    where: {
+      email: "superadmin@nexus.local",
+    },
+    update: {
+      name: "Super Admin Nexus",
+      emailVerified: true,
+      image: null,
+      role: "SUPER_ADMIN",
+      mustChangePassword: true,
+      memberId: superAdminMember.id,
+      updatedAt: new Date(),
+    },
+    create: {
+      id: crypto.randomUUID(),
+      name: "Super Admin Nexus",
+      email: "superadmin@nexus.local",
+      emailVerified: true,
+      image: null,
+      role: "SUPER_ADMIN",
+      mustChangePassword: true,
+      memberId: superAdminMember.id,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  });
+
+  console.log("Akun Super Admin awal berhasil disiapkan.");
 
   console.log(`${birdeps.length} unit organisasi berhasil disiapkan.`);
   console.log("Seed database selesai.");

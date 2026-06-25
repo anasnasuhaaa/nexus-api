@@ -1,6 +1,6 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
   importFileExtension = "ts"
 }
 
@@ -79,6 +79,7 @@ model Member {
   updatedAt DateTime @updatedAt
 
   memberships Membership[]
+  users       User[]
 
   @@schema("core")
 }
@@ -106,18 +107,23 @@ model Membership {
 }
 
 model User {
-  id            String   @id
-  name          String
-  email         String
-  emailVerified Boolean
-  image         String?
-  createdAt     DateTime
-  updatedAt     DateTime
+  id                 String   @id
+  name               String
+  email              String
+  emailVerified      Boolean
+  image              String?
+  role               String   @default("ANGGOTA_BIRDEP")
+  mustChangePassword Boolean  @default(true)
+  memberId           String?
+  createdAt          DateTime
+  updatedAt          DateTime
 
+  member   Member?   @relation(fields: [memberId], references: [id], onDelete: SetNull, onUpdate: Cascade)
   sessions Session[]
   accounts Account[]
 
   @@unique([email])
+  @@index([memberId])
   @@map("user")
   @@schema("nexus")
 }

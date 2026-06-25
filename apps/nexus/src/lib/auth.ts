@@ -12,5 +12,27 @@ export const auth = betterAuth({
     disableSignUp: true,
   },
 
+  user: {
+    additionalFields: {
+      role: {
+        type: "string",
+        required: true,
+        defaultValue: "ANGGOTA_BIRDEP",
+        input: false,
+      },
+      mustChangePassword: {
+        type: "boolean",
+        required: true,
+        defaultValue: true,
+        input: false,
+      },
+      memberId: {
+        type: "string",
+        required: false,
+        input: false,
+      },
+    },
+  },
+
   trustedOrigins: ["http://localhost:3000"],
 });
