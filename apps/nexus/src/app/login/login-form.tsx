@@ -31,12 +31,14 @@ export function LoginForm() {
       toast.error("Login gagal", {
         description:
           error.message || "Periksa kembali email dan password yang digunakan.",
+        duration: 2000,
       });
       return;
     }
 
     toast.success("Login berhasil", {
       description: "Selamat datang di Nexus.",
+      duration: 2000,
     });
 
     router.push("/dashboard");

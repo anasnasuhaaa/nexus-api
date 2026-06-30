@@ -26,6 +26,7 @@ export function LogoutButton() {
 
     toast.success("Berhasil keluar", {
       description: "Session Nexus telah diakhiri.",
+        duration: 2000,
     });
 
     router.push("/login");
