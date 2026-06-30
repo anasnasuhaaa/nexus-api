@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "@orma/database";
+import { prisma, ProgramStatus } from "@orma/database";
 import * as XLSX from "xlsx";
 
 const REQUIRED_HEADERS = [
@@ -258,9 +258,7 @@ export async function parseProgramImportFile(
       normalizedRow.progress_percent,
     );
     const pressReleaseUrl = normalizeCell(normalizedRow.press_release_url);
-    const isPublishedToTevo = parseBoolean(
-      normalizedRow.is_published_to_tevo,
-    );
+    const isPublishedToTevo = parseBoolean(normalizedRow.is_published_to_tevo);
 
     const errors: string[] = [];
 
@@ -304,7 +302,9 @@ export async function parseProgramImportFile(
       const parsedEndDate = new Date(`${endDate}T00:00:00.000Z`);
 
       if (parsedEndDate < parsedStartDate) {
-        errors.push("Tanggal selesai tidak boleh lebih awal dari tanggal mulai.");
+        errors.push(
+          "Tanggal selesai tidak boleh lebih awal dari tanggal mulai.",
+        );
       }
     }
 
@@ -356,7 +356,9 @@ export async function parseProgramImportFile(
     };
   });
 
-  const validRows = rows.filter((row) => row.validationStatus === "VALID").length;
+  const validRows = rows.filter(
+    (row) => row.validationStatus === "VALID",
+  ).length;
   const invalidRows = rows.length - validRows;
 
   return {
@@ -370,6 +372,145 @@ export async function parseProgramImportFile(
       totalRows: rows.length,
       validRows,
       invalidRows,
+    },
+  };
+}
+
+export type ConfirmProgramImportResult = {
+  success: boolean;
+  message: string;
+  summary: {
+    importedRows: number;
+    skippedRows: number;
+  };
+};
+
+function parseProgramDate(value: string) {
+  return new Date(`${value}T00:00:00.000Z`);
+}
+
+export async function confirmProgramImportFile(
+  formData: FormData,
+): Promise<ConfirmProgramImportResult> {
+  const preview = await parseProgramImportFile(formData);
+
+  if (!preview.success) {
+    return {
+      success: false,
+      message: preview.message,
+      summary: {
+        importedRows: 0,
+        skippedRows: 0,
+      },
+    };
+  }
+
+  if (preview.summary.invalidRows > 0) {
+    return {
+      success: false,
+      message:
+        "Import dibatalkan. Masih ada baris invalid, silakan perbaiki file terlebih dahulu.",
+      summary: {
+        importedRows: 0,
+        skippedRows: preview.summary.invalidRows,
+      },
+    };
+  }
+
+  const activeCabinet = await prisma.cabinetPeriod.findFirst({
+    where: {
+      isActive: true,
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  if (!activeCabinet) {
+    return {
+      success: false,
+      message: "Periode kabinet aktif belum tersedia.",
+      summary: {
+        importedRows: 0,
+        skippedRows: preview.rows.length,
+      },
+    };
+  }
+
+  const birdeps = await prisma.birdep.findMany({
+    where: {
+      cabinetPeriodId: activeCabinet.id,
+      isActive: true,
+    },
+    select: {
+      id: true,
+      code: true,
+    },
+  });
+
+  const birdepByCode = new Map(birdeps.map((birdep) => [birdep.code, birdep]));
+
+  let importedRows = 0;
+
+  for (const row of preview.rows) {
+    const birdep = birdepByCode.get(row.birdepCode);
+
+    if (!birdep) {
+      return {
+        success: false,
+        message: `Kode Birdep ${row.birdepCode} tidak ditemukan pada baris ${row.rowNumber}.`,
+        summary: {
+          importedRows,
+          skippedRows: preview.rows.length - importedRows,
+        },
+      };
+    }
+
+    const existingProgram = await prisma.program.findUnique({
+      where: {
+        birdepId_slug: {
+          birdepId: birdep.id,
+          slug: row.slug,
+        },
+      },
+    });
+
+    if (existingProgram) {
+      return {
+        success: false,
+        message: `Program dengan slug ${row.slug} sudah ada pada Birdep ${row.birdepCode}.`,
+        summary: {
+          importedRows,
+          skippedRows: preview.rows.length - importedRows,
+        },
+      };
+    }
+
+    await prisma.program.create({
+      data: {
+        birdepId: birdep.id,
+        title: row.title,
+        slug: row.slug,
+        description: row.description,
+        objective: row.objective || null,
+        startDate: parseProgramDate(row.startDate),
+        endDate: row.endDate ? parseProgramDate(row.endDate) : null,
+        status: row.status as ProgramStatus,
+        progressPercent: row.progressPercent,
+        pressReleaseUrl: row.pressReleaseUrl || null,
+        isPublishedToTevo: row.isPublishedToTevo,
+      },
+    });
+
+    importedRows++;
+  }
+
+  return {
+    success: true,
+    message: `${importedRows} program kerja berhasil diimport ke database.`,
+    summary: {
+      importedRows,
+      skippedRows: 0,
     },
   };
 }

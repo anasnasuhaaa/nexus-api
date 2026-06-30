@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   AlertCircle,
   CheckCircle2,
@@ -13,6 +14,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
 import {
+  confirmProgramImportFile,
   parseProgramImportFile,
   ProgramImportPreviewResult,
 } from "./actions";
@@ -20,6 +22,10 @@ import {
 export function ProgramImportForm() {
   const [result, setResult] = useState<ProgramImportPreviewResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const router = useRouter();
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isImporting, setIsImporting] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -54,6 +60,40 @@ export function ProgramImportForm() {
     });
   }
 
+  async function handleConfirmImport() {
+    if (!selectedFile) {
+      toast.error("File belum dipilih", {
+        description: "Pilih file XLSX terlebih dahulu.",
+        duration: 2000,
+      });
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+
+    setIsImporting(true);
+    const response = await confirmProgramImportFile(formData);
+    setIsImporting(false);
+
+    if (!response.success) {
+      toast.error("Import gagal", {
+        description: response.message,
+        duration: 2000,
+      });
+      return;
+    }
+
+    toast.success("Import berhasil", {
+      description: response.message,
+      duration: 2000,
+    });
+
+    setResult(null);
+    setSelectedFile(null);
+    router.refresh();
+  }
+
   return (
     <div className="space-y-6">
       <section className="rounded-3xl border bg-card p-5 shadow-sm">
@@ -73,7 +113,10 @@ export function ProgramImportForm() {
                 type="file"
                 accept=".xlsx"
                 required
-                onChange={() => setResult(null)}
+                onChange={(event) => {
+                  setSelectedFile(event.target.files?.[0] ?? null);
+                  setResult(null);
+                }}
                 className="block w-full rounded-xl border border-input bg-background px-3 py-2 text-sm file:mr-4 file:rounded-lg file:border-0 file:bg-primary file:px-3 file:py-1.5 file:text-sm file:font-semibold file:text-primary-foreground"
               />
 
@@ -149,6 +192,36 @@ export function ProgramImportForm() {
               </p>
             </div>
           </div>
+
+          {result.summary.totalRows > 0 ? (
+            <div className="flex flex-col gap-3 rounded-3xl border bg-card p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 className="font-black tracking-tight">Konfirmasi Import</h2>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Data hanya bisa diimport jika semua baris valid.
+                </p>
+              </div>
+
+              <Button
+                type="button"
+                disabled={result.summary.invalidRows > 0 || isImporting}
+                onClick={handleConfirmImport}
+                className="bg-primary text-primary-foreground hover:bg-primary/90"
+              >
+                {isImporting ? (
+                  <>
+                    <Loader2 className="size-4 animate-spin" />
+                    Mengimport...
+                  </>
+                ) : (
+                  <>
+                    <Upload className="size-4" />
+                    Confirm Import
+                  </>
+                )}
+              </Button>
+            </div>
+          ) : null}
 
           <div className="overflow-hidden rounded-3xl border bg-card shadow-sm">
             <div className="border-b px-5 py-4">
