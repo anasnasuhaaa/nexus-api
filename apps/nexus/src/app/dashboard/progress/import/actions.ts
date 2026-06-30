@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "@orma/database";
+import { prisma, ProgressUpdateStatus, ProgramStatus } from "@orma/database";
 import * as XLSX from "xlsx";
 
 const REQUIRED_HEADERS = [
@@ -265,6 +265,139 @@ export async function parseProgressImportFile(
       totalRows: rows.length,
       validRows,
       invalidRows,
+    },
+  };
+}
+
+export type ConfirmProgressImportResult = {
+  success: boolean;
+  message: string;
+  summary: {
+    importedRows: number;
+    skippedRows: number;
+  };
+};
+
+function parseProgressDate(value: string) {
+  return new Date(`${value}T00:00:00.000Z`);
+}
+
+function getProgramKeyForImport(birdepCode: string, programSlug: string) {
+  return `${birdepCode}::${programSlug}`;
+}
+
+function getProgramStatusFromProgress(status: string): ProgramStatus | null {
+  if (status === "DONE") {
+    return "COMPLETED";
+  }
+
+  return null;
+}
+
+export async function confirmProgressImportFile(
+  formData: FormData,
+): Promise<ConfirmProgressImportResult> {
+  const preview = await parseProgressImportFile(formData);
+
+  if (!preview.success) {
+    return {
+      success: false,
+      message: preview.message,
+      summary: {
+        importedRows: 0,
+        skippedRows: 0,
+      },
+    };
+  }
+
+  if (preview.summary.invalidRows > 0) {
+    return {
+      success: false,
+      message:
+        "Import dibatalkan. Masih ada baris invalid, silakan perbaiki file terlebih dahulu.",
+      summary: {
+        importedRows: 0,
+        skippedRows: preview.summary.invalidRows,
+      },
+    };
+  }
+
+  const programs = await prisma.program.findMany({
+    select: {
+      id: true,
+      slug: true,
+      progressPercent: true,
+      birdep: {
+        select: {
+          code: true,
+        },
+      },
+    },
+  });
+
+  const programByKey = new Map(
+    programs.map((program) => [
+      getProgramKeyForImport(program.birdep.code, program.slug),
+      program,
+    ]),
+  );
+
+  let importedRows = 0;
+
+  for (const row of preview.rows) {
+    const programKey = getProgramKeyForImport(row.birdepCode, row.programSlug);
+    const program = programByKey.get(programKey);
+
+    if (!program) {
+      return {
+        success: false,
+        message: `Program ${row.programSlug} pada Birdep ${row.birdepCode} tidak ditemukan pada baris ${row.rowNumber}.`,
+        summary: {
+          importedRows,
+          skippedRows: preview.rows.length - importedRows,
+        },
+      };
+    }
+
+    await prisma.programProgressUpdate.create({
+      data: {
+        programId: program.id,
+        authorUserId: null,
+        title: row.title,
+        note: row.note,
+        obstacle: row.obstacle || null,
+        nextStep: row.nextStep || null,
+        progressPercent: row.progressPercent,
+        status: row.status as ProgressUpdateStatus,
+        reportedAt: parseProgressDate(row.reportedAt),
+      },
+    });
+
+    const nextProgramStatus = getProgramStatusFromProgress(row.status);
+
+    await prisma.program.update({
+      where: {
+        id: program.id,
+      },
+      data: {
+        progressPercent: row.progressPercent,
+        ...(nextProgramStatus
+          ? {
+              status: nextProgramStatus,
+            }
+          : {}),
+      },
+    });
+
+    importedRows++;
+  }
+
+  return {
+    success: true,
+    message: `${importedRows} progress update berhasil diimport ke database.`,
+    summary: {
+      importedRows,
+      skippedRows: 0,
     },
   };
 }
