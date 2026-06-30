@@ -45,7 +45,7 @@ export function LogoutButton() {
         }
       >
         <LogOut className="size-4" />
-        Keluar
+        Logout
       </AlertDialogTrigger>
 
       <AlertDialogContent>

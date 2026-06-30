@@ -1,5 +1,7 @@
 import { prisma } from "@orma/database";
-import { BadgeCheck, Search, UserRound, UsersRound } from "lucide-react";
+import Link from "next/link";
+import { BadgeCheck, Search, Upload, UserRound, UsersRound } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 import { DataTable } from "@/components/data-table/data-table";
 
@@ -77,9 +79,18 @@ export default async function MembersPage() {
             </p>
           </div>
 
-          <div className="flex items-center gap-2 rounded-2xl border bg-background px-3 py-2 text-sm text-muted-foreground">
-            <Search className="size-4" />
-            CRUD dan import akan dibuat setelah fondasi UI stabil
+          <div className="flex flex-col gap-2 sm:flex-row">
+            {/* <div className="flex items-center gap-2 rounded-2xl border bg-background px-3 py-2 text-sm text-muted-foreground">
+              <Search className="size-4" />
+              Filter aktif berdasarkan nama anggota
+            </div> */}
+
+      <Link href="/dashboard/members/import">
+  <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+    <Upload className="size-4" />
+    Import XLSX
+  </Button>
+</Link>
           </div>
         </div>
       </section>
