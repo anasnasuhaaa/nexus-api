@@ -1,6 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
+import Link from "next/link";
 import { ArrowUpDown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -70,7 +71,13 @@ export const programColumns: ColumnDef<ProgramTableRow>[] = [
     ),
     cell: ({ row }) => (
       <div>
-        <div className="font-semibold">{row.original.title}</div>
+        <Link
+          href={`/dashboard/programs/${row.original.id}`}
+          className="font-semibold text-foreground transition hover:text-primary"
+        >
+          {row.original.title}
+        </Link>
+
         <div className="mt-1 text-xs text-muted-foreground">
           {row.original.slug}
         </div>
