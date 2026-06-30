@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { prisma } from "@orma/database";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -18,11 +19,27 @@ export default async function DashboardLayout({
     redirect("/login");
   }
 
+  const user = await prisma.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
+    select: {
+      name: true,
+      email: true,
+      role: true,
+    },
+  });
+
+  if (!user) {
+    redirect("/login");
+  }
+
   return (
     <DashboardShell
       user={{
-        name: session.user.name,
-        email: session.user.email,
+        name: user.name,
+        email: user.email,
+        role: user.role,
       }}
     >
       {children}

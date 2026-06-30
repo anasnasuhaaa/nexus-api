@@ -9,6 +9,7 @@ type DashboardShellProps = {
   user: {
     name: string;
     email: string;
+    role: string;
   };
 };
 

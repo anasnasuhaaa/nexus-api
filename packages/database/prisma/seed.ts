@@ -131,6 +131,186 @@ const birdeps = [
   },
 ] as const;
 
+const roles = [
+  {
+    code: "SUPER_ADMIN",
+    name: "Super Admin",
+    description: "Akses penuh untuk seluruh sistem Nexus.",
+  },
+  {
+    code: "BPH",
+    name: "BPH",
+    description: "Akses monitoring lintas Birdep dan approval internal.",
+  },
+  {
+    code: "TEVO_ADMIN",
+    name: "Tevo Admin",
+    description: "Mengelola konten publik yang akan dikonsumsi website Tevo.",
+  },
+  {
+    code: "KETUA_BIRDEP",
+    name: "Ketua Birdep",
+    description: "Mengelola data dan program kerja Birdep masing-masing.",
+  },
+  {
+    code: "SEKRETARIS_BIRDEP",
+    name: "Sekretaris Birdep",
+    description: "Membantu pengelolaan administrasi Birdep masing-masing.",
+  },
+  {
+    code: "BENDAHARA_BIRDEP",
+    name: "Bendahara Birdep",
+    description:
+      "Membantu pengelolaan informasi keuangan/program Birdep masing-masing.",
+  },
+  {
+    code: "ANGGOTA_BIRDEP",
+    name: "Anggota Birdep",
+    description: "Akses baca terbatas untuk anggota organisasi.",
+  },
+] as const;
+
+const permissions = [
+  {
+    code: "dashboard.read",
+    name: "Lihat Dashboard",
+    module: "dashboard",
+    description: "Melihat dashboard internal Nexus.",
+  },
+  {
+    code: "member.read",
+    name: "Lihat Anggota",
+    module: "member",
+    description: "Melihat data anggota organisasi.",
+  },
+  {
+    code: "member.create",
+    name: "Tambah Anggota",
+    module: "member",
+    description: "Menambahkan data anggota organisasi.",
+  },
+  {
+    code: "member.update",
+    name: "Ubah Anggota",
+    module: "member",
+    description: "Mengubah data anggota organisasi.",
+  },
+  {
+    code: "member.delete",
+    name: "Hapus Anggota",
+    module: "member",
+    description: "Menghapus atau menonaktifkan data anggota organisasi.",
+  },
+  {
+    code: "birdep.read",
+    name: "Lihat Birdep",
+    module: "birdep",
+    description: "Melihat data biro dan departemen.",
+  },
+  {
+    code: "birdep.update",
+    name: "Ubah Birdep",
+    module: "birdep",
+    description: "Mengubah profil biro atau departemen.",
+  },
+  {
+    code: "program.read",
+    name: "Lihat Program Kerja",
+    module: "program",
+    description: "Melihat data program kerja.",
+  },
+  {
+    code: "program.create",
+    name: "Tambah Program Kerja",
+    module: "program",
+    description: "Menambahkan program kerja.",
+  },
+  {
+    code: "program.update",
+    name: "Ubah Program Kerja",
+    module: "program",
+    description: "Mengubah program kerja.",
+  },
+  {
+    code: "program.delete",
+    name: "Hapus Program Kerja",
+    module: "program",
+    description: "Menghapus atau mengarsipkan program kerja.",
+  },
+  {
+    code: "progress.read",
+    name: "Lihat Progress",
+    module: "progress",
+    description: "Melihat progress program kerja.",
+  },
+  {
+    code: "progress.create",
+    name: "Tambah Progress",
+    module: "progress",
+    description: "Menambahkan laporan progress program kerja.",
+  },
+  {
+    code: "progress.update",
+    name: "Ubah Progress",
+    module: "progress",
+    description: "Mengubah laporan progress program kerja.",
+  },
+  {
+    code: "media.read",
+    name: "Lihat Media",
+    module: "media",
+    description: "Melihat aset media organisasi.",
+  },
+  {
+    code: "media.create",
+    name: "Tambah Media",
+    module: "media",
+    description: "Mengunggah aset media organisasi.",
+  },
+  {
+    code: "media.delete",
+    name: "Hapus Media",
+    module: "media",
+    description: "Menghapus aset media organisasi.",
+  },
+  {
+    code: "tevo.content.read",
+    name: "Lihat Konten Tevo",
+    module: "tevo",
+    description: "Melihat konten publik Tevo.",
+  },
+  {
+    code: "tevo.content.create",
+    name: "Tambah Konten Tevo",
+    module: "tevo",
+    description: "Menambahkan konten publik Tevo.",
+  },
+  {
+    code: "tevo.content.update",
+    name: "Ubah Konten Tevo",
+    module: "tevo",
+    description: "Mengubah konten publik Tevo.",
+  },
+  {
+    code: "tevo.content.approve",
+    name: "Approve Konten Tevo",
+    module: "tevo",
+    description: "Menyetujui konten publik Tevo sebelum publish.",
+  },
+  {
+    code: "user.manage",
+    name: "Kelola User",
+    module: "user",
+    description: "Mengelola akun pengguna Nexus.",
+  },
+  {
+    code: "role.manage",
+    name: "Kelola Role",
+    module: "role",
+    description: "Mengelola role dan permission pengguna.",
+  },
+] as const;
+
 async function main() {
   console.log("Memulai proses seed database...");
 
@@ -200,7 +380,7 @@ async function main() {
     },
   });
 
-  await prisma.user.upsert({
+  const superAdminUser = await prisma.user.upsert({
     where: {
       email: "superadmin@nexus.local",
     },
@@ -227,9 +407,95 @@ async function main() {
     },
   });
 
+  console.log("User Super Admin berhasil dihubungkan ke role SUPER_ADMIN.");
+
   console.log("Akun Super Admin awal berhasil disiapkan.");
 
   console.log(`${birdeps.length} unit organisasi berhasil disiapkan.`);
+
+  for (const role of roles) {
+    await prisma.role.upsert({
+      where: {
+        code: role.code,
+      },
+      update: {
+        name: role.name,
+        description: role.description,
+        isSystem: true,
+      },
+      create: {
+        code: role.code,
+        name: role.name,
+        description: role.description,
+        isSystem: true,
+      },
+    });
+  }
+
+  console.log(`${roles.length} role dasar berhasil disiapkan.`);
+
+  for (const permission of permissions) {
+    await prisma.permission.upsert({
+      where: {
+        code: permission.code,
+      },
+      update: {
+        name: permission.name,
+        module: permission.module,
+        description: permission.description,
+      },
+      create: {
+        code: permission.code,
+        name: permission.name,
+        module: permission.module,
+        description: permission.description,
+      },
+    });
+  }
+
+  console.log(`${permissions.length} permission dasar berhasil disiapkan.`);
+
+  const superAdminRole = await prisma.role.findUniqueOrThrow({
+    where: {
+      code: "SUPER_ADMIN",
+    },
+  });
+
+  await prisma.userRole.upsert({
+    where: {
+      userId_roleId: {
+        userId: superAdminUser.id,
+        roleId: superAdminRole.id,
+      },
+    },
+    update: {},
+    create: {
+      userId: superAdminUser.id,
+      roleId: superAdminRole.id,
+    },
+  });
+
+  const allPermissions = await prisma.permission.findMany();
+
+  for (const permission of allPermissions) {
+    await prisma.rolePermission.upsert({
+      where: {
+        roleId_permissionId: {
+          roleId: superAdminRole.id,
+          permissionId: permission.id,
+        },
+      },
+      update: {},
+      create: {
+        roleId: superAdminRole.id,
+        permissionId: permission.id,
+      },
+    });
+  }
+
+  console.log(
+    `Role SUPER_ADMIN berhasil diberi ${allPermissions.length} permission.`,
+  );
   console.log("Seed database selesai.");
 }
 
