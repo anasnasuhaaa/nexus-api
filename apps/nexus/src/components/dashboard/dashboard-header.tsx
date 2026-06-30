@@ -87,7 +87,7 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
 
           <div className="min-w-0">
             <p className="truncate text-sm font-bold leading-none sm:text-base">
-              Halo, {user.name}
+              {user.name}
             </p>
             <p className="mt-1 truncate text-xs text-muted-foreground">
               {user.email} · {user.role}
