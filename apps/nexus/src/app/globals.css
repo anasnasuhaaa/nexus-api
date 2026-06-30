@@ -47,6 +47,14 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  --color-status-active: var(--status-active);
+  --color-status-active-foreground: var(--status-active-foreground);
+  --color-status-active-soft: var(--status-active-soft);
+
+  --color-status-inactive: var(--status-inactive);
+  --color-status-inactive-foreground: var(--status-inactive-foreground);
+  --color-status-inactive-soft: var(--status-inactive-soft);
 }
 
 :root {
@@ -93,6 +101,14 @@
   --sidebar-accent-foreground: #be1e2d;
   --sidebar-border: #e4e4e7;
   --sidebar-ring: #be1e2d;
+
+  --status-active: #16a34a;
+  --status-active-foreground: #ffffff;
+  --status-active-soft: #dcfce7;
+
+  --status-inactive: #be1e2d;
+  --status-inactive-foreground: #ffffff;
+  --status-inactive-soft: #fef2f2;
 }
 .dark {
   --background: #09090b;
@@ -136,6 +152,14 @@
   --sidebar-accent-foreground: #ffffff;
   --sidebar-border: #27272a;
   --sidebar-ring: #be1e2d;
+
+  --status-active: #22c55e;
+  --status-active-foreground: #052e16;
+  --status-active-soft: #052e16;
+
+  --status-inactive: #be1e2d;
+  --status-inactive-foreground: #ffffff;
+  --status-inactive-soft: #2a0f14;
 }
 
 @layer base {

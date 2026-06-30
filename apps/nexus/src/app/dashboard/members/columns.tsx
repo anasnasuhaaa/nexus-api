@@ -127,11 +127,11 @@ export const memberColumns: ColumnDef<MemberTableRow>[] = [
     header: "Status",
     cell: ({ row }) =>
       row.original.isActive ? (
-        <span className="inline-flex rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary">
+        <span className="inline-flex rounded-full bg-status-active-soft px-2.5 py-1 text-xs font-semibold text-status-active">
           Aktif
         </span>
       ) : (
-        <span className="inline-flex rounded-full bg-muted px-2.5 py-1 text-xs font-semibold text-muted-foreground">
+        <span className="inline-flex rounded-full bg-status-inactive-soft px-2.5 py-1 text-xs font-semibold text-status-inactive">
           Nonaktif
         </span>
       ),
