@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArchiveProgramButton } from "./archive-program-button";
 import { prisma } from "@orma/database";
 import {
   Activity,
@@ -157,6 +158,11 @@ export default async function ProgramDetailPage({
                   Edit Program
                 </Button>
               </Link>
+
+              <ArchiveProgramButton
+                programId={program.id}
+                disabled={program.status === "ARCHIVED"}
+              />
             </div>
 
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-primary">
