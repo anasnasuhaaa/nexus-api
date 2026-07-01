@@ -1,6 +1,6 @@
 "use client";
 
-import { Archive, Loader2 } from "lucide-react";
+import { Trash2, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -16,37 +16,36 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+// Import buttonVariants dari komponen Button
 import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils"; // Import cn untuk menggabungkan class
+import { deleteProgramAction } from "./delete-action";
 
-import { archiveProgramAction } from "./archive-action";
-
-type ArchiveProgramButtonProps = {
+type DeleteProgramButtonProps = {
   programId: string;
   disabled?: boolean;
 };
 
-export function ArchiveProgramButton({
+export function DeleteProgramButton({
   programId,
   disabled = false,
-}: ArchiveProgramButtonProps) {
+}: DeleteProgramButtonProps) {
   const router = useRouter();
-  const [isArchiving, setIsArchiving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
-  async function handleArchive() {
-    setIsArchiving(true);
-    const response = await archiveProgramAction(programId);
-    setIsArchiving(false);
+  async function handleDelete() {
+    setIsDeleting(true);
+    const response = await deleteProgramAction(programId);
+    setIsDeleting(false);
 
     if (!response.success) {
-      toast.error("Gagal mengarsipkan program", {
+      toast.error("Gagal menghapus program", {
         description: response.message,
         duration: 2000,
       });
       return;
     }
 
-    toast.success("Program diarsipkan", {
+    toast.success("Program dihapus", {
       description: response.message,
       duration: 2000,
     });
@@ -57,43 +56,39 @@ export function ArchiveProgramButton({
 
   return (
     <AlertDialog>
+      {/* Terapkan class dari buttonVariants langsung ke Trigger */}
       <AlertDialogTrigger
-        className={cn(
-          buttonVariants({ variant: "outline" }),
-          "border-status-inactive/30 text-status-inactive hover:bg-status-inactive-soft hover:text-status-inactive"
-        )}
-        disabled={disabled || isArchiving}
+        className={buttonVariants({ variant: "destructive" })}
+        disabled={disabled || isDeleting}
       >
-        {isArchiving ? (
+        {isDeleting ? (
           <>
             <Loader2 className="size-4 animate-spin mr-2" />
-            Mengarsipkan...
+            Menghapus...
           </>
         ) : (
           <>
-            <Archive className="size-4 mr-2" />
-            Archive
+            <Trash2 className="size-4 mr-2" />
+            Hapus Permanen
           </>
         )}
       </AlertDialogTrigger>
 
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Arsipkan program kerja?</AlertDialogTitle>
+          <AlertDialogTitle>Hapus permanen program kerja?</AlertDialogTitle>
           <AlertDialogDescription>
-            Program kerja tidak akan dihapus permanen. Statusnya akan berubah
-            menjadi ARCHIVED dan publikasi ke Tevo akan dinonaktifkan. Riwayat
-            progress update tetap tersimpan.
+            Aksi ini tidak dapat dibatalkan. Program kerja ini beserta seluruh riwayat progress update yang terkait akan dihapus selamanya dari sistem.
           </AlertDialogDescription>
         </AlertDialogHeader>
 
         <AlertDialogFooter>
           <AlertDialogCancel>Batal</AlertDialogCancel>
           <AlertDialogAction
-            onClick={handleArchive}
-            className="bg-primary text-primary-foreground hover:bg-primary/90"
+            onClick={handleDelete}
+            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
           >
-            Ya, arsipkan
+            Ya, hapus permanen
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

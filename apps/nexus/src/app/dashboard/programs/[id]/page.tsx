@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArchiveProgramButton } from "./archive-program-button";
+import { UnarchiveProgramButton } from "./unarchive-program-button";
+import { DeleteProgramButton } from "./delete-program-button";
 import { prisma } from "@orma/database";
 import {
   Activity,
@@ -147,22 +149,27 @@ export default async function ProgramDetailPage({
             <div className="mb-4 flex flex-wrap gap-2">
               <Link href="/dashboard/programs">
                 <Button variant="outline">
-                  <ArrowLeft className="size-4" />
+                  <ArrowLeft className="size-4 mr-2" />
                   Kembali
                 </Button>
               </Link>
 
-              <Link href={`/dashboard/programs/${program.id}/edit`}>
-                <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
-                  <Pencil className="size-4" />
-                  Edit Program
-                </Button>
-              </Link>
-
-              <ArchiveProgramButton
-                programId={program.id}
-                disabled={program.status === "ARCHIVED"}
-              />
+              {program.status !== "ARCHIVED" ? (
+                <>
+                  <Link href={`/dashboard/programs/${program.id}/edit`}>
+                    <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+                      <Pencil className="size-4 mr-2" />
+                      Edit Program
+                    </Button>
+                  </Link>
+                  <ArchiveProgramButton programId={program.id} />
+                </>
+              ) : (
+                <>
+                  <UnarchiveProgramButton programId={program.id} />
+                  <DeleteProgramButton programId={program.id} />
+                </>
+              )}
             </div>
 
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-primary">

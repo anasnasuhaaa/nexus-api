@@ -1,6 +1,6 @@
 "use client";
 
-import { Archive, Loader2 } from "lucide-react";
+import { RefreshCw, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -16,84 +16,79 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+// Import buttonVariants dari komponen Button
 import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils"; // Import cn untuk menggabungkan class
+import { unarchiveProgramAction } from "./unarchive-action";
 
-import { archiveProgramAction } from "./archive-action";
-
-type ArchiveProgramButtonProps = {
+type UnarchiveProgramButtonProps = {
   programId: string;
   disabled?: boolean;
 };
 
-export function ArchiveProgramButton({
+export function UnarchiveProgramButton({
   programId,
   disabled = false,
-}: ArchiveProgramButtonProps) {
+}: UnarchiveProgramButtonProps) {
   const router = useRouter();
-  const [isArchiving, setIsArchiving] = useState(false);
+  const [isUnarchiving, setIsUnarchiving] = useState(false);
 
-  async function handleArchive() {
-    setIsArchiving(true);
-    const response = await archiveProgramAction(programId);
-    setIsArchiving(false);
+  async function handleUnarchive() {
+    setIsUnarchiving(true);
+    const response = await unarchiveProgramAction(programId);
+    setIsUnarchiving(false);
 
     if (!response.success) {
-      toast.error("Gagal mengarsipkan program", {
+      toast.error("Gagal memulihkan program", {
         description: response.message,
         duration: 2000,
       });
       return;
     }
 
-    toast.success("Program diarsipkan", {
+    toast.success("Program dipulihkan", {
       description: response.message,
       duration: 2000,
     });
 
-    router.push("/dashboard/programs");
+    router.push(`/dashboard/programs/${programId}`);
     router.refresh();
   }
 
   return (
     <AlertDialog>
+      {/* Terapkan class dari buttonVariants langsung ke Trigger */}
       <AlertDialogTrigger
-        className={cn(
-          buttonVariants({ variant: "outline" }),
-          "border-status-inactive/30 text-status-inactive hover:bg-status-inactive-soft hover:text-status-inactive"
-        )}
-        disabled={disabled || isArchiving}
+        className={buttonVariants({ variant: "outline" })}
+        disabled={disabled || isUnarchiving}
       >
-        {isArchiving ? (
+        {isUnarchiving ? (
           <>
             <Loader2 className="size-4 animate-spin mr-2" />
-            Mengarsipkan...
+            Memulihkan...
           </>
         ) : (
           <>
-            <Archive className="size-4 mr-2" />
-            Archive
+            <RefreshCw className="size-4 mr-2" />
+            Unarchive
           </>
         )}
       </AlertDialogTrigger>
 
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Arsipkan program kerja?</AlertDialogTitle>
+          <AlertDialogTitle>Pulihkan program kerja?</AlertDialogTitle>
           <AlertDialogDescription>
-            Program kerja tidak akan dihapus permanen. Statusnya akan berubah
-            menjadi ARCHIVED dan publikasi ke Tevo akan dinonaktifkan. Riwayat
-            progress update tetap tersimpan.
+            Status program kerja akan dikembalikan menjadi Direncanakan (PLANNED) dan dapat diedit atau dilanjutkan kembali.
           </AlertDialogDescription>
         </AlertDialogHeader>
 
         <AlertDialogFooter>
           <AlertDialogCancel>Batal</AlertDialogCancel>
           <AlertDialogAction
-            onClick={handleArchive}
+            onClick={handleUnarchive}
             className="bg-primary text-primary-foreground hover:bg-primary/90"
           >
-            Ya, arsipkan
+            Ya, pulihkan
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
