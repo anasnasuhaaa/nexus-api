@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArchiveProgramButton } from "./archive-program-button";
+import { ProgramLifecycleActions } from "./archive-program-button";
 import { prisma } from "@orma/database";
 import {
   Activity,
@@ -152,16 +152,18 @@ export default async function ProgramDetailPage({
                 </Button>
               </Link>
 
-              <Link href={`/dashboard/programs/${program.id}/edit`}>
-                <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
-                  <Pencil className="size-4" />
-                  Edit Program
-                </Button>
-              </Link>
-
-              <ArchiveProgramButton
+              {program.status !== "ARCHIVED" ? (
+                <Link href={`/dashboard/programs/${program.id}/edit`}>
+                  <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+                    <Pencil className="size-4" />
+                    Edit Program
+                  </Button>
+                </Link>
+              ) : null}
+              <ProgramLifecycleActions
                 programId={program.id}
-                disabled={program.status === "ARCHIVED"}
+                programTitle={program.title}
+                programStatus={program.status}
               />
             </div>
 
