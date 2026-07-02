@@ -10,6 +10,7 @@ import {
   ExternalLink,
   FileText,
   Flag,
+  Plus,
   Landmark,
   LinkIcon,
   Pencil,
@@ -160,6 +161,16 @@ export default async function ProgramDetailPage({
                   </Button>
                 </Link>
               ) : null}
+
+              {program.status !== "ARCHIVED" ? (
+                <Link href={`/dashboard/progress/new?programId=${program.id}`}>
+                  <Button variant="outline">
+                    <Plus className="size-4" />
+                    Tambah Progress
+                  </Button>
+                </Link>
+              ) : null}
+
               <ProgramLifecycleActions
                 programId={program.id}
                 programTitle={program.title}

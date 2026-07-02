@@ -7,6 +7,7 @@ import {
   CalendarDays,
   FileText,
   Flag,
+  Plus,
   Landmark,
   ListChecks,
   Route,

@@ -133,10 +133,12 @@ export default async function ProgressPage() {
               </Button>
             </Link>
 
-            <Button disabled className="bg-primary text-primary-foreground">
-              <Plus className="size-4" />
-              Tambah Progress
-            </Button>
+            <Link href="/dashboard/progress/new">
+              <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 sm:w-auto">
+                <Plus className="size-4" />
+                Tambah Progress
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
