@@ -6,7 +6,6 @@ import {
   CheckCircle2,
   Clock3,
   Plus,
-  Search,
   Upload,
 } from "lucide-react";
 
@@ -28,6 +27,28 @@ function formatDate(date: Date | null) {
     month: "short",
     year: "numeric",
   }).format(date);
+}
+
+function getUniqueOptions<T>(
+  data: T[],
+  getValue: (item: T) => string,
+  getLabel: (item: T) => string,
+) {
+  return Array.from(
+    new Map(
+      data.map((item) => {
+        const value = getValue(item);
+
+        return [
+          value,
+          {
+            label: getLabel(item),
+            value,
+          },
+        ];
+      }),
+    ).values(),
+  );
 }
 
 async function getProgressUpdates() {
@@ -78,10 +99,6 @@ export default async function ProgressPage() {
     (progress) => progress.status === "BLOCKED",
   );
 
-  const doneUpdates = progressUpdates.filter(
-    (progress) => progress.status === "DONE",
-  );
-
   const tableData: ProgressUpdateTableRow[] = progressUpdates.map(
     (progress, index) => {
       return {
@@ -98,6 +115,18 @@ export default async function ProgressPage() {
         reportedAt: formatDate(progress.reportedAt),
       };
     },
+  );
+
+  const birdepOptions = getUniqueOptions(
+    tableData,
+    (progress) => progress.birdepName,
+    (progress) => progress.birdepName,
+  );
+
+  const programOptions = getUniqueOptions(
+    tableData,
+    (progress) => progress.programTitle,
+    (progress) => progress.programTitle,
   );
 
   return (
@@ -121,11 +150,6 @@ export default async function ProgressPage() {
           </div>
 
           <div className="flex flex-col gap-2 sm:flex-row">
-            <div className="flex items-center gap-2 rounded-2xl border bg-card px-3 py-2 text-sm text-muted-foreground">
-              <Search className="size-4" />
-              Filter aktif berdasarkan judul progress
-            </div>
-
             <Link href="/dashboard/progress/import">
               <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 sm:w-auto">
                 <Upload className="size-4" />
@@ -177,9 +201,7 @@ export default async function ProgressPage() {
             <Clock3 className="size-5" />
           </div>
 
-          <p className="text-sm font-medium text-muted-foreground">
-            Berisiko
-          </p>
+          <p className="text-sm font-medium text-muted-foreground">Berisiko</p>
 
           <p className="mt-2 text-3xl font-black tracking-tight">
             {atRiskUpdates.length}
@@ -215,6 +237,94 @@ export default async function ProgressPage() {
           data={tableData}
           searchKey="title"
           searchPlaceholder="Cari progress update..."
+          filters={[
+            {
+              columnId: "birdepName",
+              label: "Birdep",
+              options: [
+                {
+                  label: "Semua Birdep",
+                  value: "ALL",
+                },
+                ...birdepOptions,
+              ],
+            },
+            {
+              columnId: "status",
+              label: "Status",
+              options: [
+                {
+                  label: "Semua Status",
+                  value: "ALL",
+                },
+                {
+                  label: "Sesuai Rencana",
+                  value: "ON_TRACK",
+                },
+                {
+                  label: "Berisiko",
+                  value: "AT_RISK",
+                },
+                {
+                  label: "Terhambat",
+                  value: "BLOCKED",
+                },
+                {
+                  label: "Selesai",
+                  value: "DONE",
+                },
+              ],
+            },
+            {
+              columnId: "programTitle",
+              label: "Program",
+              options: [
+                {
+                  label: "Semua Program",
+                  value: "ALL",
+                },
+                ...programOptions,
+              ],
+            },
+          ]}
+          sortOptions={[
+            {
+              label: "Progress tertinggi",
+              value: "progress-desc",
+              columnId: "progressPercent",
+              desc: true,
+            },
+            {
+              label: "Progress terendah",
+              value: "progress-asc",
+              columnId: "progressPercent",
+              desc: false,
+            },
+            {
+              label: "Judul A-Z",
+              value: "title-asc",
+              columnId: "title",
+              desc: false,
+            },
+            {
+              label: "Judul Z-A",
+              value: "title-desc",
+              columnId: "title",
+              desc: true,
+            },
+            {
+              label: "Tanggal terbaru",
+              value: "reported-desc",
+              columnId: "reportedAt",
+              desc: true,
+            },
+            {
+              label: "Tanggal terlama",
+              value: "reported-asc",
+              columnId: "reportedAt",
+              desc: false,
+            },
+          ]}
         />
       </section>
     </div>

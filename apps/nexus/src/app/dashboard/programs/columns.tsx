@@ -18,6 +18,7 @@ export type ProgramTableRow = {
   startDate: string;
   endDate: string;
   isPublishedToTevo: boolean;
+  publishStatus: "PUBLISHED" | "INTERNAL";
 };
 
 function getProgramStatusLabel(status: string) {
@@ -34,16 +35,11 @@ function getProgramStatusLabel(status: string) {
 
 function getProgramStatusClassName(status: string) {
   const classNames: Record<string, string> = {
-    PLANNED:
-      "bg-primary/10 text-primary",
-    ONGOING:
-      "bg-status-active-soft text-status-active",
-    COMPLETED:
-      "bg-status-active-soft text-status-active",
-    CANCELLED:
-      "bg-status-inactive-soft text-status-inactive",
-    ARCHIVED:
-      "bg-muted text-muted-foreground",
+    PLANNED: "bg-primary/10 text-primary",
+    ONGOING: "bg-status-active-soft text-status-active",
+    COMPLETED: "bg-status-active-soft text-status-active",
+    CANCELLED: "bg-status-inactive-soft text-status-inactive",
+    ARCHIVED: "bg-muted text-muted-foreground",
   };
 
   return classNames[status] ?? "bg-muted text-muted-foreground";
@@ -61,6 +57,7 @@ export const programColumns: ColumnDef<ProgramTableRow>[] = [
     accessorKey: "title",
     header: ({ column }) => (
       <Button
+        type="button"
         variant="ghost"
         className="-ml-3 gap-2"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -70,7 +67,7 @@ export const programColumns: ColumnDef<ProgramTableRow>[] = [
       </Button>
     ),
     cell: ({ row }) => (
-      <div>
+      <div className="min-w-56">
         <Link
           href={`/dashboard/programs/${row.original.id}`}
           className="font-semibold text-foreground transition hover:text-primary"
@@ -88,7 +85,7 @@ export const programColumns: ColumnDef<ProgramTableRow>[] = [
     accessorKey: "birdepName",
     header: "Birdep",
     cell: ({ row }) => (
-      <div>
+      <div className="min-w-32">
         <div className="font-medium">{row.original.birdepName}</div>
         <div className="mt-1 text-xs text-muted-foreground">
           {row.original.birdepCode}
@@ -101,7 +98,7 @@ export const programColumns: ColumnDef<ProgramTableRow>[] = [
     header: "Status",
     cell: ({ row }) => (
       <span
-        className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${getProgramStatusClassName(
+        className={`inline-flex whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-semibold ${getProgramStatusClassName(
           row.original.status,
         )}`}
       >
@@ -111,9 +108,19 @@ export const programColumns: ColumnDef<ProgramTableRow>[] = [
   },
   {
     accessorKey: "progressPercent",
-    header: "Progress",
+    header: ({ column }) => (
+      <Button
+        type="button"
+        variant="ghost"
+        className="-ml-3 gap-2"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Progress
+        <ArrowUpDown className="size-3.5" />
+      </Button>
+    ),
     cell: ({ row }) => (
-      <div className="min-w-32">
+      <div className="min-w-36">
         <div className="flex items-center justify-between text-xs">
           <span className="text-muted-foreground">Capaian</span>
           <span className="font-semibold text-primary">
@@ -136,7 +143,7 @@ export const programColumns: ColumnDef<ProgramTableRow>[] = [
     accessorKey: "startDate",
     header: "Tanggal",
     cell: ({ row }) => (
-      <div className="text-sm">
+      <div className="min-w-32 text-sm">
         <div>{row.original.startDate}</div>
         <div className="mt-1 text-xs text-muted-foreground">
           s.d. {row.original.endDate}
@@ -145,15 +152,15 @@ export const programColumns: ColumnDef<ProgramTableRow>[] = [
     ),
   },
   {
-    accessorKey: "isPublishedToTevo",
+    accessorKey: "publishStatus",
     header: "Tevo",
     cell: ({ row }) =>
-      row.original.isPublishedToTevo ? (
-        <span className="inline-flex rounded-full bg-status-active-soft px-2.5 py-1 text-xs font-semibold text-status-active">
+      row.original.publishStatus === "PUBLISHED" ? (
+        <span className="inline-flex whitespace-nowrap rounded-full bg-status-active-soft px-2.5 py-1 text-xs font-semibold text-status-active">
           Published
         </span>
       ) : (
-        <span className="inline-flex rounded-full bg-muted px-2.5 py-1 text-xs font-semibold text-muted-foreground">
+        <span className="inline-flex whitespace-nowrap rounded-full bg-muted px-2.5 py-1 text-xs font-semibold text-muted-foreground">
           Internal
         </span>
       ),

@@ -5,7 +5,6 @@ import {
   CheckCircle2,
   FileText,
   Plus,
-  Search,
   Timer,
   Upload,
 } from "lucide-react";
@@ -25,6 +24,28 @@ function formatDate(date: Date | null) {
     month: "short",
     year: "numeric",
   }).format(date);
+}
+
+function getUniqueOptions<T>(
+  data: T[],
+  getValue: (item: T) => string,
+  getLabel: (item: T) => string,
+) {
+  return Array.from(
+    new Map(
+      data.map((item) => {
+        const value = getValue(item);
+
+        return [
+          value,
+          {
+            label: getLabel(item),
+            value,
+          },
+        ];
+      }),
+    ).values(),
+  );
 }
 
 async function getPrograms() {
@@ -78,8 +99,15 @@ export default async function ProgramsPage() {
       startDate: formatDate(program.startDate),
       endDate: formatDate(program.endDate),
       isPublishedToTevo: program.isPublishedToTevo,
+      publishStatus: program.isPublishedToTevo ? "PUBLISHED" : "INTERNAL",
     };
   });
+
+  const birdepOptions = getUniqueOptions(
+    tableData,
+    (program) => program.birdepName,
+    (program) => program.birdepName,
+  );
 
   return (
     <div className="space-y-6">
@@ -102,17 +130,13 @@ export default async function ProgramsPage() {
           </div>
 
           <div className="flex flex-col gap-2 sm:flex-row">
-            {/* <div className="flex items-center gap-2 rounded-2xl border bg-card px-3 py-2 text-sm text-muted-foreground">
-              <Search className="size-4" />
-              Filter aktif berdasarkan nama program
-            </div> */}
-
             <Link href="/dashboard/programs/import">
               <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 sm:w-auto">
                 <Upload className="size-4" />
                 Import XLSX
               </Button>
             </Link>
+
             <Link href="/dashboard/programs/new">
               <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 sm:w-auto">
                 <Plus className="size-4" />
@@ -157,9 +181,7 @@ export default async function ProgramsPage() {
             <CheckCircle2 className="size-5" />
           </div>
 
-          <p className="text-sm font-medium text-muted-foreground">
-            Selesai
-          </p>
+          <p className="text-sm font-medium text-muted-foreground">Selesai</p>
 
           <p className="mt-2 text-3xl font-black tracking-tight">
             {completedPrograms.length}
@@ -194,6 +216,93 @@ export default async function ProgramsPage() {
           data={tableData}
           searchKey="title"
           searchPlaceholder="Cari nama program kerja..."
+          filters={[
+            {
+              columnId: "birdepName",
+              label: "Birdep",
+              options: [
+                {
+                  label: "Semua Birdep",
+                  value: "ALL",
+                },
+                ...birdepOptions,
+              ],
+            },
+            {
+              columnId: "status",
+              label: "Status",
+              options: [
+                {
+                  label: "Semua Status",
+                  value: "ALL",
+                },
+                {
+                  label: "Direncanakan",
+                  value: "PLANNED",
+                },
+                {
+                  label: "Berjalan",
+                  value: "ONGOING",
+                },
+                {
+                  label: "Selesai",
+                  value: "COMPLETED",
+                },
+                {
+                  label: "Dibatalkan",
+                  value: "CANCELLED",
+                },
+                {
+                  label: "Diarsipkan",
+                  value: "ARCHIVED",
+                },
+              ],
+            },
+            {
+              columnId: "publishStatus",
+              label: "Publikasi",
+              options: [
+                {
+                  label: "Semua Publikasi",
+                  value: "ALL",
+                },
+                {
+                  label: "Published",
+                  value: "PUBLISHED",
+                },
+                {
+                  label: "Internal",
+                  value: "INTERNAL",
+                },
+              ],
+            },
+          ]}
+          sortOptions={[
+            {
+              label: "Progress tertinggi",
+              value: "progress-desc",
+              columnId: "progressPercent",
+              desc: true,
+            },
+            {
+              label: "Progress terendah",
+              value: "progress-asc",
+              columnId: "progressPercent",
+              desc: false,
+            },
+            {
+              label: "Nama A-Z",
+              value: "title-asc",
+              columnId: "title",
+              desc: false,
+            },
+            {
+              label: "Nama Z-A",
+              value: "title-desc",
+              columnId: "title",
+              desc: true,
+            },
+          ]}
         />
       </section>
     </div>

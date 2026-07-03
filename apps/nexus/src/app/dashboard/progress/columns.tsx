@@ -54,6 +54,7 @@ export const progressUpdateColumns: ColumnDef<ProgressUpdateTableRow>[] = [
     accessorKey: "title",
     header: ({ column }) => (
       <Button
+        type="button"
         variant="ghost"
         className="-ml-3 gap-2"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -63,7 +64,7 @@ export const progressUpdateColumns: ColumnDef<ProgressUpdateTableRow>[] = [
       </Button>
     ),
     cell: ({ row }) => (
-      <div>
+      <div className="min-w-56">
         <Link
           href={`/dashboard/progress/${row.original.id}`}
           className="font-semibold text-foreground transition hover:text-primary"
@@ -81,7 +82,7 @@ export const progressUpdateColumns: ColumnDef<ProgressUpdateTableRow>[] = [
     accessorKey: "programTitle",
     header: "Program",
     cell: ({ row }) => (
-      <div>
+      <div className="min-w-56">
         <div className="font-medium">{row.original.programTitle}</div>
         <div className="mt-1 text-xs text-muted-foreground">
           {row.original.programSlug}
@@ -93,7 +94,7 @@ export const progressUpdateColumns: ColumnDef<ProgressUpdateTableRow>[] = [
     accessorKey: "birdepName",
     header: "Birdep",
     cell: ({ row }) => (
-      <div>
+      <div className="min-w-32">
         <div className="font-medium">{row.original.birdepName}</div>
         <div className="mt-1 text-xs text-muted-foreground">
           {row.original.birdepCode}
@@ -103,9 +104,19 @@ export const progressUpdateColumns: ColumnDef<ProgressUpdateTableRow>[] = [
   },
   {
     accessorKey: "progressPercent",
-    header: "Progress",
+    header: ({ column }) => (
+      <Button
+        type="button"
+        variant="ghost"
+        className="-ml-3 gap-2"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Progress
+        <ArrowUpDown className="size-3.5" />
+      </Button>
+    ),
     cell: ({ row }) => (
-      <div className="min-w-32">
+      <div className="min-w-36">
         <div className="flex items-center justify-between text-xs">
           <span className="text-muted-foreground">Capaian</span>
           <span className="font-semibold text-primary">
@@ -129,7 +140,7 @@ export const progressUpdateColumns: ColumnDef<ProgressUpdateTableRow>[] = [
     header: "Status",
     cell: ({ row }) => (
       <span
-        className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${getProgressStatusClassName(
+        className={`inline-flex whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-semibold ${getProgressStatusClassName(
           row.original.status,
         )}`}
       >
@@ -141,7 +152,9 @@ export const progressUpdateColumns: ColumnDef<ProgressUpdateTableRow>[] = [
     accessorKey: "authorName",
     header: "Pelapor",
     cell: ({ row }) => (
-      <span className="text-muted-foreground">{row.original.authorName}</span>
+      <span className="whitespace-nowrap text-muted-foreground">
+        {row.original.authorName}
+      </span>
     ),
   },
 ];
