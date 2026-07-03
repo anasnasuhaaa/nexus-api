@@ -14,9 +14,8 @@ export const auth = betterAuth({
   },
 
   session: {
-    expiresIn: 60 * 30,
-    updateAge: 0,
-    disableSessionRefresh: true,
+    expiresIn: 60 * 15,
+    updateAge: 60 * 5,
   },
 
   user: {

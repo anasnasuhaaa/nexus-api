@@ -40,19 +40,12 @@ export function ProgramForm({ birdeps }: ProgramFormProps) {
       return;
     }
 
-    toast.success("Program berhasil dibuat", {
+    toast.success("Program berhasil ditambahkan", {
       description: response.message,
       duration: 2000,
     });
 
-    if (response.programId) {
-      router.push(`/dashboard/programs/${response.programId}`);
-      router.refresh();
-      return;
-    }
-
-    router.push("/dashboard/programs");
-    router.refresh();
+    window.location.assign("/dashboard/programs");
   }
 
   return (
