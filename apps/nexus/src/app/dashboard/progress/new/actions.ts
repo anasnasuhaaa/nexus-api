@@ -2,6 +2,7 @@
 
 import { prisma, ProgressUpdateStatus, ProgramStatus } from "@orma/database";
 import { headers } from "next/headers";
+import { revalidatePath } from "next/cache";
 
 import { auth } from "@/lib/auth";
 
@@ -68,7 +69,8 @@ export async function createProgressAction(
   const obstacle = normalizeText(formData.get("obstacle"));
   const nextStep = normalizeText(formData.get("nextStep"));
   const progressPercentValue = normalizeText(formData.get("progressPercent"));
-  const status = normalizeText(formData.get("status")).toUpperCase() || "ON_TRACK";
+  const status =
+    normalizeText(formData.get("status")).toUpperCase() || "ON_TRACK";
   const reportedAt = normalizeText(formData.get("reportedAt"));
 
   const progressPercent = Number(progressPercentValue);
@@ -177,6 +179,11 @@ export async function createProgressAction(
       updatedByUserId: session.user.id,
     },
   });
+
+  revalidatePath("/dashboard/progress");
+  revalidatePath("/dashboard/programs");
+  revalidatePath(`/dashboard/programs/${programId}`);
+  revalidatePath("/dashboard");
 
   return {
     success: true,

@@ -2,6 +2,7 @@
 
 import { prisma, ProgressUpdateStatus } from "@orma/database";
 import { headers } from "next/headers";
+import { revalidatePath } from "next/cache";
 
 import { auth } from "@/lib/auth";
 import { syncProgramProgress } from "@/lib/programs/sync-program-progress";
@@ -153,6 +154,12 @@ export async function updateProgressAction(
   });
 
   await syncProgramProgress(existingProgress.programId, session.user.id);
+
+  revalidatePath("/dashboard/progress");
+  revalidatePath(`/dashboard/progress/${progressId}`);
+  revalidatePath("/dashboard/programs");
+  revalidatePath(`/dashboard/programs/${existingProgress.programId}`);
+  revalidatePath("/dashboard");
 
   return {
     success: true,

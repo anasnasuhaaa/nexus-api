@@ -2,6 +2,7 @@
 
 import { prisma, ProgramStatus } from "@orma/database";
 import { headers } from "next/headers";
+import { revalidatePath } from "next/cache";
 
 import { auth } from "@/lib/auth";
 
@@ -106,7 +107,8 @@ export async function updateProgramAction(
   const objective = normalizeText(formData.get("objective"));
   const startDate = normalizeText(formData.get("startDate"));
   const endDate = normalizeText(formData.get("endDate"));
-  const status = normalizeText(formData.get("status")).toUpperCase() || "PLANNED";
+  const status =
+    normalizeText(formData.get("status")).toUpperCase() || "PLANNED";
   const progressPercentValue = normalizeText(formData.get("progressPercent"));
   const pressReleaseUrl = normalizeText(formData.get("pressReleaseUrl"));
   const isPublishedToTevo = parseBoolean(formData.get("isPublishedToTevo"));
@@ -243,6 +245,10 @@ export async function updateProgramAction(
       updatedByUserId: session.user.id,
     },
   });
+
+  revalidatePath("/dashboard/programs");
+  revalidatePath(`/dashboard/programs/${programId}`);
+  revalidatePath("/dashboard");
 
   return {
     success: true,

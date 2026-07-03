@@ -45,7 +45,14 @@ export function ProgramForm({ birdeps }: ProgramFormProps) {
       duration: 2000,
     });
 
-    window.location.assign("/dashboard/programs");
+    if (response.programId) {
+      router.push(`/dashboard/programs/${response.programId}`);
+      router.refresh();
+      return;
+    }
+
+    router.push("/dashboard/programs");
+    router.refresh();
   }
 
   return (

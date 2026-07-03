@@ -2,6 +2,7 @@
 
 import { prisma } from "@orma/database";
 import { headers } from "next/headers";
+import { revalidatePath } from "next/cache";
 
 import { auth } from "@/lib/auth";
 
@@ -174,6 +175,11 @@ export async function deleteProgramPermanentlyAction(
       id: programId,
     },
   });
+
+  revalidatePath("/dashboard/programs");
+  revalidatePath("/dashboard/progress");
+  revalidatePath(`/dashboard/programs/${programId}`);
+  revalidatePath("/dashboard");
 
   return {
     success: true,
