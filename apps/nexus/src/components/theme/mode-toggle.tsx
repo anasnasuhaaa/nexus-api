@@ -1,8 +1,8 @@
 "use client";
 
 import { Laptop, Moon, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
 
+import { useTheme } from "@/components/theme/theme-provider";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,23 +12,28 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export function ModeToggle() {
-  const { setTheme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
           <Button
+            type="button"
             variant="outline"
             size="icon"
             aria-label="Ubah tema tampilan"
-          />
+          >
+            {resolvedTheme === "dark" ? (
+              <Moon className="size-4" />
+            ) : (
+              <Sun className="size-4" />
+            )}
+
+            <span className="sr-only">Ubah tema</span>
+          </Button>
         }
-      >
-        <Sun className="size-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-        <Moon className="absolute size-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-        <span className="sr-only">Ubah tema</span>
-      </DropdownMenuTrigger>
+      />
 
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => setTheme("light")}>

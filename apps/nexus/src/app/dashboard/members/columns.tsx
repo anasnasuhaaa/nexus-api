@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 
@@ -37,6 +38,24 @@ function getPositionLabel(position: string) {
   return labels[position] ?? position;
 }
 
+function getRoleLabel(role: string | null) {
+  if (!role) {
+    return "-";
+  }
+
+  const labels: Record<string, string> = {
+    SUPER_ADMIN: "Super Admin",
+    TEVO_ADMIN: "Tevo Admin",
+    BPH: "BPH",
+    KETUA_BIRDEP: "Ketua Birdep",
+    SEKRETARIS_BIRDEP: "Sekretaris Birdep",
+    BENDAHARA_BIRDEP: "Bendahara Birdep",
+    ANGGOTA_BIRDEP: "Anggota Birdep",
+  };
+
+  return labels[role] ?? role.replaceAll("_", " ");
+}
+
 export const memberColumns: ColumnDef<MemberTableRow>[] = [
   {
     accessorKey: "number",
@@ -49,6 +68,7 @@ export const memberColumns: ColumnDef<MemberTableRow>[] = [
     accessorKey: "fullName",
     header: ({ column }) => (
       <Button
+        type="button"
         variant="ghost"
         className="-ml-3 gap-2"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
@@ -58,8 +78,14 @@ export const memberColumns: ColumnDef<MemberTableRow>[] = [
       </Button>
     ),
     cell: ({ row }) => (
-      <div>
-        <div className="font-semibold">{row.original.fullName}</div>
+      <div className="min-w-52">
+        <Link
+          href={`/dashboard/members/${row.original.id}`}
+          className="font-semibold text-foreground transition hover:text-primary"
+        >
+          {row.original.fullName}
+        </Link>
+
         {row.original.instagram ? (
           <div className="mt-1 text-xs text-muted-foreground">
             @{row.original.instagram}
@@ -72,14 +98,16 @@ export const memberColumns: ColumnDef<MemberTableRow>[] = [
     accessorKey: "nim",
     header: "NIM",
     cell: ({ row }) => (
-      <span className="text-muted-foreground">{row.original.nim}</span>
+      <span className="whitespace-nowrap text-muted-foreground">
+        {row.original.nim}
+      </span>
     ),
   },
   {
     accessorKey: "birdepName",
     header: "Birdep",
     cell: ({ row }) => (
-      <div>
+      <div className="min-w-40">
         <div className="font-medium">{row.original.birdepName}</div>
         <div className="mt-1 text-xs text-muted-foreground">
           {row.original.cabinetName}
@@ -94,7 +122,7 @@ export const memberColumns: ColumnDef<MemberTableRow>[] = [
       row.original.position === "-" ? (
         <span className="text-muted-foreground">-</span>
       ) : (
-        <div>
+        <div className="min-w-44">
           <span className="inline-flex rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary">
             {getPositionLabel(row.original.position)}
           </span>
@@ -112,10 +140,10 @@ export const memberColumns: ColumnDef<MemberTableRow>[] = [
     header: "Akun",
     cell: ({ row }) =>
       row.original.email ? (
-        <div>
-          <div className="font-medium">{row.original.email}</div>
+        <div className="min-w-56">
+          <div className="wrap-break-word font-medium">{row.original.email}</div>
           <div className="mt-1 text-xs text-muted-foreground">
-            Role: {row.original.role}
+            Role: {getRoleLabel(row.original.role)}
           </div>
         </div>
       ) : (

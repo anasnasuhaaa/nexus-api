@@ -8,17 +8,11 @@ import "./globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: {
-    default: "Nexus",
-    template: "%s | Nexus",
-  },
-  description:
-    "Sistem Informasi dan Monitoring Internal Ormawa Eksekutif PKU IPB.",
+  title: "Nexus",
+  description: "Dashboard internal Ormawa Eksekutif PKU",
 };
 
 export default function RootLayout({
@@ -28,15 +22,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans antialiased`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+      <body className={inter.className}>
+        <ThemeProvider defaultTheme="system">
           {children}
-
           <Toaster richColors position="top-right" />
         </ThemeProvider>
       </body>
