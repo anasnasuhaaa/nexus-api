@@ -1,5 +1,6 @@
 import { prisma } from "@orma/database";
 import Link from "next/link";
+import { ResetPasswordButton } from "./reset-password-button";
 import { notFound } from "next/navigation";
 import {
   ArrowLeft,
@@ -345,6 +346,12 @@ export default async function MemberDetailPage({
                   value={formatDate(linkedUser.createdAt)}
                 />
               </div>
+
+              <ResetPasswordButton
+                memberId={member.id}
+                userId={linkedUser.id}
+                userEmail={linkedUser.email}
+              />
             </div>
           ) : (
             <div className="rounded-2xl border border-dashed bg-card p-5 text-sm leading-7 text-muted-foreground">
