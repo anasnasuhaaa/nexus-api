@@ -17,6 +17,7 @@ import {
   Table2,
   Upload,
   UsersRound,
+  UserCircle
 } from "lucide-react";
 import { useState } from "react";
 import type { LucideIcon } from "lucide-react";
@@ -222,8 +223,8 @@ export function DashboardSidebar() {
                     const ChildIcon = child.icon;
                     const childActive =
                       child.href === "/dashboard/members" ||
-                      child.href === "/dashboard/programs" ||
-                      child.href === "/dashboard/progress"
+                        child.href === "/dashboard/programs" ||
+                        child.href === "/dashboard/progress"
                         ? pathname === child.href
                         : isExactOrNestedPath(pathname, child.href);
 
@@ -251,6 +252,13 @@ export function DashboardSidebar() {
       </nav>
 
       <div className="shrink-0 border-t p-3">
+        <Link
+          href="/dashboard/profile"
+          className="mb-2 flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground"
+        >
+          <UserCircle className="size-4" />
+          Profil Saya
+        </Link>
         <Link
           href="/"
           className="mb-2 flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground"

@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
+import { DashboardPasswordGuard } from "@/components/dashboard/dashboard-password-guard";
 import { auth } from "@/lib/auth";
 
 export default async function DashboardLayout({
@@ -42,6 +43,7 @@ export default async function DashboardLayout({
         role: user.role,
       }}
     >
+      <DashboardPasswordGuard />
       {children}
     </DashboardShell>
   );
