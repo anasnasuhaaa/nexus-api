@@ -1,12 +1,16 @@
 import { prisma } from "@orma/database";
 import Link from "next/link";
-import { BadgeCheck, Upload, UserRound, UsersRound } from "lucide-react";
+import {
+  BadgeCheck,
+  MailCheck,
+  Upload,
+  UserRound,
+  UsersRound,
+} from "lucide-react";
 
 import { DataTable } from "@/components/data-table/data-table";
 import { Button } from "@/components/ui/button";
 
-import { BulkActivationButton } from "./bulk-activation-button";
-import { getBulkActivationStatsAction } from "./bulk-activation-action";
 import { memberColumns, MemberTableRow } from "./columns";
 
 async function getMembers() {
@@ -81,10 +85,14 @@ function getUniqueOptions<T>(
 
 export default async function MembersPage() {
   const members = await getMembers();
-  const activationStats = await getBulkActivationStatsAction();
 
   const activeMembers = members.filter((member) => member.isActive);
   const membersWithAccount = members.filter((member) => member.users.length > 0);
+  const pendingActivationMembers = members.filter((member) => {
+    const user = member.users[0];
+
+    return user?.mustChangePassword === true && user?.banned === false;
+  });
 
   const tableData: MemberTableRow[] = members.map((member, index) => {
     const latestMembership = member.memberships[0];
@@ -128,16 +136,18 @@ export default async function MembersPage() {
             </h1>
 
             <p className="mt-3 max-w-3xl text-sm leading-7 text-muted-foreground sm:text-base">
-              Halaman ini membaca data langsung dari database. Tabel sudah
-              memakai DataTable agar mendukung pencarian, filter Birdep, dan
-              pagination.
+              Halaman ini membaca data langsung dari database. Tabel fokus
+              untuk melihat, mencari, dan memfilter data anggota organisasi.
             </p>
           </div>
 
           <div className="flex flex-col gap-2 sm:flex-row">
-            <BulkActivationButton
-              eligibleCount={activationStats.eligibleCount}
-            />
+            <Link href="/dashboard/members/activation">
+              <Button variant="outline">
+                <MailCheck className="size-4" />
+                Aktivasi Akun
+              </Button>
+            </Link>
 
             <Link href="/dashboard/members/import">
               <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
@@ -149,7 +159,7 @@ export default async function MembersPage() {
         </div>
       </section>
 
-      <section className="grid gap-4 sm:grid-cols-3">
+      <section className="grid gap-4 sm:grid-cols-4">
         <div className="rounded-3xl border bg-card p-5 shadow-sm">
           <div className="mb-4 flex size-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
             <UsersRound className="size-5" />
@@ -189,6 +199,20 @@ export default async function MembersPage() {
 
           <p className="mt-2 text-3xl font-black tracking-tight">
             {membersWithAccount.length}
+          </p>
+        </div>
+
+        <div className="rounded-3xl border bg-card p-5 shadow-sm">
+          <div className="mb-4 flex size-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+            <MailCheck className="size-5" />
+          </div>
+
+          <p className="text-sm font-medium text-muted-foreground">
+            Belum Aktivasi
+          </p>
+
+          <p className="mt-2 text-3xl font-black tracking-tight">
+            {pendingActivationMembers.length}
           </p>
         </div>
       </section>
