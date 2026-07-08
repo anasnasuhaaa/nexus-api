@@ -3,6 +3,9 @@ import Link from "next/link";
 import { BadgeCheck, Search, Upload, UserRound, UsersRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+import { BulkActivationButton } from "./bulk-activation-button";
+import { getBulkActivationStatsAction } from "./bulk-activation-action";
+
 import { DataTable } from "@/components/data-table/data-table";
 
 import { memberColumns, MemberTableRow } from "./columns";
@@ -36,6 +39,7 @@ async function getMembers() {
 
 export default async function MembersPage() {
   const members = await getMembers();
+  const activationStats = await getBulkActivationStatsAction();
 
   const activeMembers = members.filter((member) => member.isActive);
   const membersWithAccount = members.filter((member) => member.users.length > 0);
@@ -84,13 +88,13 @@ export default async function MembersPage() {
               <Search className="size-4" />
               Filter aktif berdasarkan nama anggota
             </div> */}
-
-      <Link href="/dashboard/members/import">
-  <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
-    <Upload className="size-4" />
-    Import XLSX
-  </Button>
-</Link>
+            <BulkActivationButton eligibleCount={activationStats.eligibleCount} />
+            <Link href="/dashboard/members/import">
+              <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+                <Upload className="size-4" />
+                Import XLSX
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
