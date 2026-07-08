@@ -1,13 +1,12 @@
 import { prisma } from "@orma/database";
 import Link from "next/link";
-import { BadgeCheck, Search, Upload, UserRound, UsersRound } from "lucide-react";
+import { BadgeCheck, Upload, UserRound, UsersRound } from "lucide-react";
+
+import { DataTable } from "@/components/data-table/data-table";
 import { Button } from "@/components/ui/button";
 
 import { BulkActivationButton } from "./bulk-activation-button";
 import { getBulkActivationStatsAction } from "./bulk-activation-action";
-
-import { DataTable } from "@/components/data-table/data-table";
-
 import { memberColumns, MemberTableRow } from "./columns";
 
 async function getMembers() {
@@ -30,11 +29,54 @@ async function getMembers() {
           id: true,
           email: true,
           role: true,
+          banned: true,
           mustChangePassword: true,
         },
       },
     },
   });
+}
+
+function getActivationStatus(user?: {
+  email: string;
+  banned: boolean;
+  mustChangePassword: boolean;
+}) {
+  if (!user) {
+    return "NO_ACCOUNT" as const;
+  }
+
+  if (user.banned) {
+    return "BANNED" as const;
+  }
+
+  if (user.mustChangePassword) {
+    return "PENDING_ACTIVATION" as const;
+  }
+
+  return "ACTIVE" as const;
+}
+
+function getUniqueOptions<T>(
+  data: T[],
+  getValue: (item: T) => string,
+  getLabel: (item: T) => string,
+) {
+  return Array.from(
+    new Map(
+      data.map((item) => {
+        const value = getValue(item);
+
+        return [
+          value,
+          {
+            label: getLabel(item),
+            value,
+          },
+        ];
+      }),
+    ).values(),
+  );
 }
 
 export default async function MembersPage() {
@@ -54,15 +96,23 @@ export default async function MembersPage() {
       fullName: member.fullName,
       nim: member.nim,
       instagram: member.instagram,
-      birdepName: latestMembership?.primaryBirdep.name ?? "Belum ada membership",
+      birdepName:
+        latestMembership?.primaryBirdep.name ?? "Belum ada membership",
       cabinetName: latestMembership?.cabinetPeriod.name ?? "-",
       position: latestMembership?.organizationalPosition ?? "-",
       internalTitle: latestMembership?.internalTitle ?? null,
       email: user?.email ?? null,
       role: user?.role ?? null,
       isActive: member.isActive,
+      activationStatus: getActivationStatus(user),
     };
   });
+
+  const birdepOptions = getUniqueOptions(
+    tableData,
+    (member) => member.birdepName,
+    (member) => member.birdepName,
+  ).filter((option) => option.value !== "Belum ada membership");
 
   return (
     <div className="space-y-6">
@@ -79,16 +129,16 @@ export default async function MembersPage() {
 
             <p className="mt-3 max-w-3xl text-sm leading-7 text-muted-foreground sm:text-base">
               Halaman ini membaca data langsung dari database. Tabel sudah
-              memakai DataTable agar mendukung filter, sorting, dan pagination.
+              memakai DataTable agar mendukung pencarian, filter Birdep, dan
+              pagination.
             </p>
           </div>
 
           <div className="flex flex-col gap-2 sm:flex-row">
-            {/* <div className="flex items-center gap-2 rounded-2xl border bg-background px-3 py-2 text-sm text-muted-foreground">
-              <Search className="size-4" />
-              Filter aktif berdasarkan nama anggota
-            </div> */}
-            <BulkActivationButton eligibleCount={activationStats.eligibleCount} />
+            <BulkActivationButton
+              eligibleCount={activationStats.eligibleCount}
+            />
+
             <Link href="/dashboard/members/import">
               <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
                 <Upload className="size-4" />
@@ -147,7 +197,7 @@ export default async function MembersPage() {
         <div className="mb-5">
           <h2 className="font-black tracking-tight">Tabel Anggota</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Filter saat ini menggunakan kolom nama.
+            Gunakan pencarian nama dan filter Birdep untuk melihat data anggota.
           </p>
         </div>
 
@@ -156,6 +206,33 @@ export default async function MembersPage() {
           data={tableData}
           searchKey="fullName"
           searchPlaceholder="Cari nama anggota..."
+          filters={[
+            {
+              columnId: "birdepName",
+              label: "Birdep",
+              options: [
+                {
+                  label: "Semua Birdep",
+                  value: "ALL",
+                },
+                ...birdepOptions,
+              ],
+            },
+          ]}
+          sortOptions={[
+            {
+              label: "Nama A-Z",
+              value: "name-asc",
+              columnId: "fullName",
+              desc: false,
+            },
+            {
+              label: "Nama Z-A",
+              value: "name-desc",
+              columnId: "fullName",
+              desc: true,
+            },
+          ]}
         />
       </section>
     </div>

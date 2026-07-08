@@ -6,6 +6,12 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 
+export type MemberActivationStatus =
+  | "NO_ACCOUNT"
+  | "PENDING_ACTIVATION"
+  | "ACTIVE"
+  | "BANNED";
+
 export type MemberTableRow = {
   id: string;
   number: number;
@@ -19,6 +25,7 @@ export type MemberTableRow = {
   email: string | null;
   role: string | null;
   isActive: boolean;
+  activationStatus: MemberActivationStatus;
 };
 
 function getPositionLabel(position: string) {
@@ -39,9 +46,7 @@ function getPositionLabel(position: string) {
 }
 
 function getRoleLabel(role: string | null) {
-  if (!role) {
-    return "-";
-  }
+  if (!role) return "-";
 
   const labels: Record<string, string> = {
     SUPER_ADMIN: "Super Admin",
@@ -54,6 +59,38 @@ function getRoleLabel(role: string | null) {
   };
 
   return labels[role] ?? role.replaceAll("_", " ");
+}
+
+function getActivationBadge(status: MemberActivationStatus) {
+  if (status === "NO_ACCOUNT") {
+    return (
+      <span className="inline-flex rounded-full bg-muted px-2.5 py-1 text-xs font-semibold text-muted-foreground">
+        Belum Punya Akun
+      </span>
+    );
+  }
+
+  if (status === "PENDING_ACTIVATION") {
+    return (
+      <span className="inline-flex rounded-full bg-yellow-100 px-2.5 py-1 text-xs font-semibold text-yellow-700 dark:bg-yellow-950/40 dark:text-yellow-300">
+        Belum Aktivasi
+      </span>
+    );
+  }
+
+  if (status === "BANNED") {
+    return (
+      <span className="inline-flex rounded-full bg-status-inactive-soft px-2.5 py-1 text-xs font-semibold text-status-inactive">
+        Dibekukan
+      </span>
+    );
+  }
+
+  return (
+    <span className="inline-flex rounded-full bg-status-active-soft px-2.5 py-1 text-xs font-semibold text-status-active">
+      Aktif
+    </span>
+  );
 }
 
 export const memberColumns: ColumnDef<MemberTableRow>[] = [
@@ -151,8 +188,13 @@ export const memberColumns: ColumnDef<MemberTableRow>[] = [
       ),
   },
   {
+    accessorKey: "activationStatus",
+    header: "Aktivasi",
+    cell: ({ row }) => getActivationBadge(row.original.activationStatus),
+  },
+  {
     accessorKey: "isActive",
-    header: "Status",
+    header: "Status Anggota",
     cell: ({ row }) =>
       row.original.isActive ? (
         <span className="inline-flex rounded-full bg-status-active-soft px-2.5 py-1 text-xs font-semibold text-status-active">
