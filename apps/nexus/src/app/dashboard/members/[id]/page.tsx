@@ -1,6 +1,5 @@
 import { prisma } from "@orma/database";
 import Link from "next/link";
-import { ResetPasswordButton } from "./reset-password-button";
 import { notFound } from "next/navigation";
 import {
   ArrowLeft,
@@ -8,6 +7,7 @@ import {
   Building2,
   CalendarDays,
   Mail,
+  Pencil,
   ShieldCheck,
   UserRound,
 } from "lucide-react";
@@ -15,6 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 import { MemberLifecycleButton } from "./member-lifecycle-button";
+import { ResetPasswordButton } from "./reset-password-button";
 
 type MemberDetailPageProps = {
   params: Promise<{
@@ -101,6 +102,14 @@ async function getMemberDetail(memberId: string) {
           createdAt: "desc",
         },
         include: {
+          cabinetPeriod: {
+            select: {
+              name: true,
+              startDate: true,
+              endDate: true,
+              isActive: true,
+            },
+          },
           primaryBirdep: {
             select: {
               name: true,
@@ -145,6 +154,7 @@ async function getMemberDetail(memberId: string) {
       isActive: true,
     },
   });
+
   return {
     member,
     linkedUser,
@@ -200,6 +210,13 @@ export default async function MemberDetailPage({
             <Button variant="outline">
               <ArrowLeft className="size-4" />
               Kembali
+            </Button>
+          </Link>
+
+          <Link href={`/dashboard/members/${member.id}/edit`}>
+            <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+              <Pencil className="size-4" />
+              Edit Anggota
             </Button>
           </Link>
 
@@ -398,8 +415,8 @@ export default async function MemberDetailPage({
 
               const fallbackCabinetPeriodRange = activeCabinetPeriod
                 ? `${formatDate(activeCabinetPeriod.startDate)} - ${formatDate(
-                  activeCabinetPeriod.endDate,
-                )}`
+                    activeCabinetPeriod.endDate,
+                  )}`
                 : "-";
 
               const cabinetPeriodName = String(
@@ -408,19 +425,24 @@ export default async function MemberDetailPage({
                   : getRecordValue(cabinetPeriodRecord, ["name"]),
               );
 
-              const cabinetStartDate = getRecordValue(cabinetPeriodRecord, ["startDate"]);
-              const cabinetEndDate = getRecordValue(cabinetPeriodRecord, ["endDate"]);
+              const cabinetStartDate = getRecordValue(cabinetPeriodRecord, [
+                "startDate",
+              ]);
+              const cabinetEndDate = getRecordValue(cabinetPeriodRecord, [
+                "endDate",
+              ]);
 
               const cabinetPeriodRange =
                 cabinetStartDate === "-"
                   ? fallbackCabinetPeriodRange
                   : `${formatDate(cabinetStartDate as Date)} - ${formatDate(
-                    cabinetEndDate as Date,
-                  )}`;
+                      cabinetEndDate as Date,
+                    )}`;
 
               const cabinetPeriodIsActive =
                 getRecordValue(cabinetPeriodRecord, ["isActive"]) === true ||
-                getRecordValue(activeCabinetRecord ?? {}, ["isActive"]) === true;
+                getRecordValue(activeCabinetRecord ?? {}, ["isActive"]) ===
+                  true;
 
               const membershipId = String(
                 getRecordValue(membershipRecord, ["id"]),
