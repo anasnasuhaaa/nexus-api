@@ -6,17 +6,19 @@ import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
 
-export type ResetPasswordResult = {
+export type SendResetPasswordLinkResult = {
   success: boolean;
   message: string;
 };
 
-export async function resetMemberUserPasswordAction(
+function getAppUrl() {
+  return process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+}
+
+export async function sendMemberResetPasswordLinkAction(
   memberId: string,
   userId: string,
-  newPassword: string,
-  confirmPassword: string,
-): Promise<ResetPasswordResult> {
+): Promise<SendResetPasswordLinkResult> {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -40,7 +42,7 @@ export async function resetMemberUserPasswordAction(
   if (!currentUser || currentUser.role !== "SUPER_ADMIN") {
     return {
       success: false,
-      message: "Hanya Super Admin yang dapat mereset password user.",
+      message: "Hanya Super Admin yang dapat mengirim link reset password.",
     };
   }
 
@@ -52,6 +54,7 @@ export async function resetMemberUserPasswordAction(
     select: {
       id: true,
       email: true,
+      name: true,
     },
   });
 
@@ -63,63 +66,13 @@ export async function resetMemberUserPasswordAction(
     };
   }
 
-  if (!newPassword || !confirmPassword) {
-    return {
-      success: false,
-      message: "Password baru dan konfirmasi password wajib diisi.",
-    };
-  }
-
-  if (newPassword.length < 8) {
-    return {
-      success: false,
-      message: "Password baru minimal 8 karakter.",
-    };
-  }
-
-  if (newPassword !== confirmPassword) {
-    return {
-      success: false,
-      message: "Konfirmasi password tidak sama.",
-    };
-  }
-
-  const authContext = await auth.$context;
-  const hashedPassword = await authContext.password.hash(newPassword);
-
-  const existingCredentialAccount = await prisma.account.findFirst({
-    where: {
-      userId: targetUser.id,
-      providerId: "credential",
+  await auth.api.requestPasswordReset({
+    body: {
+      email: targetUser.email,
+      redirectTo: `${getAppUrl()}/reset-password`,
     },
-    select: {
-      id: true,
-    },
+    headers: await headers(),
   });
-
-  if (existingCredentialAccount) {
-    await prisma.account.update({
-      where: {
-        id: existingCredentialAccount.id,
-      },
-      data: {
-        password: hashedPassword,
-        updatedAt: new Date(),
-      },
-    });
-  } else {
-    await prisma.account.create({
-      data: {
-        id: crypto.randomUUID(),
-        userId: targetUser.id,
-        accountId: targetUser.email,
-        providerId: "credential",
-        password: hashedPassword,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    });
-  }
 
   await prisma.user.update({
     where: {
@@ -137,7 +90,6 @@ export async function resetMemberUserPasswordAction(
 
   return {
     success: true,
-    message:
-      "Password user berhasil direset. User wajib mengganti password saat login berikutnya.",
+    message: `Link aktivasi/reset password berhasil dikirim ke ${targetUser.email}.`,
   };
 }
