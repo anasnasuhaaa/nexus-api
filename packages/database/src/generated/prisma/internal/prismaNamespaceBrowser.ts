@@ -65,7 +65,8 @@ export const ModelName = {
   RolePermission: 'RolePermission',
   UserPermissionOverride: 'UserPermissionOverride',
   Program: 'Program',
-  ProgramProgressUpdate: 'ProgramProgressUpdate'
+  ProgramProgressUpdate: 'ProgramProgressUpdate',
+  UserActivationEmailLog: 'UserActivationEmailLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -305,6 +306,20 @@ export const ProgramProgressUpdateScalarFieldEnum = {
 } as const
 
 export type ProgramProgressUpdateScalarFieldEnum = (typeof ProgramProgressUpdateScalarFieldEnum)[keyof typeof ProgramProgressUpdateScalarFieldEnum]
+
+
+export const UserActivationEmailLogScalarFieldEnum = {
+  id: 'id',
+  targetUserId: 'targetUserId',
+  senderUserId: 'senderUserId',
+  targetEmail: 'targetEmail',
+  targetName: 'targetName',
+  status: 'status',
+  errorMessage: 'errorMessage',
+  createdAt: 'createdAt'
+} as const
+
+export type UserActivationEmailLogScalarFieldEnum = (typeof UserActivationEmailLogScalarFieldEnum)[keyof typeof UserActivationEmailLogScalarFieldEnum]
 
 
 export const SortOrder = {

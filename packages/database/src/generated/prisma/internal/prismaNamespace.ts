@@ -398,7 +398,8 @@ export const ModelName = {
   RolePermission: 'RolePermission',
   UserPermissionOverride: 'UserPermissionOverride',
   Program: 'Program',
-  ProgramProgressUpdate: 'ProgramProgressUpdate'
+  ProgramProgressUpdate: 'ProgramProgressUpdate',
+  UserActivationEmailLog: 'UserActivationEmailLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -414,7 +415,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "cabinetPeriod" | "birdep" | "member" | "membership" | "user" | "session" | "account" | "verification" | "role" | "permission" | "userRole" | "rolePermission" | "userPermissionOverride" | "program" | "programProgressUpdate"
+    modelProps: "cabinetPeriod" | "birdep" | "member" | "membership" | "user" | "session" | "account" | "verification" | "role" | "permission" | "userRole" | "rolePermission" | "userPermissionOverride" | "program" | "programProgressUpdate" | "userActivationEmailLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1528,6 +1529,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    UserActivationEmailLog: {
+      payload: Prisma.$UserActivationEmailLogPayload<ExtArgs>
+      fields: Prisma.UserActivationEmailLogFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.UserActivationEmailLogFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserActivationEmailLogPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.UserActivationEmailLogFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserActivationEmailLogPayload>
+        }
+        findFirst: {
+          args: Prisma.UserActivationEmailLogFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserActivationEmailLogPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.UserActivationEmailLogFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserActivationEmailLogPayload>
+        }
+        findMany: {
+          args: Prisma.UserActivationEmailLogFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserActivationEmailLogPayload>[]
+        }
+        create: {
+          args: Prisma.UserActivationEmailLogCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserActivationEmailLogPayload>
+        }
+        createMany: {
+          args: Prisma.UserActivationEmailLogCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.UserActivationEmailLogCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserActivationEmailLogPayload>[]
+        }
+        delete: {
+          args: Prisma.UserActivationEmailLogDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserActivationEmailLogPayload>
+        }
+        update: {
+          args: Prisma.UserActivationEmailLogUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserActivationEmailLogPayload>
+        }
+        deleteMany: {
+          args: Prisma.UserActivationEmailLogDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.UserActivationEmailLogUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.UserActivationEmailLogUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserActivationEmailLogPayload>[]
+        }
+        upsert: {
+          args: Prisma.UserActivationEmailLogUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserActivationEmailLogPayload>
+        }
+        aggregate: {
+          args: Prisma.UserActivationEmailLogAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUserActivationEmailLog>
+        }
+        groupBy: {
+          args: Prisma.UserActivationEmailLogGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserActivationEmailLogGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.UserActivationEmailLogCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserActivationEmailLogCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1788,6 +1863,20 @@ export const ProgramProgressUpdateScalarFieldEnum = {
 } as const
 
 export type ProgramProgressUpdateScalarFieldEnum = (typeof ProgramProgressUpdateScalarFieldEnum)[keyof typeof ProgramProgressUpdateScalarFieldEnum]
+
+
+export const UserActivationEmailLogScalarFieldEnum = {
+  id: 'id',
+  targetUserId: 'targetUserId',
+  senderUserId: 'senderUserId',
+  targetEmail: 'targetEmail',
+  targetName: 'targetName',
+  status: 'status',
+  errorMessage: 'errorMessage',
+  createdAt: 'createdAt'
+} as const
+
+export type UserActivationEmailLogScalarFieldEnum = (typeof UserActivationEmailLogScalarFieldEnum)[keyof typeof UserActivationEmailLogScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2063,6 +2152,7 @@ export type GlobalOmitConfig = {
   userPermissionOverride?: Prisma.UserPermissionOverrideOmit
   program?: Prisma.ProgramOmit
   programProgressUpdate?: Prisma.ProgramProgressUpdateOmit
+  userActivationEmailLog?: Prisma.UserActivationEmailLogOmit
 }
 
 /* Types for Logging */

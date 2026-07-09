@@ -337,3 +337,20 @@ model ProgramProgressUpdate {
   @@index([reportedAt])
   @@schema("nexus")
 }
+
+model UserActivationEmailLog {
+  id           String   @id @default(uuid())
+  targetUserId String
+  senderUserId String?
+  targetEmail  String
+  targetName   String
+  status       String
+  errorMessage String?  @db.Text
+  createdAt    DateTime @default(now())
+
+  @@index([targetUserId])
+  @@index([senderUserId])
+  @@index([status])
+  @@index([createdAt])
+  @@schema("nexus")
+}

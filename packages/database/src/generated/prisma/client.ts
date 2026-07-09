@@ -116,3 +116,8 @@ export type Program = Prisma.ProgramModel
  * 
  */
 export type ProgramProgressUpdate = Prisma.ProgramProgressUpdateModel
+/**
+ * Model UserActivationEmailLog
+ * 
+ */
+export type UserActivationEmailLog = Prisma.UserActivationEmailLogModel
