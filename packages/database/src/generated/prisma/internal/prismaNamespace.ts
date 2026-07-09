@@ -399,7 +399,8 @@ export const ModelName = {
   UserPermissionOverride: 'UserPermissionOverride',
   Program: 'Program',
   ProgramProgressUpdate: 'ProgramProgressUpdate',
-  UserActivationEmailLog: 'UserActivationEmailLog'
+  UserActivationEmailLog: 'UserActivationEmailLog',
+  TevoSiteProfile: 'TevoSiteProfile'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -415,7 +416,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "cabinetPeriod" | "birdep" | "member" | "membership" | "user" | "session" | "account" | "verification" | "role" | "permission" | "userRole" | "rolePermission" | "userPermissionOverride" | "program" | "programProgressUpdate" | "userActivationEmailLog"
+    modelProps: "cabinetPeriod" | "birdep" | "member" | "membership" | "user" | "session" | "account" | "verification" | "role" | "permission" | "userRole" | "rolePermission" | "userPermissionOverride" | "program" | "programProgressUpdate" | "userActivationEmailLog" | "tevoSiteProfile"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1603,6 +1604,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    TevoSiteProfile: {
+      payload: Prisma.$TevoSiteProfilePayload<ExtArgs>
+      fields: Prisma.TevoSiteProfileFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TevoSiteProfileFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TevoSiteProfilePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TevoSiteProfileFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TevoSiteProfilePayload>
+        }
+        findFirst: {
+          args: Prisma.TevoSiteProfileFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TevoSiteProfilePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TevoSiteProfileFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TevoSiteProfilePayload>
+        }
+        findMany: {
+          args: Prisma.TevoSiteProfileFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TevoSiteProfilePayload>[]
+        }
+        create: {
+          args: Prisma.TevoSiteProfileCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TevoSiteProfilePayload>
+        }
+        createMany: {
+          args: Prisma.TevoSiteProfileCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TevoSiteProfileCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TevoSiteProfilePayload>[]
+        }
+        delete: {
+          args: Prisma.TevoSiteProfileDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TevoSiteProfilePayload>
+        }
+        update: {
+          args: Prisma.TevoSiteProfileUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TevoSiteProfilePayload>
+        }
+        deleteMany: {
+          args: Prisma.TevoSiteProfileDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TevoSiteProfileUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TevoSiteProfileUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TevoSiteProfilePayload>[]
+        }
+        upsert: {
+          args: Prisma.TevoSiteProfileUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TevoSiteProfilePayload>
+        }
+        aggregate: {
+          args: Prisma.TevoSiteProfileAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTevoSiteProfile>
+        }
+        groupBy: {
+          args: Prisma.TevoSiteProfileGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TevoSiteProfileGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TevoSiteProfileCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TevoSiteProfileCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1837,11 +1912,18 @@ export const ProgramScalarFieldEnum = {
   status: 'status',
   progressPercent: 'progressPercent',
   pressReleaseUrl: 'pressReleaseUrl',
-  isPublishedToTevo: 'isPublishedToTevo',
   createdByUserId: 'createdByUserId',
   updatedByUserId: 'updatedByUserId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  publicTitle: 'publicTitle',
+  publicSlug: 'publicSlug',
+  publicSummary: 'publicSummary',
+  publicDescription: 'publicDescription',
+  publicCoverUrl: 'publicCoverUrl',
+  isPublishedToTevo: 'isPublishedToTevo',
+  publishedToTevoAt: 'publishedToTevoAt',
+  archivedFromTevoAt: 'archivedFromTevoAt'
 } as const
 
 export type ProgramScalarFieldEnum = (typeof ProgramScalarFieldEnum)[keyof typeof ProgramScalarFieldEnum]
@@ -1877,6 +1959,23 @@ export const UserActivationEmailLogScalarFieldEnum = {
 } as const
 
 export type UserActivationEmailLogScalarFieldEnum = (typeof UserActivationEmailLogScalarFieldEnum)[keyof typeof UserActivationEmailLogScalarFieldEnum]
+
+
+export const TevoSiteProfileScalarFieldEnum = {
+  id: 'id',
+  siteName: 'siteName',
+  tagline: 'tagline',
+  organizationSummary: 'organizationSummary',
+  vision: 'vision',
+  mission: 'mission',
+  heroTitle: 'heroTitle',
+  heroSubtitle: 'heroSubtitle',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TevoSiteProfileScalarFieldEnum = (typeof TevoSiteProfileScalarFieldEnum)[keyof typeof TevoSiteProfileScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2153,6 +2252,7 @@ export type GlobalOmitConfig = {
   program?: Prisma.ProgramOmit
   programProgressUpdate?: Prisma.ProgramProgressUpdateOmit
   userActivationEmailLog?: Prisma.UserActivationEmailLogOmit
+  tevoSiteProfile?: Prisma.TevoSiteProfileOmit
 }
 
 /* Types for Logging */

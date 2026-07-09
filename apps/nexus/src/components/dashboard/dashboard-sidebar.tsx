@@ -14,10 +14,12 @@ import {
   Newspaper,
   PlusCircle,
   ShieldCheck,
+  Sparkles,
+  Settings,
   Table2,
   Upload,
+  UserCircle,
   UsersRound,
-  UserCircle
 } from "lucide-react";
 import { useState } from "react";
 import type { LucideIcon } from "lucide-react";
@@ -124,7 +126,51 @@ const dashboardMenus: DashboardMenu[] = [
     title: "Konten Tevo",
     href: "/dashboard/tevo",
     icon: Newspaper,
+    children: [
+      {
+        title: "Overview",
+        href: "/dashboard/tevo",
+        icon: LayoutDashboard,
+      },
+      {
+        title: "Program Kerja",
+        href: "/dashboard/tevo/programs",
+        icon: FileText,
+      },
+      {
+        title: "Visi Misi",
+        href: "/dashboard/tevo/vision-mission",
+        icon: Sparkles,
+      },
+      {
+        title: "Struktur Organisasi",
+        href: "/dashboard/tevo/organization-structure",
+        icon: Landmark,
+      },
+      {
+        title: "Anggota Birdep",
+        href: "/dashboard/tevo/members",
+        icon: UsersRound,
+      },
+      {
+        title: "CMS / Berita",
+        href: "/dashboard/tevo/news",
+        icon: Newspaper,
+      },
+      {
+        title: "Pengaturan Tevo",
+        href: "/dashboard/tevo/settings",
+        icon: Settings,
+      },
+    ],
   },
+];
+
+const exactOnlySubmenuHrefs = [
+  "/dashboard/members",
+  "/dashboard/programs",
+  "/dashboard/progress",
+  "/dashboard/tevo",
 ];
 
 function isActivePath(pathname: string, href: string) {
@@ -137,6 +183,14 @@ function isActivePath(pathname: string, href: string) {
 
 function isExactOrNestedPath(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+function isActiveSubmenuPath(pathname: string, href: string) {
+  if (exactOnlySubmenuHrefs.includes(href)) {
+    return pathname === href;
+  }
+
+  return isExactOrNestedPath(pathname, href);
 }
 
 export function DashboardSidebar() {
@@ -163,7 +217,7 @@ export function DashboardSidebar() {
         <div>
           <p className="font-black leading-none">Nexus</p>
           <p className="mt-1 text-xs text-muted-foreground">
-            Internal System
+            Astana Angkasa
           </p>
         </div>
       </div>
@@ -221,12 +275,10 @@ export function DashboardSidebar() {
                 <div className="ml-4 space-y-1 border-l border-border pl-3">
                   {menu.children?.map((child) => {
                     const ChildIcon = child.icon;
-                    const childActive =
-                      child.href === "/dashboard/members" ||
-                        child.href === "/dashboard/programs" ||
-                        child.href === "/dashboard/progress"
-                        ? pathname === child.href
-                        : isExactOrNestedPath(pathname, child.href);
+                    const childActive = isActiveSubmenuPath(
+                      pathname,
+                      child.href,
+                    );
 
                     return (
                       <Link
@@ -259,6 +311,7 @@ export function DashboardSidebar() {
           <UserCircle className="size-4" />
           Profil Saya
         </Link>
+
         <Link
           href="/"
           className="mb-2 flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground"

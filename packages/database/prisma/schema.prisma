@@ -296,11 +296,19 @@ model Program {
   status            ProgramStatus @default(PLANNED)
   progressPercent   Int           @default(0)
   pressReleaseUrl   String?
-  isPublishedToTevo Boolean       @default(false)
   createdByUserId   String?
   updatedByUserId   String?
   createdAt         DateTime      @default(now())
   updatedAt         DateTime      @updatedAt
+
+  publicTitle          String?
+  publicSlug           String?   @unique
+  publicSummary        String?   @db.Text
+  publicDescription    String?   @db.Text
+  publicCoverUrl       String?
+  isPublishedToTevo    Boolean   @default(false)
+  publishedToTevoAt    DateTime?
+  archivedFromTevoAt   DateTime?
 
   birdep          Birdep                  @relation(fields: [birdepId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   createdBy       User?                   @relation("ProgramCreatedBy", fields: [createdByUserId], references: [id], onDelete: SetNull, onUpdate: Cascade)
@@ -353,4 +361,20 @@ model UserActivationEmailLog {
   @@index([status])
   @@index([createdAt])
   @@schema("nexus")
+}
+
+model TevoSiteProfile {
+  id                  String   @id @default(uuid())
+  siteName            String   @default("Tevo")
+  tagline             String?
+  organizationSummary String?  @db.Text
+  vision              String?  @db.Text
+  mission             String?  @db.Text
+  heroTitle           String?
+  heroSubtitle        String?  @db.Text
+  isActive            Boolean  @default(true)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@schema("tevo")
 }

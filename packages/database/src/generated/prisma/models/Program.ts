@@ -46,11 +46,18 @@ export type ProgramMinAggregateOutputType = {
   status: $Enums.ProgramStatus | null
   progressPercent: number | null
   pressReleaseUrl: string | null
-  isPublishedToTevo: boolean | null
   createdByUserId: string | null
   updatedByUserId: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  publicTitle: string | null
+  publicSlug: string | null
+  publicSummary: string | null
+  publicDescription: string | null
+  publicCoverUrl: string | null
+  isPublishedToTevo: boolean | null
+  publishedToTevoAt: Date | null
+  archivedFromTevoAt: Date | null
 }
 
 export type ProgramMaxAggregateOutputType = {
@@ -65,11 +72,18 @@ export type ProgramMaxAggregateOutputType = {
   status: $Enums.ProgramStatus | null
   progressPercent: number | null
   pressReleaseUrl: string | null
-  isPublishedToTevo: boolean | null
   createdByUserId: string | null
   updatedByUserId: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  publicTitle: string | null
+  publicSlug: string | null
+  publicSummary: string | null
+  publicDescription: string | null
+  publicCoverUrl: string | null
+  isPublishedToTevo: boolean | null
+  publishedToTevoAt: Date | null
+  archivedFromTevoAt: Date | null
 }
 
 export type ProgramCountAggregateOutputType = {
@@ -84,11 +98,18 @@ export type ProgramCountAggregateOutputType = {
   status: number
   progressPercent: number
   pressReleaseUrl: number
-  isPublishedToTevo: number
   createdByUserId: number
   updatedByUserId: number
   createdAt: number
   updatedAt: number
+  publicTitle: number
+  publicSlug: number
+  publicSummary: number
+  publicDescription: number
+  publicCoverUrl: number
+  isPublishedToTevo: number
+  publishedToTevoAt: number
+  archivedFromTevoAt: number
   _all: number
 }
 
@@ -113,11 +134,18 @@ export type ProgramMinAggregateInputType = {
   status?: true
   progressPercent?: true
   pressReleaseUrl?: true
-  isPublishedToTevo?: true
   createdByUserId?: true
   updatedByUserId?: true
   createdAt?: true
   updatedAt?: true
+  publicTitle?: true
+  publicSlug?: true
+  publicSummary?: true
+  publicDescription?: true
+  publicCoverUrl?: true
+  isPublishedToTevo?: true
+  publishedToTevoAt?: true
+  archivedFromTevoAt?: true
 }
 
 export type ProgramMaxAggregateInputType = {
@@ -132,11 +160,18 @@ export type ProgramMaxAggregateInputType = {
   status?: true
   progressPercent?: true
   pressReleaseUrl?: true
-  isPublishedToTevo?: true
   createdByUserId?: true
   updatedByUserId?: true
   createdAt?: true
   updatedAt?: true
+  publicTitle?: true
+  publicSlug?: true
+  publicSummary?: true
+  publicDescription?: true
+  publicCoverUrl?: true
+  isPublishedToTevo?: true
+  publishedToTevoAt?: true
+  archivedFromTevoAt?: true
 }
 
 export type ProgramCountAggregateInputType = {
@@ -151,11 +186,18 @@ export type ProgramCountAggregateInputType = {
   status?: true
   progressPercent?: true
   pressReleaseUrl?: true
-  isPublishedToTevo?: true
   createdByUserId?: true
   updatedByUserId?: true
   createdAt?: true
   updatedAt?: true
+  publicTitle?: true
+  publicSlug?: true
+  publicSummary?: true
+  publicDescription?: true
+  publicCoverUrl?: true
+  isPublishedToTevo?: true
+  publishedToTevoAt?: true
+  archivedFromTevoAt?: true
   _all?: true
 }
 
@@ -257,11 +299,18 @@ export type ProgramGroupByOutputType = {
   status: $Enums.ProgramStatus
   progressPercent: number
   pressReleaseUrl: string | null
-  isPublishedToTevo: boolean
   createdByUserId: string | null
   updatedByUserId: string | null
   createdAt: Date
   updatedAt: Date
+  publicTitle: string | null
+  publicSlug: string | null
+  publicSummary: string | null
+  publicDescription: string | null
+  publicCoverUrl: string | null
+  isPublishedToTevo: boolean
+  publishedToTevoAt: Date | null
+  archivedFromTevoAt: Date | null
   _count: ProgramCountAggregateOutputType | null
   _avg: ProgramAvgAggregateOutputType | null
   _sum: ProgramSumAggregateOutputType | null
@@ -299,11 +348,18 @@ export type ProgramWhereInput = {
   status?: Prisma.EnumProgramStatusFilter<"Program"> | $Enums.ProgramStatus
   progressPercent?: Prisma.IntFilter<"Program"> | number
   pressReleaseUrl?: Prisma.StringNullableFilter<"Program"> | string | null
-  isPublishedToTevo?: Prisma.BoolFilter<"Program"> | boolean
   createdByUserId?: Prisma.StringNullableFilter<"Program"> | string | null
   updatedByUserId?: Prisma.StringNullableFilter<"Program"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Program"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Program"> | Date | string
+  publicTitle?: Prisma.StringNullableFilter<"Program"> | string | null
+  publicSlug?: Prisma.StringNullableFilter<"Program"> | string | null
+  publicSummary?: Prisma.StringNullableFilter<"Program"> | string | null
+  publicDescription?: Prisma.StringNullableFilter<"Program"> | string | null
+  publicCoverUrl?: Prisma.StringNullableFilter<"Program"> | string | null
+  isPublishedToTevo?: Prisma.BoolFilter<"Program"> | boolean
+  publishedToTevoAt?: Prisma.DateTimeNullableFilter<"Program"> | Date | string | null
+  archivedFromTevoAt?: Prisma.DateTimeNullableFilter<"Program"> | Date | string | null
   birdep?: Prisma.XOR<Prisma.BirdepScalarRelationFilter, Prisma.BirdepWhereInput>
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   updatedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
@@ -322,11 +378,18 @@ export type ProgramOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   progressPercent?: Prisma.SortOrder
   pressReleaseUrl?: Prisma.SortOrderInput | Prisma.SortOrder
-  isPublishedToTevo?: Prisma.SortOrder
   createdByUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   updatedByUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  publicTitle?: Prisma.SortOrderInput | Prisma.SortOrder
+  publicSlug?: Prisma.SortOrderInput | Prisma.SortOrder
+  publicSummary?: Prisma.SortOrderInput | Prisma.SortOrder
+  publicDescription?: Prisma.SortOrderInput | Prisma.SortOrder
+  publicCoverUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  isPublishedToTevo?: Prisma.SortOrder
+  publishedToTevoAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  archivedFromTevoAt?: Prisma.SortOrderInput | Prisma.SortOrder
   birdep?: Prisma.BirdepOrderByWithRelationInput
   createdBy?: Prisma.UserOrderByWithRelationInput
   updatedBy?: Prisma.UserOrderByWithRelationInput
@@ -335,6 +398,7 @@ export type ProgramOrderByWithRelationInput = {
 
 export type ProgramWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  publicSlug?: string
   birdepId_slug?: Prisma.ProgramBirdepIdSlugCompoundUniqueInput
   AND?: Prisma.ProgramWhereInput | Prisma.ProgramWhereInput[]
   OR?: Prisma.ProgramWhereInput[]
@@ -349,16 +413,22 @@ export type ProgramWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumProgramStatusFilter<"Program"> | $Enums.ProgramStatus
   progressPercent?: Prisma.IntFilter<"Program"> | number
   pressReleaseUrl?: Prisma.StringNullableFilter<"Program"> | string | null
-  isPublishedToTevo?: Prisma.BoolFilter<"Program"> | boolean
   createdByUserId?: Prisma.StringNullableFilter<"Program"> | string | null
   updatedByUserId?: Prisma.StringNullableFilter<"Program"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Program"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Program"> | Date | string
+  publicTitle?: Prisma.StringNullableFilter<"Program"> | string | null
+  publicSummary?: Prisma.StringNullableFilter<"Program"> | string | null
+  publicDescription?: Prisma.StringNullableFilter<"Program"> | string | null
+  publicCoverUrl?: Prisma.StringNullableFilter<"Program"> | string | null
+  isPublishedToTevo?: Prisma.BoolFilter<"Program"> | boolean
+  publishedToTevoAt?: Prisma.DateTimeNullableFilter<"Program"> | Date | string | null
+  archivedFromTevoAt?: Prisma.DateTimeNullableFilter<"Program"> | Date | string | null
   birdep?: Prisma.XOR<Prisma.BirdepScalarRelationFilter, Prisma.BirdepWhereInput>
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   updatedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   progressUpdates?: Prisma.ProgramProgressUpdateListRelationFilter
-}, "id" | "birdepId_slug">
+}, "id" | "publicSlug" | "birdepId_slug">
 
 export type ProgramOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -372,11 +442,18 @@ export type ProgramOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   progressPercent?: Prisma.SortOrder
   pressReleaseUrl?: Prisma.SortOrderInput | Prisma.SortOrder
-  isPublishedToTevo?: Prisma.SortOrder
   createdByUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   updatedByUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  publicTitle?: Prisma.SortOrderInput | Prisma.SortOrder
+  publicSlug?: Prisma.SortOrderInput | Prisma.SortOrder
+  publicSummary?: Prisma.SortOrderInput | Prisma.SortOrder
+  publicDescription?: Prisma.SortOrderInput | Prisma.SortOrder
+  publicCoverUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  isPublishedToTevo?: Prisma.SortOrder
+  publishedToTevoAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  archivedFromTevoAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ProgramCountOrderByAggregateInput
   _avg?: Prisma.ProgramAvgOrderByAggregateInput
   _max?: Prisma.ProgramMaxOrderByAggregateInput
@@ -399,11 +476,18 @@ export type ProgramScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumProgramStatusWithAggregatesFilter<"Program"> | $Enums.ProgramStatus
   progressPercent?: Prisma.IntWithAggregatesFilter<"Program"> | number
   pressReleaseUrl?: Prisma.StringNullableWithAggregatesFilter<"Program"> | string | null
-  isPublishedToTevo?: Prisma.BoolWithAggregatesFilter<"Program"> | boolean
   createdByUserId?: Prisma.StringNullableWithAggregatesFilter<"Program"> | string | null
   updatedByUserId?: Prisma.StringNullableWithAggregatesFilter<"Program"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Program"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Program"> | Date | string
+  publicTitle?: Prisma.StringNullableWithAggregatesFilter<"Program"> | string | null
+  publicSlug?: Prisma.StringNullableWithAggregatesFilter<"Program"> | string | null
+  publicSummary?: Prisma.StringNullableWithAggregatesFilter<"Program"> | string | null
+  publicDescription?: Prisma.StringNullableWithAggregatesFilter<"Program"> | string | null
+  publicCoverUrl?: Prisma.StringNullableWithAggregatesFilter<"Program"> | string | null
+  isPublishedToTevo?: Prisma.BoolWithAggregatesFilter<"Program"> | boolean
+  publishedToTevoAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Program"> | Date | string | null
+  archivedFromTevoAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Program"> | Date | string | null
 }
 
 export type ProgramCreateInput = {
@@ -417,9 +501,16 @@ export type ProgramCreateInput = {
   status?: $Enums.ProgramStatus
   progressPercent?: number
   pressReleaseUrl?: string | null
-  isPublishedToTevo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  publicTitle?: string | null
+  publicSlug?: string | null
+  publicSummary?: string | null
+  publicDescription?: string | null
+  publicCoverUrl?: string | null
+  isPublishedToTevo?: boolean
+  publishedToTevoAt?: Date | string | null
+  archivedFromTevoAt?: Date | string | null
   birdep: Prisma.BirdepCreateNestedOneWithoutProgramsInput
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedProgramsInput
   updatedBy?: Prisma.UserCreateNestedOneWithoutUpdatedProgramsInput
@@ -438,11 +529,18 @@ export type ProgramUncheckedCreateInput = {
   status?: $Enums.ProgramStatus
   progressPercent?: number
   pressReleaseUrl?: string | null
-  isPublishedToTevo?: boolean
   createdByUserId?: string | null
   updatedByUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  publicTitle?: string | null
+  publicSlug?: string | null
+  publicSummary?: string | null
+  publicDescription?: string | null
+  publicCoverUrl?: string | null
+  isPublishedToTevo?: boolean
+  publishedToTevoAt?: Date | string | null
+  archivedFromTevoAt?: Date | string | null
   progressUpdates?: Prisma.ProgramProgressUpdateUncheckedCreateNestedManyWithoutProgramInput
 }
 
@@ -457,9 +555,16 @@ export type ProgramUpdateInput = {
   status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
   progressPercent?: Prisma.IntFieldUpdateOperationsInput | number
   pressReleaseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publicTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSlug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicCoverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publishedToTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedFromTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   birdep?: Prisma.BirdepUpdateOneRequiredWithoutProgramsNestedInput
   createdBy?: Prisma.UserUpdateOneWithoutCreatedProgramsNestedInput
   updatedBy?: Prisma.UserUpdateOneWithoutUpdatedProgramsNestedInput
@@ -478,11 +583,18 @@ export type ProgramUncheckedUpdateInput = {
   status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
   progressPercent?: Prisma.IntFieldUpdateOperationsInput | number
   pressReleaseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publicTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSlug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicCoverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publishedToTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedFromTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   progressUpdates?: Prisma.ProgramProgressUpdateUncheckedUpdateManyWithoutProgramNestedInput
 }
 
@@ -498,11 +610,18 @@ export type ProgramCreateManyInput = {
   status?: $Enums.ProgramStatus
   progressPercent?: number
   pressReleaseUrl?: string | null
-  isPublishedToTevo?: boolean
   createdByUserId?: string | null
   updatedByUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  publicTitle?: string | null
+  publicSlug?: string | null
+  publicSummary?: string | null
+  publicDescription?: string | null
+  publicCoverUrl?: string | null
+  isPublishedToTevo?: boolean
+  publishedToTevoAt?: Date | string | null
+  archivedFromTevoAt?: Date | string | null
 }
 
 export type ProgramUpdateManyMutationInput = {
@@ -516,9 +635,16 @@ export type ProgramUpdateManyMutationInput = {
   status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
   progressPercent?: Prisma.IntFieldUpdateOperationsInput | number
   pressReleaseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publicTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSlug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicCoverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publishedToTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedFromTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ProgramUncheckedUpdateManyInput = {
@@ -533,11 +659,18 @@ export type ProgramUncheckedUpdateManyInput = {
   status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
   progressPercent?: Prisma.IntFieldUpdateOperationsInput | number
   pressReleaseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publicTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSlug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicCoverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publishedToTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedFromTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ProgramListRelationFilter = {
@@ -567,11 +700,18 @@ export type ProgramCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   progressPercent?: Prisma.SortOrder
   pressReleaseUrl?: Prisma.SortOrder
-  isPublishedToTevo?: Prisma.SortOrder
   createdByUserId?: Prisma.SortOrder
   updatedByUserId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  publicTitle?: Prisma.SortOrder
+  publicSlug?: Prisma.SortOrder
+  publicSummary?: Prisma.SortOrder
+  publicDescription?: Prisma.SortOrder
+  publicCoverUrl?: Prisma.SortOrder
+  isPublishedToTevo?: Prisma.SortOrder
+  publishedToTevoAt?: Prisma.SortOrder
+  archivedFromTevoAt?: Prisma.SortOrder
 }
 
 export type ProgramAvgOrderByAggregateInput = {
@@ -590,11 +730,18 @@ export type ProgramMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   progressPercent?: Prisma.SortOrder
   pressReleaseUrl?: Prisma.SortOrder
-  isPublishedToTevo?: Prisma.SortOrder
   createdByUserId?: Prisma.SortOrder
   updatedByUserId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  publicTitle?: Prisma.SortOrder
+  publicSlug?: Prisma.SortOrder
+  publicSummary?: Prisma.SortOrder
+  publicDescription?: Prisma.SortOrder
+  publicCoverUrl?: Prisma.SortOrder
+  isPublishedToTevo?: Prisma.SortOrder
+  publishedToTevoAt?: Prisma.SortOrder
+  archivedFromTevoAt?: Prisma.SortOrder
 }
 
 export type ProgramMinOrderByAggregateInput = {
@@ -609,11 +756,18 @@ export type ProgramMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   progressPercent?: Prisma.SortOrder
   pressReleaseUrl?: Prisma.SortOrder
-  isPublishedToTevo?: Prisma.SortOrder
   createdByUserId?: Prisma.SortOrder
   updatedByUserId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  publicTitle?: Prisma.SortOrder
+  publicSlug?: Prisma.SortOrder
+  publicSummary?: Prisma.SortOrder
+  publicDescription?: Prisma.SortOrder
+  publicCoverUrl?: Prisma.SortOrder
+  isPublishedToTevo?: Prisma.SortOrder
+  publishedToTevoAt?: Prisma.SortOrder
+  archivedFromTevoAt?: Prisma.SortOrder
 }
 
 export type ProgramSumOrderByAggregateInput = {
@@ -788,9 +942,16 @@ export type ProgramCreateWithoutBirdepInput = {
   status?: $Enums.ProgramStatus
   progressPercent?: number
   pressReleaseUrl?: string | null
-  isPublishedToTevo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  publicTitle?: string | null
+  publicSlug?: string | null
+  publicSummary?: string | null
+  publicDescription?: string | null
+  publicCoverUrl?: string | null
+  isPublishedToTevo?: boolean
+  publishedToTevoAt?: Date | string | null
+  archivedFromTevoAt?: Date | string | null
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedProgramsInput
   updatedBy?: Prisma.UserCreateNestedOneWithoutUpdatedProgramsInput
   progressUpdates?: Prisma.ProgramProgressUpdateCreateNestedManyWithoutProgramInput
@@ -807,11 +968,18 @@ export type ProgramUncheckedCreateWithoutBirdepInput = {
   status?: $Enums.ProgramStatus
   progressPercent?: number
   pressReleaseUrl?: string | null
-  isPublishedToTevo?: boolean
   createdByUserId?: string | null
   updatedByUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  publicTitle?: string | null
+  publicSlug?: string | null
+  publicSummary?: string | null
+  publicDescription?: string | null
+  publicCoverUrl?: string | null
+  isPublishedToTevo?: boolean
+  publishedToTevoAt?: Date | string | null
+  archivedFromTevoAt?: Date | string | null
   progressUpdates?: Prisma.ProgramProgressUpdateUncheckedCreateNestedManyWithoutProgramInput
 }
 
@@ -856,11 +1024,18 @@ export type ProgramScalarWhereInput = {
   status?: Prisma.EnumProgramStatusFilter<"Program"> | $Enums.ProgramStatus
   progressPercent?: Prisma.IntFilter<"Program"> | number
   pressReleaseUrl?: Prisma.StringNullableFilter<"Program"> | string | null
-  isPublishedToTevo?: Prisma.BoolFilter<"Program"> | boolean
   createdByUserId?: Prisma.StringNullableFilter<"Program"> | string | null
   updatedByUserId?: Prisma.StringNullableFilter<"Program"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Program"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Program"> | Date | string
+  publicTitle?: Prisma.StringNullableFilter<"Program"> | string | null
+  publicSlug?: Prisma.StringNullableFilter<"Program"> | string | null
+  publicSummary?: Prisma.StringNullableFilter<"Program"> | string | null
+  publicDescription?: Prisma.StringNullableFilter<"Program"> | string | null
+  publicCoverUrl?: Prisma.StringNullableFilter<"Program"> | string | null
+  isPublishedToTevo?: Prisma.BoolFilter<"Program"> | boolean
+  publishedToTevoAt?: Prisma.DateTimeNullableFilter<"Program"> | Date | string | null
+  archivedFromTevoAt?: Prisma.DateTimeNullableFilter<"Program"> | Date | string | null
 }
 
 export type ProgramCreateWithoutCreatedByInput = {
@@ -874,9 +1049,16 @@ export type ProgramCreateWithoutCreatedByInput = {
   status?: $Enums.ProgramStatus
   progressPercent?: number
   pressReleaseUrl?: string | null
-  isPublishedToTevo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  publicTitle?: string | null
+  publicSlug?: string | null
+  publicSummary?: string | null
+  publicDescription?: string | null
+  publicCoverUrl?: string | null
+  isPublishedToTevo?: boolean
+  publishedToTevoAt?: Date | string | null
+  archivedFromTevoAt?: Date | string | null
   birdep: Prisma.BirdepCreateNestedOneWithoutProgramsInput
   updatedBy?: Prisma.UserCreateNestedOneWithoutUpdatedProgramsInput
   progressUpdates?: Prisma.ProgramProgressUpdateCreateNestedManyWithoutProgramInput
@@ -894,10 +1076,17 @@ export type ProgramUncheckedCreateWithoutCreatedByInput = {
   status?: $Enums.ProgramStatus
   progressPercent?: number
   pressReleaseUrl?: string | null
-  isPublishedToTevo?: boolean
   updatedByUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  publicTitle?: string | null
+  publicSlug?: string | null
+  publicSummary?: string | null
+  publicDescription?: string | null
+  publicCoverUrl?: string | null
+  isPublishedToTevo?: boolean
+  publishedToTevoAt?: Date | string | null
+  archivedFromTevoAt?: Date | string | null
   progressUpdates?: Prisma.ProgramProgressUpdateUncheckedCreateNestedManyWithoutProgramInput
 }
 
@@ -922,9 +1111,16 @@ export type ProgramCreateWithoutUpdatedByInput = {
   status?: $Enums.ProgramStatus
   progressPercent?: number
   pressReleaseUrl?: string | null
-  isPublishedToTevo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  publicTitle?: string | null
+  publicSlug?: string | null
+  publicSummary?: string | null
+  publicDescription?: string | null
+  publicCoverUrl?: string | null
+  isPublishedToTevo?: boolean
+  publishedToTevoAt?: Date | string | null
+  archivedFromTevoAt?: Date | string | null
   birdep: Prisma.BirdepCreateNestedOneWithoutProgramsInput
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedProgramsInput
   progressUpdates?: Prisma.ProgramProgressUpdateCreateNestedManyWithoutProgramInput
@@ -942,10 +1138,17 @@ export type ProgramUncheckedCreateWithoutUpdatedByInput = {
   status?: $Enums.ProgramStatus
   progressPercent?: number
   pressReleaseUrl?: string | null
-  isPublishedToTevo?: boolean
   createdByUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  publicTitle?: string | null
+  publicSlug?: string | null
+  publicSummary?: string | null
+  publicDescription?: string | null
+  publicCoverUrl?: string | null
+  isPublishedToTevo?: boolean
+  publishedToTevoAt?: Date | string | null
+  archivedFromTevoAt?: Date | string | null
   progressUpdates?: Prisma.ProgramProgressUpdateUncheckedCreateNestedManyWithoutProgramInput
 }
 
@@ -1002,9 +1205,16 @@ export type ProgramCreateWithoutProgressUpdatesInput = {
   status?: $Enums.ProgramStatus
   progressPercent?: number
   pressReleaseUrl?: string | null
-  isPublishedToTevo?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  publicTitle?: string | null
+  publicSlug?: string | null
+  publicSummary?: string | null
+  publicDescription?: string | null
+  publicCoverUrl?: string | null
+  isPublishedToTevo?: boolean
+  publishedToTevoAt?: Date | string | null
+  archivedFromTevoAt?: Date | string | null
   birdep: Prisma.BirdepCreateNestedOneWithoutProgramsInput
   createdBy?: Prisma.UserCreateNestedOneWithoutCreatedProgramsInput
   updatedBy?: Prisma.UserCreateNestedOneWithoutUpdatedProgramsInput
@@ -1022,11 +1232,18 @@ export type ProgramUncheckedCreateWithoutProgressUpdatesInput = {
   status?: $Enums.ProgramStatus
   progressPercent?: number
   pressReleaseUrl?: string | null
-  isPublishedToTevo?: boolean
   createdByUserId?: string | null
   updatedByUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  publicTitle?: string | null
+  publicSlug?: string | null
+  publicSummary?: string | null
+  publicDescription?: string | null
+  publicCoverUrl?: string | null
+  isPublishedToTevo?: boolean
+  publishedToTevoAt?: Date | string | null
+  archivedFromTevoAt?: Date | string | null
 }
 
 export type ProgramCreateOrConnectWithoutProgressUpdatesInput = {
@@ -1056,9 +1273,16 @@ export type ProgramUpdateWithoutProgressUpdatesInput = {
   status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
   progressPercent?: Prisma.IntFieldUpdateOperationsInput | number
   pressReleaseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publicTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSlug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicCoverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publishedToTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedFromTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   birdep?: Prisma.BirdepUpdateOneRequiredWithoutProgramsNestedInput
   createdBy?: Prisma.UserUpdateOneWithoutCreatedProgramsNestedInput
   updatedBy?: Prisma.UserUpdateOneWithoutUpdatedProgramsNestedInput
@@ -1076,11 +1300,18 @@ export type ProgramUncheckedUpdateWithoutProgressUpdatesInput = {
   status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
   progressPercent?: Prisma.IntFieldUpdateOperationsInput | number
   pressReleaseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publicTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSlug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicCoverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publishedToTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedFromTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ProgramCreateManyBirdepInput = {
@@ -1094,11 +1325,18 @@ export type ProgramCreateManyBirdepInput = {
   status?: $Enums.ProgramStatus
   progressPercent?: number
   pressReleaseUrl?: string | null
-  isPublishedToTevo?: boolean
   createdByUserId?: string | null
   updatedByUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  publicTitle?: string | null
+  publicSlug?: string | null
+  publicSummary?: string | null
+  publicDescription?: string | null
+  publicCoverUrl?: string | null
+  isPublishedToTevo?: boolean
+  publishedToTevoAt?: Date | string | null
+  archivedFromTevoAt?: Date | string | null
 }
 
 export type ProgramUpdateWithoutBirdepInput = {
@@ -1112,9 +1350,16 @@ export type ProgramUpdateWithoutBirdepInput = {
   status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
   progressPercent?: Prisma.IntFieldUpdateOperationsInput | number
   pressReleaseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publicTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSlug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicCoverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publishedToTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedFromTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdBy?: Prisma.UserUpdateOneWithoutCreatedProgramsNestedInput
   updatedBy?: Prisma.UserUpdateOneWithoutUpdatedProgramsNestedInput
   progressUpdates?: Prisma.ProgramProgressUpdateUpdateManyWithoutProgramNestedInput
@@ -1131,11 +1376,18 @@ export type ProgramUncheckedUpdateWithoutBirdepInput = {
   status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
   progressPercent?: Prisma.IntFieldUpdateOperationsInput | number
   pressReleaseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publicTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSlug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicCoverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publishedToTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedFromTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   progressUpdates?: Prisma.ProgramProgressUpdateUncheckedUpdateManyWithoutProgramNestedInput
 }
 
@@ -1150,11 +1402,18 @@ export type ProgramUncheckedUpdateManyWithoutBirdepInput = {
   status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
   progressPercent?: Prisma.IntFieldUpdateOperationsInput | number
   pressReleaseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   updatedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publicTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSlug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicCoverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publishedToTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedFromTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ProgramCreateManyCreatedByInput = {
@@ -1169,10 +1428,17 @@ export type ProgramCreateManyCreatedByInput = {
   status?: $Enums.ProgramStatus
   progressPercent?: number
   pressReleaseUrl?: string | null
-  isPublishedToTevo?: boolean
   updatedByUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  publicTitle?: string | null
+  publicSlug?: string | null
+  publicSummary?: string | null
+  publicDescription?: string | null
+  publicCoverUrl?: string | null
+  isPublishedToTevo?: boolean
+  publishedToTevoAt?: Date | string | null
+  archivedFromTevoAt?: Date | string | null
 }
 
 export type ProgramCreateManyUpdatedByInput = {
@@ -1187,10 +1453,17 @@ export type ProgramCreateManyUpdatedByInput = {
   status?: $Enums.ProgramStatus
   progressPercent?: number
   pressReleaseUrl?: string | null
-  isPublishedToTevo?: boolean
   createdByUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  publicTitle?: string | null
+  publicSlug?: string | null
+  publicSummary?: string | null
+  publicDescription?: string | null
+  publicCoverUrl?: string | null
+  isPublishedToTevo?: boolean
+  publishedToTevoAt?: Date | string | null
+  archivedFromTevoAt?: Date | string | null
 }
 
 export type ProgramUpdateWithoutCreatedByInput = {
@@ -1204,9 +1477,16 @@ export type ProgramUpdateWithoutCreatedByInput = {
   status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
   progressPercent?: Prisma.IntFieldUpdateOperationsInput | number
   pressReleaseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publicTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSlug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicCoverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publishedToTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedFromTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   birdep?: Prisma.BirdepUpdateOneRequiredWithoutProgramsNestedInput
   updatedBy?: Prisma.UserUpdateOneWithoutUpdatedProgramsNestedInput
   progressUpdates?: Prisma.ProgramProgressUpdateUpdateManyWithoutProgramNestedInput
@@ -1224,10 +1504,17 @@ export type ProgramUncheckedUpdateWithoutCreatedByInput = {
   status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
   progressPercent?: Prisma.IntFieldUpdateOperationsInput | number
   pressReleaseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publicTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSlug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicCoverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publishedToTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedFromTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   progressUpdates?: Prisma.ProgramProgressUpdateUncheckedUpdateManyWithoutProgramNestedInput
 }
 
@@ -1243,10 +1530,17 @@ export type ProgramUncheckedUpdateManyWithoutCreatedByInput = {
   status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
   progressPercent?: Prisma.IntFieldUpdateOperationsInput | number
   pressReleaseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   updatedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publicTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSlug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicCoverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publishedToTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedFromTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ProgramUpdateWithoutUpdatedByInput = {
@@ -1260,9 +1554,16 @@ export type ProgramUpdateWithoutUpdatedByInput = {
   status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
   progressPercent?: Prisma.IntFieldUpdateOperationsInput | number
   pressReleaseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publicTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSlug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicCoverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publishedToTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedFromTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   birdep?: Prisma.BirdepUpdateOneRequiredWithoutProgramsNestedInput
   createdBy?: Prisma.UserUpdateOneWithoutCreatedProgramsNestedInput
   progressUpdates?: Prisma.ProgramProgressUpdateUpdateManyWithoutProgramNestedInput
@@ -1280,10 +1581,17 @@ export type ProgramUncheckedUpdateWithoutUpdatedByInput = {
   status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
   progressPercent?: Prisma.IntFieldUpdateOperationsInput | number
   pressReleaseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publicTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSlug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicCoverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publishedToTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedFromTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   progressUpdates?: Prisma.ProgramProgressUpdateUncheckedUpdateManyWithoutProgramNestedInput
 }
 
@@ -1299,10 +1607,17 @@ export type ProgramUncheckedUpdateManyWithoutUpdatedByInput = {
   status?: Prisma.EnumProgramStatusFieldUpdateOperationsInput | $Enums.ProgramStatus
   progressPercent?: Prisma.IntFieldUpdateOperationsInput | number
   pressReleaseUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  publicTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSlug?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicCoverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublishedToTevo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publishedToTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedFromTevoAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -1348,11 +1663,18 @@ export type ProgramSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   status?: boolean
   progressPercent?: boolean
   pressReleaseUrl?: boolean
-  isPublishedToTevo?: boolean
   createdByUserId?: boolean
   updatedByUserId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  publicTitle?: boolean
+  publicSlug?: boolean
+  publicSummary?: boolean
+  publicDescription?: boolean
+  publicCoverUrl?: boolean
+  isPublishedToTevo?: boolean
+  publishedToTevoAt?: boolean
+  archivedFromTevoAt?: boolean
   birdep?: boolean | Prisma.BirdepDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Program$createdByArgs<ExtArgs>
   updatedBy?: boolean | Prisma.Program$updatedByArgs<ExtArgs>
@@ -1372,11 +1694,18 @@ export type ProgramSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   status?: boolean
   progressPercent?: boolean
   pressReleaseUrl?: boolean
-  isPublishedToTevo?: boolean
   createdByUserId?: boolean
   updatedByUserId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  publicTitle?: boolean
+  publicSlug?: boolean
+  publicSummary?: boolean
+  publicDescription?: boolean
+  publicCoverUrl?: boolean
+  isPublishedToTevo?: boolean
+  publishedToTevoAt?: boolean
+  archivedFromTevoAt?: boolean
   birdep?: boolean | Prisma.BirdepDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Program$createdByArgs<ExtArgs>
   updatedBy?: boolean | Prisma.Program$updatedByArgs<ExtArgs>
@@ -1394,11 +1723,18 @@ export type ProgramSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   status?: boolean
   progressPercent?: boolean
   pressReleaseUrl?: boolean
-  isPublishedToTevo?: boolean
   createdByUserId?: boolean
   updatedByUserId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  publicTitle?: boolean
+  publicSlug?: boolean
+  publicSummary?: boolean
+  publicDescription?: boolean
+  publicCoverUrl?: boolean
+  isPublishedToTevo?: boolean
+  publishedToTevoAt?: boolean
+  archivedFromTevoAt?: boolean
   birdep?: boolean | Prisma.BirdepDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Program$createdByArgs<ExtArgs>
   updatedBy?: boolean | Prisma.Program$updatedByArgs<ExtArgs>
@@ -1416,14 +1752,21 @@ export type ProgramSelectScalar = {
   status?: boolean
   progressPercent?: boolean
   pressReleaseUrl?: boolean
-  isPublishedToTevo?: boolean
   createdByUserId?: boolean
   updatedByUserId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  publicTitle?: boolean
+  publicSlug?: boolean
+  publicSummary?: boolean
+  publicDescription?: boolean
+  publicCoverUrl?: boolean
+  isPublishedToTevo?: boolean
+  publishedToTevoAt?: boolean
+  archivedFromTevoAt?: boolean
 }
 
-export type ProgramOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "birdepId" | "title" | "slug" | "description" | "objective" | "startDate" | "endDate" | "status" | "progressPercent" | "pressReleaseUrl" | "isPublishedToTevo" | "createdByUserId" | "updatedByUserId" | "createdAt" | "updatedAt", ExtArgs["result"]["program"]>
+export type ProgramOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "birdepId" | "title" | "slug" | "description" | "objective" | "startDate" | "endDate" | "status" | "progressPercent" | "pressReleaseUrl" | "createdByUserId" | "updatedByUserId" | "createdAt" | "updatedAt" | "publicTitle" | "publicSlug" | "publicSummary" | "publicDescription" | "publicCoverUrl" | "isPublishedToTevo" | "publishedToTevoAt" | "archivedFromTevoAt", ExtArgs["result"]["program"]>
 export type ProgramInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   birdep?: boolean | Prisma.BirdepDefaultArgs<ExtArgs>
   createdBy?: boolean | Prisma.Program$createdByArgs<ExtArgs>
@@ -1462,11 +1805,18 @@ export type $ProgramPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     status: $Enums.ProgramStatus
     progressPercent: number
     pressReleaseUrl: string | null
-    isPublishedToTevo: boolean
     createdByUserId: string | null
     updatedByUserId: string | null
     createdAt: Date
     updatedAt: Date
+    publicTitle: string | null
+    publicSlug: string | null
+    publicSummary: string | null
+    publicDescription: string | null
+    publicCoverUrl: string | null
+    isPublishedToTevo: boolean
+    publishedToTevoAt: Date | null
+    archivedFromTevoAt: Date | null
   }, ExtArgs["result"]["program"]>
   composites: {}
 }
@@ -1905,11 +2255,18 @@ export interface ProgramFieldRefs {
   readonly status: Prisma.FieldRef<"Program", 'ProgramStatus'>
   readonly progressPercent: Prisma.FieldRef<"Program", 'Int'>
   readonly pressReleaseUrl: Prisma.FieldRef<"Program", 'String'>
-  readonly isPublishedToTevo: Prisma.FieldRef<"Program", 'Boolean'>
   readonly createdByUserId: Prisma.FieldRef<"Program", 'String'>
   readonly updatedByUserId: Prisma.FieldRef<"Program", 'String'>
   readonly createdAt: Prisma.FieldRef<"Program", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Program", 'DateTime'>
+  readonly publicTitle: Prisma.FieldRef<"Program", 'String'>
+  readonly publicSlug: Prisma.FieldRef<"Program", 'String'>
+  readonly publicSummary: Prisma.FieldRef<"Program", 'String'>
+  readonly publicDescription: Prisma.FieldRef<"Program", 'String'>
+  readonly publicCoverUrl: Prisma.FieldRef<"Program", 'String'>
+  readonly isPublishedToTevo: Prisma.FieldRef<"Program", 'Boolean'>
+  readonly publishedToTevoAt: Prisma.FieldRef<"Program", 'DateTime'>
+  readonly archivedFromTevoAt: Prisma.FieldRef<"Program", 'DateTime'>
 }
     
 

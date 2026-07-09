@@ -66,7 +66,8 @@ export const ModelName = {
   UserPermissionOverride: 'UserPermissionOverride',
   Program: 'Program',
   ProgramProgressUpdate: 'ProgramProgressUpdate',
-  UserActivationEmailLog: 'UserActivationEmailLog'
+  UserActivationEmailLog: 'UserActivationEmailLog',
+  TevoSiteProfile: 'TevoSiteProfile'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -280,11 +281,18 @@ export const ProgramScalarFieldEnum = {
   status: 'status',
   progressPercent: 'progressPercent',
   pressReleaseUrl: 'pressReleaseUrl',
-  isPublishedToTevo: 'isPublishedToTevo',
   createdByUserId: 'createdByUserId',
   updatedByUserId: 'updatedByUserId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  publicTitle: 'publicTitle',
+  publicSlug: 'publicSlug',
+  publicSummary: 'publicSummary',
+  publicDescription: 'publicDescription',
+  publicCoverUrl: 'publicCoverUrl',
+  isPublishedToTevo: 'isPublishedToTevo',
+  publishedToTevoAt: 'publishedToTevoAt',
+  archivedFromTevoAt: 'archivedFromTevoAt'
 } as const
 
 export type ProgramScalarFieldEnum = (typeof ProgramScalarFieldEnum)[keyof typeof ProgramScalarFieldEnum]
@@ -320,6 +328,23 @@ export const UserActivationEmailLogScalarFieldEnum = {
 } as const
 
 export type UserActivationEmailLogScalarFieldEnum = (typeof UserActivationEmailLogScalarFieldEnum)[keyof typeof UserActivationEmailLogScalarFieldEnum]
+
+
+export const TevoSiteProfileScalarFieldEnum = {
+  id: 'id',
+  siteName: 'siteName',
+  tagline: 'tagline',
+  organizationSummary: 'organizationSummary',
+  vision: 'vision',
+  mission: 'mission',
+  heroTitle: 'heroTitle',
+  heroSubtitle: 'heroSubtitle',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TevoSiteProfileScalarFieldEnum = (typeof TevoSiteProfileScalarFieldEnum)[keyof typeof TevoSiteProfileScalarFieldEnum]
 
 
 export const SortOrder = {

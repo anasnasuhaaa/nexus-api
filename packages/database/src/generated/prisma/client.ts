@@ -121,3 +121,8 @@ export type ProgramProgressUpdate = Prisma.ProgramProgressUpdateModel
  * 
  */
 export type UserActivationEmailLog = Prisma.UserActivationEmailLogModel
+/**
+ * Model TevoSiteProfile
+ * 
+ */
+export type TevoSiteProfile = Prisma.TevoSiteProfileModel
