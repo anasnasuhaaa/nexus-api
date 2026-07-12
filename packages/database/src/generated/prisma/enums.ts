@@ -53,3 +53,12 @@ export const ProgressUpdateStatus = {
 } as const
 
 export type ProgressUpdateStatus = (typeof ProgressUpdateStatus)[keyof typeof ProgressUpdateStatus]
+
+
+export const TevoArticleStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type TevoArticleStatus = (typeof TevoArticleStatus)[keyof typeof TevoArticleStatus]

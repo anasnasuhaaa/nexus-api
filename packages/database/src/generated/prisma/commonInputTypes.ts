@@ -243,6 +243,23 @@ export type EnumProgressUpdateStatusWithAggregatesFilter<$PrismaModel = never> =
   _max?: Prisma.NestedEnumProgressUpdateStatusFilter<$PrismaModel>
 }
 
+export type EnumTevoArticleStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.TevoArticleStatus | Prisma.EnumTevoArticleStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.TevoArticleStatus[] | Prisma.ListEnumTevoArticleStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TevoArticleStatus[] | Prisma.ListEnumTevoArticleStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTevoArticleStatusFilter<$PrismaModel> | $Enums.TevoArticleStatus
+}
+
+export type EnumTevoArticleStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TevoArticleStatus | Prisma.EnumTevoArticleStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.TevoArticleStatus[] | Prisma.ListEnumTevoArticleStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TevoArticleStatus[] | Prisma.ListEnumTevoArticleStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTevoArticleStatusWithAggregatesFilter<$PrismaModel> | $Enums.TevoArticleStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTevoArticleStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTevoArticleStatusFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -483,6 +500,23 @@ export type NestedEnumProgressUpdateStatusWithAggregatesFilter<$PrismaModel = ne
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumProgressUpdateStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumProgressUpdateStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumTevoArticleStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.TevoArticleStatus | Prisma.EnumTevoArticleStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.TevoArticleStatus[] | Prisma.ListEnumTevoArticleStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TevoArticleStatus[] | Prisma.ListEnumTevoArticleStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTevoArticleStatusFilter<$PrismaModel> | $Enums.TevoArticleStatus
+}
+
+export type NestedEnumTevoArticleStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TevoArticleStatus | Prisma.EnumTevoArticleStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.TevoArticleStatus[] | Prisma.ListEnumTevoArticleStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TevoArticleStatus[] | Prisma.ListEnumTevoArticleStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTevoArticleStatusWithAggregatesFilter<$PrismaModel> | $Enums.TevoArticleStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTevoArticleStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTevoArticleStatusFilter<$PrismaModel>
 }
 
 

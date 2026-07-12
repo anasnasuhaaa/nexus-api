@@ -400,7 +400,8 @@ export const ModelName = {
   Program: 'Program',
   ProgramProgressUpdate: 'ProgramProgressUpdate',
   UserActivationEmailLog: 'UserActivationEmailLog',
-  TevoSiteProfile: 'TevoSiteProfile'
+  TevoSiteProfile: 'TevoSiteProfile',
+  TevoArticle: 'TevoArticle'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -416,7 +417,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "cabinetPeriod" | "birdep" | "member" | "membership" | "user" | "session" | "account" | "verification" | "role" | "permission" | "userRole" | "rolePermission" | "userPermissionOverride" | "program" | "programProgressUpdate" | "userActivationEmailLog" | "tevoSiteProfile"
+    modelProps: "cabinetPeriod" | "birdep" | "member" | "membership" | "user" | "session" | "account" | "verification" | "role" | "permission" | "userRole" | "rolePermission" | "userPermissionOverride" | "program" | "programProgressUpdate" | "userActivationEmailLog" | "tevoSiteProfile" | "tevoArticle"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1678,6 +1679,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    TevoArticle: {
+      payload: Prisma.$TevoArticlePayload<ExtArgs>
+      fields: Prisma.TevoArticleFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TevoArticleFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TevoArticlePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TevoArticleFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TevoArticlePayload>
+        }
+        findFirst: {
+          args: Prisma.TevoArticleFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TevoArticlePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TevoArticleFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TevoArticlePayload>
+        }
+        findMany: {
+          args: Prisma.TevoArticleFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TevoArticlePayload>[]
+        }
+        create: {
+          args: Prisma.TevoArticleCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TevoArticlePayload>
+        }
+        createMany: {
+          args: Prisma.TevoArticleCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TevoArticleCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TevoArticlePayload>[]
+        }
+        delete: {
+          args: Prisma.TevoArticleDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TevoArticlePayload>
+        }
+        update: {
+          args: Prisma.TevoArticleUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TevoArticlePayload>
+        }
+        deleteMany: {
+          args: Prisma.TevoArticleDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TevoArticleUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TevoArticleUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TevoArticlePayload>[]
+        }
+        upsert: {
+          args: Prisma.TevoArticleUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TevoArticlePayload>
+        }
+        aggregate: {
+          args: Prisma.TevoArticleAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTevoArticle>
+        }
+        groupBy: {
+          args: Prisma.TevoArticleGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TevoArticleGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TevoArticleCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TevoArticleCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1978,6 +2053,26 @@ export const TevoSiteProfileScalarFieldEnum = {
 export type TevoSiteProfileScalarFieldEnum = (typeof TevoSiteProfileScalarFieldEnum)[keyof typeof TevoSiteProfileScalarFieldEnum]
 
 
+export const TevoArticleScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  slug: 'slug',
+  excerpt: 'excerpt',
+  content: 'content',
+  coverUrl: 'coverUrl',
+  status: 'status',
+  authorUserId: 'authorUserId',
+  authorName: 'authorName',
+  authorEmail: 'authorEmail',
+  publishedAt: 'publishedAt',
+  archivedAt: 'archivedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TevoArticleScalarFieldEnum = (typeof TevoArticleScalarFieldEnum)[keyof typeof TevoArticleScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2110,6 +2205,20 @@ export type EnumProgressUpdateStatusFieldRefInput<$PrismaModel> = FieldRefInputT
  * Reference to a field of type 'ProgressUpdateStatus[]'
  */
 export type ListEnumProgressUpdateStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProgressUpdateStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'TevoArticleStatus'
+ */
+export type EnumTevoArticleStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TevoArticleStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'TevoArticleStatus[]'
+ */
+export type ListEnumTevoArticleStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TevoArticleStatus[]'>
     
 
 
@@ -2253,6 +2362,7 @@ export type GlobalOmitConfig = {
   programProgressUpdate?: Prisma.ProgramProgressUpdateOmit
   userActivationEmailLog?: Prisma.UserActivationEmailLogOmit
   tevoSiteProfile?: Prisma.TevoSiteProfileOmit
+  tevoArticle?: Prisma.TevoArticleOmit
 }
 
 /* Types for Logging */

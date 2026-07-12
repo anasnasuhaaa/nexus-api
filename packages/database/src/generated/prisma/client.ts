@@ -126,3 +126,8 @@ export type UserActivationEmailLog = Prisma.UserActivationEmailLogModel
  * 
  */
 export type TevoSiteProfile = Prisma.TevoSiteProfileModel
+/**
+ * Model TevoArticle
+ * 
+ */
+export type TevoArticle = Prisma.TevoArticleModel

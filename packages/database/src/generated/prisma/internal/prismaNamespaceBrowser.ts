@@ -67,7 +67,8 @@ export const ModelName = {
   Program: 'Program',
   ProgramProgressUpdate: 'ProgramProgressUpdate',
   UserActivationEmailLog: 'UserActivationEmailLog',
-  TevoSiteProfile: 'TevoSiteProfile'
+  TevoSiteProfile: 'TevoSiteProfile',
+  TevoArticle: 'TevoArticle'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -345,6 +346,26 @@ export const TevoSiteProfileScalarFieldEnum = {
 } as const
 
 export type TevoSiteProfileScalarFieldEnum = (typeof TevoSiteProfileScalarFieldEnum)[keyof typeof TevoSiteProfileScalarFieldEnum]
+
+
+export const TevoArticleScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  slug: 'slug',
+  excerpt: 'excerpt',
+  content: 'content',
+  coverUrl: 'coverUrl',
+  status: 'status',
+  authorUserId: 'authorUserId',
+  authorName: 'authorName',
+  authorEmail: 'authorEmail',
+  publishedAt: 'publishedAt',
+  archivedAt: 'archivedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TevoArticleScalarFieldEnum = (typeof TevoArticleScalarFieldEnum)[keyof typeof TevoArticleScalarFieldEnum]
 
 
 export const SortOrder = {

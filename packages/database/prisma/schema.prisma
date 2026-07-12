@@ -51,6 +51,14 @@ enum ProgressUpdateStatus {
   @@schema("nexus")
 }
 
+enum TevoArticleStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+
+  @@schema("tevo")
+}
+
 model CabinetPeriod {
   id        String   @id @default(uuid())
   name      String
@@ -376,5 +384,29 @@ model TevoSiteProfile {
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 
+  @@schema("tevo")
+}
+
+model TevoArticle {
+  id          String            @id @default(uuid())
+  title       String
+  slug        String            @unique
+  excerpt     String?           @db.Text
+  content     String            @db.Text
+  coverUrl    String?
+  status      TevoArticleStatus @default(DRAFT)
+
+  authorUserId String?
+  authorName   String?
+  authorEmail  String?
+
+  publishedAt DateTime?
+  archivedAt  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([status])
+  @@index([publishedAt])
+  @@index([createdAt])
   @@schema("tevo")
 }

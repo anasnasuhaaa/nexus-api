@@ -1,11 +1,48 @@
+import type { CSSProperties } from "react";
+
+import Image from "next/image";
+import { Asimovian } from "next/font/google";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { ShieldCheck } from "lucide-react";
+import { KeyRound, ShieldCheck } from "lucide-react";
 
-import { ModeToggle } from "@/components/theme/mode-toggle";
 import { auth } from "@/lib/auth";
 
 import { LoginForm } from "./login-form";
+
+const asimovian = Asimovian({
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+});
+
+function createTicketMask(radius: string): CSSProperties {
+  const maskImage = [
+    `radial-gradient(circle ${radius} at 0 0, transparent 97%, #000 100%)`,
+    `radial-gradient(circle ${radius} at 100% 0, transparent 97%, #000 100%)`,
+    `radial-gradient(circle ${radius} at 0 100%, transparent 97%, #000 100%)`,
+    `radial-gradient(circle ${radius} at 100% 100%, transparent 97%, #000 100%)`,
+  ].join(", ");
+
+  return {
+    WebkitMaskImage: maskImage,
+    maskImage,
+    WebkitMaskSize: "51% 51%",
+    maskSize: "51% 51%",
+    WebkitMaskPosition:
+      "top left, top right, bottom left, bottom right",
+    maskPosition:
+      "top left, top right, bottom left, bottom right",
+    WebkitMaskRepeat: "no-repeat",
+    maskRepeat: "no-repeat",
+  };
+}
+
+const outerTicketMask = createTicketMask("var(--ticket-notch)");
+
+const innerTicketMask = createTicketMask(
+  "calc(var(--ticket-notch) - 1.5px)",
+);
 
 export default async function LoginPage() {
   const session = await auth.api.getSession({
@@ -17,74 +54,87 @@ export default async function LoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen bg-background text-foreground">
-      <section className="hidden flex-1 bg-primary p-10 text-primary-foreground lg:flex lg:flex-col lg:justify-between">
-        <div className="flex items-center gap-3">
-          <div className="flex size-11 items-center justify-center rounded-2xl bg-white/15">
-            <ShieldCheck className="size-5" />
-          </div>
+    <main
+      className="relative h-screen h-[100svh] max-h-[100svh] overflow-hidden bg-[#1B0D08] text-[#34271F] [color-scheme:light]"
+      style={{ colorScheme: "light" }}
+    >
+      {/* Background */}
+      <div className="absolute inset-0">
+        <Image
+          src="/login/bg.png"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="scale-[1.03] object-cover object-center"
+        />
 
-          <div>
-            <p className="text-lg font-black">Nexus</p>
-            <p className="text-sm text-white/75">Ormawa Eksekutif PKU IPB</p>
-          </div>
-        </div>
+        <div className="absolute inset-0 bg-black/20" />
 
-        <div className="max-w-xl">
-          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.26em] text-white/70">
-            Kabinet Astana Angkasa
-          </p>
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(31,13,6,0.18)_0%,rgba(31,13,6,0.38)_45%,rgba(20,8,4,0.68)_100%)]" />
 
-          <h1 className="text-5xl font-black leading-tight tracking-tight">
-            Sistem internal untuk monitoring organisasi yang lebih rapi.
-          </h1>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,246,219,0.08)_0%,rgba(31,13,6,0.16)_42%,rgba(17,7,3,0.6)_100%)]" />
 
-          <p className="mt-5 max-w-lg text-base leading-8 text-white/75">
-            Login hanya tersedia untuk pengurus yang memiliki akun resmi.
-            Registrasi publik tidak diaktifkan.
-          </p>
-        </div>
+        <div className="absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-black/35 to-transparent" />
 
-        <p className="text-xs text-white/60">
-          © 2026 Nexus — Internal Organization System
-        </p>
-      </section>
+        <div className="absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-black/35 to-transparent" />
+      </div>
 
-      <section className="flex min-h-screen w-full items-center justify-center px-4 py-10 lg:w-130">
-        <div className="w-full max-w-sm">
-          <div className="mb-8 flex items-center justify-between">
-            <div className="flex items-center gap-3 lg:hidden">
-              <div className="flex size-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-                <ShieldCheck className="size-5" />
-              </div>
 
-              <div>
-                <p className="font-black">Nexus</p>
-                <p className="text-xs text-muted-foreground">
-                  Ormawa Eksekutif PKU IPB
-                </p>
+      {/* Seluruh konten dibatasi setinggi viewport */}
+      <section className="relative z-10 flex h-full min-h-0 items-center justify-center px-4 py-3 sm:px-6 sm:py-5">
+        <div className="w-full max-w-[430px] origin-center [@media(max-height:680px)]:scale-[0.92] [@media(max-height:600px)]:scale-[0.84]">
+          {/* Shape utama dengan empat sudut cekung */}
+          <div
+            style={outerTicketMask}
+            className="relative bg-[#D8A95D] p-[1.5px] drop-shadow-[0_28px_55px_rgba(34,12,3,0.48)] [--ticket-notch:28px] sm:[--ticket-notch:38px]"
+          >
+            <div
+              style={innerTicketMask}
+              className="relative bg-[#FFF9EE]/95 backdrop-blur-xl"
+            >
+              <div className="px-7 pb-6 pt-6 sm:px-10 sm:pb-8 sm:pt-8">
+                <div className="flex flex-col items-center text-center">
+                  <div className="flex min-h-14 items-center justify-center sm:min-h-16">
+                    <Image
+                      src="/login/logo.png"
+                      alt="Logo Astana Angkasa"
+                      width={210}
+                      height={72}
+                      priority
+                      className="h-auto w-[160px] object-contain sm:w-[185px]"
+                    />
+                  </div>
+
+                  <h1
+                    className={`${asimovian.className} mt-3 text-[2rem] leading-tight tracking-[0.02em] text-[#A51616] sm:mt-4 sm:text-[2.35rem]`}
+                  >
+                    Halo, Astaners!
+                  </h1>
+                </div>
+
+                <LoginForm />
+
+                <div className="mt-5 flex items-start gap-3 rounded-2xl border border-[#E8D8BC] bg-[#F8EEDC]/75 p-3">
+                  <div className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-xl bg-white text-[#A51616] shadow-sm">
+                    <KeyRound className="size-4" />
+                  </div>
+
+                  <p className="text-xs leading-5 text-[#746456]">
+                    Halaman ini hanya tersedia bagi pengurus yang telah memiliki
+                    akun dari Super Admin.
+                  </p>
+                </div>
               </div>
             </div>
-
-            <div className="ml-auto">
-              <ModeToggle />
-            </div>
           </div>
 
-          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-primary">
-            Login Pengurus
-          </p>
-
-          <h2 className="mt-3 text-3xl font-black tracking-tight">
-            Masuk ke Nexus
-          </h2>
-
-          <p className="mt-3 text-sm leading-7 text-muted-foreground">
-            Gunakan akun yang sudah dibuat oleh Super Admin untuk mengakses
-            dashboard internal organisasi.
-          </p>
-
-          <LoginForm />
+          <footer className="mt-3 text-center text-[10px] leading-4 text-white/65 sm:mt-4 sm:text-[11px]">
+            <p className="font-medium text-white/85">
+              Nexus · Kabinet Astana Angkasa
+            </p>
+            <p>© 2026 Ormawa Eksekutif PKU IPB</p>
+          </footer>
         </div>
       </section>
     </main>

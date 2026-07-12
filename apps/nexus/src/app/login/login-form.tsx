@@ -2,22 +2,41 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, LogIn } from "lucide-react";
+import {
+  CheckCircle2,
+  Eye,
+  EyeOff,
+  KeyRound,
+  Loader2,
+  LogIn,
+  Mail,
+} from "lucide-react";
 import { toast } from "sonner";
 
-import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
+import { authClient } from "@/lib/auth-client";
+
+type LoginStatus = "idle" | "error" | "success";
 
 export function LoginForm() {
   const router = useRouter();
 
   const [email, setEmail] = useState("superadmin@nexus.local");
   const [password, setPassword] = useState("SuperAdmin12345!");
+  const [showPassword, setShowPassword] = useState(false);
+  const [status, setStatus] = useState<LoginStatus>("idle");
   const [isLoading, setIsLoading] = useState(false);
+
+  function resetStatus() {
+    if (status !== "idle") {
+      setStatus("idle");
+    }
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
+    setStatus("idle");
     setIsLoading(true);
 
     const { error } = await authClient.signIn.email({
@@ -28,74 +47,158 @@ export function LoginForm() {
     setIsLoading(false);
 
     if (error) {
+      setStatus("error");
+
       toast.error("Login gagal", {
         description:
           error.message || "Periksa kembali email dan password yang digunakan.",
         duration: 2000,
       });
+
       return;
     }
+
+    setStatus("success");
 
     toast.success("Login berhasil", {
       description: "Selamat datang di Nexus.",
       duration: 2000,
     });
 
-    router.push("/dashboard");
+    router.replace("/dashboard");
     router.refresh();
   }
 
+  const fieldStateClass =
+    status === "error"
+      ? "border-red-500 bg-[#FFF7E8] focus-within:border-red-500 focus-within:ring-4 focus-within:ring-red-500/10"
+      : status === "success"
+        ? "border-lime-500 bg-[#FFF7E8] focus-within:border-lime-500 focus-within:ring-4 focus-within:ring-lime-500/10"
+        : "border-[#E4CFA9] bg-[#FFF7E8] hover:border-[#D4A85F] focus-within:border-[#B61D1D] focus-within:ring-4 focus-within:ring-[#B61D1D]/10";
+
+  const iconStateClass =
+    status === "error"
+      ? "text-red-500"
+      : status === "success"
+        ? "text-lime-500"
+        : "text-[#B1833F] group-focus-within:text-[#B61D1D]";
+
   return (
-    <form onSubmit={handleSubmit} className="mt-8 space-y-5">
-      <div className="space-y-2">
+    <form
+      onSubmit={handleSubmit}
+      className="mt-5 space-y-4 sm:mt-6"
+    >
+      <div className="space-y-1.5">
         <label
           htmlFor="email"
-          className="text-sm font-semibold text-foreground"
+          className="block text-[11px] font-bold uppercase tracking-[0.14em] text-[#5C4635]"
         >
           Email
         </label>
 
-        <input
-          id="email"
-          type="email"
-          autoComplete="email"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-          className="h-11 w-full rounded-xl border border-input bg-background px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
-          placeholder="superadmin@nexus.local"
-          required
-        />
+        <div
+          className={`group flex h-11 items-center rounded-full border px-4 shadow-sm transition duration-200 ${fieldStateClass}`}
+        >
+          <Mail
+            aria-hidden="true"
+            className={`mr-3 size-[17px] shrink-0 transition-colors ${iconStateClass}`}
+          />
+
+          <input
+            id="email"
+            type="email"
+            autoComplete="email"
+            value={email}
+            onChange={(event) => {
+              setEmail(event.target.value);
+              resetStatus();
+            }}
+            disabled={isLoading}
+            aria-invalid={status === "error"}
+            className="h-full min-w-0 flex-1 bg-transparent text-sm text-[#34271F] outline-none placeholder:text-[#B9A993] disabled:cursor-not-allowed disabled:opacity-60"
+            placeholder="nama@nexus.local"
+            required
+          />
+
+          {status === "success" && (
+            <CheckCircle2
+              aria-hidden="true"
+              className="ml-2 size-[17px] shrink-0 text-lime-500"
+            />
+          )}
+        </div>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <label
           htmlFor="password"
-          className="text-sm font-semibold text-foreground"
+          className="block text-[11px] font-bold uppercase tracking-[0.14em] text-[#5C4635]"
         >
           Password
         </label>
 
-        <input
-          id="password"
-          type="password"
-          autoComplete="current-password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          className="h-11 w-full rounded-xl border border-input bg-background px-3 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
-          placeholder="Masukkan password"
-          required
-        />
+        <div
+          className={`group flex h-11 items-center rounded-full border px-4 shadow-sm transition duration-200 ${fieldStateClass}`}
+        >
+          <KeyRound
+            aria-hidden="true"
+            className={`mr-3 size-[17px] shrink-0 transition-colors ${iconStateClass}`}
+          />
+
+          <input
+            id="password"
+            type={showPassword ? "text" : "password"}
+            autoComplete="current-password"
+            value={password}
+            onChange={(event) => {
+              setPassword(event.target.value);
+              resetStatus();
+            }}
+            disabled={isLoading}
+            aria-invalid={status === "error"}
+            className="h-full min-w-0 flex-1 bg-transparent text-sm text-[#34271F] outline-none placeholder:text-[#B9A993] disabled:cursor-not-allowed disabled:opacity-60"
+            placeholder="Masukkan password"
+            required
+          />
+
+          <button
+            type="button"
+            onClick={() => setShowPassword((current) => !current)}
+            disabled={isLoading}
+            aria-label={
+              showPassword ? "Sembunyikan password" : "Tampilkan password"
+            }
+            className="ml-2 flex size-8 shrink-0 items-center justify-center rounded-full text-[#A98B63] transition hover:bg-[#F3E4CA] hover:text-[#A51616] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B61D1D]/30 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {showPassword ? (
+              <EyeOff className="size-[17px]" />
+            ) : (
+              <Eye className="size-[17px]" />
+            )}
+          </button>
+        </div>
+
+        {status === "error" && (
+          <p role="alert" className="text-xs leading-5 text-red-600">
+            Email atau password tidak sesuai. Silakan periksa kembali.
+          </p>
+        )}
       </div>
 
       <Button
         type="submit"
-        className="h-11 w-full bg-primary text-primary-foreground hover:bg-primary/90"
         disabled={isLoading}
+        className="h-11 w-full rounded-full bg-[#DFAE61] font-bold text-[#8E1717] shadow-[0_8px_20px_rgba(139,82,16,0.18)] transition duration-200 hover:-translate-y-0.5 hover:bg-[#D39D4A] hover:text-[#7A1111] active:translate-y-0 disabled:translate-y-0 disabled:shadow-none"
       >
         {isLoading ? (
           <>
             <Loader2 className="size-4 animate-spin" />
-            Memproses...
+            Memverifikasi akun...
+          </>
+        ) : status === "success" ? (
+          <>
+            <CheckCircle2 className="size-4" />
+            Login berhasil
           </>
         ) : (
           <>
@@ -104,12 +207,6 @@ export function LoginForm() {
           </>
         )}
       </Button>
-
-      <div className="rounded-xl border border-dashed bg-muted/40 p-3 text-xs leading-6 text-muted-foreground">
-        <p className="font-semibold text-foreground">Akun development:</p>
-        <p>Email: superadmin@nexus.local</p>
-        <p>Password: SuperAdmin12345!</p>
-      </div>
     </form>
   );
 }
