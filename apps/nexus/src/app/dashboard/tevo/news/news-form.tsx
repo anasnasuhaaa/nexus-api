@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
+import { MediaPicker, MediaPickerItem } from "@/components/media/media-picker";
 import { Button } from "@/components/ui/button";
 
 import {
@@ -28,6 +29,7 @@ export type TevoArticleInitialData = {
 type TevoArticleFormProps = {
   mode: "create" | "edit";
   initialData: TevoArticleInitialData;
+  mediaAssets: MediaPickerItem[];
 };
 
 const STATUS_OPTIONS: {
@@ -64,6 +66,7 @@ function generateSlug(value: string) {
 export function TevoArticleForm({
   mode,
   initialData,
+  mediaAssets,
 }: TevoArticleFormProps) {
   const router = useRouter();
 
@@ -224,19 +227,13 @@ export function TevoArticleForm({
           </div>
 
           <div className="lg:col-span-2">
-            <Field label="Cover Image URL" htmlFor="coverUrl">
-              <input
-                id="coverUrl"
-                value={coverUrl}
-                onChange={(event) => setCoverUrl(event.target.value)}
-                placeholder="https://..."
-                className="h-10 w-full rounded-xl border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
-              />
-              <p className="text-xs text-muted-foreground">
-                Sementara gunakan URL gambar. Setelah Media Library dibuat,
-                field ini bisa diganti menjadi Media Picker.
-              </p>
-            </Field>
+            <MediaPicker
+              label="Cover Artikel"
+              value={coverUrl}
+              onChange={setCoverUrl}
+              media={mediaAssets}
+              description="Pilih gambar dari Media Library sebagai cover artikel di website Tevo."
+            />
           </div>
         </div>
       </section>
@@ -251,7 +248,9 @@ export function TevoArticleForm({
 
         <Button
           type="submit"
-          disabled={isSubmitting || !title.trim() || !slug.trim() || !content.trim()}
+          disabled={
+            isSubmitting || !title.trim() || !slug.trim() || !content.trim()
+          }
           className="bg-primary text-primary-foreground hover:bg-primary/90"
         >
           {isSubmitting ? (

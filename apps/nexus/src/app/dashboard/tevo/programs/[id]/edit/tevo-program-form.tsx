@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
+import { MediaPicker, MediaPickerItem } from "@/components/media/media-picker";
 import { Button } from "@/components/ui/button";
 
 import { updateTevoProgramAction } from "./tevo-program-action";
@@ -23,6 +24,7 @@ export type TevoProgramInitialData = {
 
 type TevoProgramFormProps = {
   initialData: TevoProgramInitialData;
+  mediaAssets: MediaPickerItem[];
 };
 
 function generateSlug(value: string) {
@@ -34,7 +36,10 @@ function generateSlug(value: string) {
     .replace(/^-+|-+$/g, "");
 }
 
-export function TevoProgramForm({ initialData }: TevoProgramFormProps) {
+export function TevoProgramForm({
+  initialData,
+  mediaAssets,
+}: TevoProgramFormProps) {
   const router = useRouter();
 
   const [publicTitle, setPublicTitle] = useState(initialData.publicTitle);
@@ -174,7 +179,9 @@ export function TevoProgramForm({ initialData }: TevoProgramFormProps) {
             <input
               id="publicSlug"
               value={publicSlug}
-              onChange={(event) => setPublicSlug(generateSlug(event.target.value))}
+              onChange={(event) =>
+                setPublicSlug(generateSlug(event.target.value))
+              }
               placeholder="contoh: angkasakost"
               className="h-10 w-full rounded-xl border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
             />
@@ -214,15 +221,13 @@ export function TevoProgramForm({ initialData }: TevoProgramFormProps) {
           </div>
 
           <div className="lg:col-span-2">
-            <Field label="Cover Image URL" htmlFor="publicCoverUrl">
-              <input
-                id="publicCoverUrl"
-                value={publicCoverUrl}
-                onChange={(event) => setPublicCoverUrl(event.target.value)}
-                placeholder="https://..."
-                className="h-10 w-full rounded-xl border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
-              />
-            </Field>
+            <MediaPicker
+              label="Cover Program"
+              value={publicCoverUrl}
+              onChange={setPublicCoverUrl}
+              media={mediaAssets}
+              description="Pilih gambar dari Media Library sebagai cover program di website Tevo."
+            />
           </div>
         </div>
       </section>

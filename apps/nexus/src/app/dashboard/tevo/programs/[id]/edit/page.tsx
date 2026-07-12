@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, Globe2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import type { MediaPickerItem } from "@/components/media/media-picker";
 
 import { TevoProgramForm, TevoProgramInitialData } from "./tevo-program-form";
 
@@ -23,14 +24,56 @@ function getProgramTitle(program: Record<string, unknown>) {
   );
 }
 
+function formatDateTime(date: Date | null | undefined) {
+  if (!date) {
+    return "-";
+  }
+
+  return new Intl.DateTimeFormat("id-ID", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(date);
+}
+
+async function getMediaPickerItems(): Promise<MediaPickerItem[]> {
+  const media = await prisma.mediaAsset.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+    select: {
+      id: true,
+      originalName: true,
+      url: true,
+      altText: true,
+      category: true,
+      createdAt: true,
+    },
+  });
+
+  return media.map((item) => ({
+    id: item.id,
+    originalName: item.originalName,
+    url: item.url,
+    altText: item.altText,
+    category: item.category,
+    createdAtLabel: formatDateTime(item.createdAt),
+  }));
+}
+
 export default async function EditTevoProgramPage({ params }: PageProps) {
   const { id } = await params;
 
-  const program = await prisma.program.findUnique({
-    where: {
-      id,
-    },
-  });
+  const [program, mediaAssets] = await Promise.all([
+    prisma.program.findUnique({
+      where: {
+        id,
+      },
+    }),
+    getMediaPickerItems(),
+  ]);
 
   if (!program) {
     notFound();
@@ -72,18 +115,21 @@ export default async function EditTevoProgramPage({ params }: PageProps) {
           </h1>
 
           <p className="mt-3 max-w-3xl text-sm leading-7 text-muted-foreground sm:text-base">
-            Siapkan judul, slug, ringkasan, dan deskripsi publik untuk program{" "}
-            <strong>{internalTitle}</strong>.
+            Siapkan judul, slug, ringkasan, deskripsi, dan cover publik untuk
+            program <strong>{internalTitle}</strong>.
           </p>
 
           <div className="mt-5 inline-flex items-center gap-2 rounded-2xl border bg-background px-4 py-3 text-sm text-muted-foreground">
             <Globe2 className="size-4 text-primary" />
-            Data ini akan digunakan oleh website publik Tevo.
+            Cover program diambil dari Media Library Nexus.
           </div>
         </div>
       </section>
 
-      <TevoProgramForm initialData={initialData} />
+      <TevoProgramForm
+        initialData={initialData}
+        mediaAssets={mediaAssets}
+      />
     </div>
   );
 }

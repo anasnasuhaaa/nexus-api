@@ -1,11 +1,54 @@
+import { prisma } from "@orma/database";
 import Link from "next/link";
 import { ArrowLeft, Newspaper } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import type { MediaPickerItem } from "@/components/media/media-picker";
 
 import { TevoArticleForm, TevoArticleInitialData } from "../news-form";
 
-export default function NewTevoArticlePage() {
+function formatDateTime(date: Date | null | undefined) {
+  if (!date) {
+    return "-";
+  }
+
+  return new Intl.DateTimeFormat("id-ID", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(date);
+}
+
+async function getMediaPickerItems(): Promise<MediaPickerItem[]> {
+  const media = await prisma.mediaAsset.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+    select: {
+      id: true,
+      originalName: true,
+      url: true,
+      altText: true,
+      category: true,
+      createdAt: true,
+    },
+  });
+
+  return media.map((item) => ({
+    id: item.id,
+    originalName: item.originalName,
+    url: item.url,
+    altText: item.altText,
+    category: item.category,
+    createdAtLabel: formatDateTime(item.createdAt),
+  }));
+}
+
+export default async function NewTevoArticlePage() {
+  const mediaAssets = await getMediaPickerItems();
+
   const initialData: TevoArticleInitialData = {
     articleId: null,
     title: "",
@@ -43,13 +86,18 @@ export default function NewTevoArticlePage() {
             </h1>
 
             <p className="mt-3 max-w-3xl text-sm leading-7 text-muted-foreground sm:text-base">
-              Buat artikel baru untuk website publik Tevo.
+              Buat artikel baru untuk website publik Tevo. Cover artikel
+              diambil dari Media Library.
             </p>
           </div>
         </div>
       </section>
 
-      <TevoArticleForm mode="create" initialData={initialData} />
+      <TevoArticleForm
+        mode="create"
+        initialData={initialData}
+        mediaAssets={mediaAssets}
+      />
     </div>
   );
 }

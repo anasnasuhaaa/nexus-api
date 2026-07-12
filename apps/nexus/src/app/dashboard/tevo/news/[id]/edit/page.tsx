@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, Newspaper } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import type { MediaPickerItem } from "@/components/media/media-picker";
 
 import {
   TevoArticleForm,
@@ -16,16 +17,58 @@ type EditTevoArticlePageProps = {
   }>;
 };
 
+function formatDateTime(date: Date | null | undefined) {
+  if (!date) {
+    return "-";
+  }
+
+  return new Intl.DateTimeFormat("id-ID", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(date);
+}
+
+async function getMediaPickerItems(): Promise<MediaPickerItem[]> {
+  const media = await prisma.mediaAsset.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+    select: {
+      id: true,
+      originalName: true,
+      url: true,
+      altText: true,
+      category: true,
+      createdAt: true,
+    },
+  });
+
+  return media.map((item) => ({
+    id: item.id,
+    originalName: item.originalName,
+    url: item.url,
+    altText: item.altText,
+    category: item.category,
+    createdAtLabel: formatDateTime(item.createdAt),
+  }));
+}
+
 export default async function EditTevoArticlePage({
   params,
 }: EditTevoArticlePageProps) {
   const { id } = await params;
 
-  const article = await prisma.tevoArticle.findUnique({
-    where: {
-      id,
-    },
-  });
+  const [article, mediaAssets] = await Promise.all([
+    prisma.tevoArticle.findUnique({
+      where: {
+        id,
+      },
+    }),
+    getMediaPickerItems(),
+  ]);
 
   if (!article) {
     notFound();
@@ -38,7 +81,7 @@ export default async function EditTevoArticlePage({
     excerpt: article.excerpt ?? "",
     content: article.content,
     coverUrl: article.coverUrl ?? "",
-    status: article.status,
+    status: article.status as TevoArticleInitialData["status"],
   };
 
   return (
@@ -74,7 +117,11 @@ export default async function EditTevoArticlePage({
         </div>
       </section>
 
-      <TevoArticleForm mode="edit" initialData={initialData} />
+      <TevoArticleForm
+        mode="edit"
+        initialData={initialData}
+        mediaAssets={mediaAssets}
+      />
     </div>
   );
 }
