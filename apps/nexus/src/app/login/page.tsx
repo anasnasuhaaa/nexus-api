@@ -55,7 +55,7 @@ export default async function LoginPage() {
 
   return (
     <main
-      className="relative h-screen h-[100svh] max-h-[100svh] overflow-hidden bg-[#1B0D08] text-[#34271F] [color-scheme:light]"
+      className="relative h-svh max-h-svh overflow-hidden bg-[#1B0D08] text-[#34271F] scheme-light"
       style={{ colorScheme: "light" }}
     >
       {/* Background */}
@@ -75,15 +75,15 @@ export default async function LoginPage() {
 
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,246,219,0.08)_0%,rgba(31,13,6,0.16)_42%,rgba(17,7,3,0.6)_100%)]" />
 
-        <div className="absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-black/35 to-transparent" />
+        <div className="absolute inset-y-0 left-0 w-1/4 bg-linear-to-r from-black/35 to-transparent" />
 
-        <div className="absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-black/35 to-transparent" />
+        <div className="absolute inset-y-0 right-0 w-1/4 bg-linear-to-l from-black/35 to-transparent" />
       </div>
 
 
       {/* Seluruh konten dibatasi setinggi viewport */}
       <section className="relative z-10 flex h-full min-h-0 items-center justify-center px-4 py-3 sm:px-6 sm:py-5">
-        <div className="w-full max-w-[430px] origin-center [@media(max-height:680px)]:scale-[0.92] [@media(max-height:600px)]:scale-[0.84]">
+        <div className="w-full max-w-107.5 origin-center [@media(max-height:680px)]:scale-[0.92] [@media(max-height:600px)]:scale-[0.84]">
           {/* Shape utama dengan empat sudut cekung */}
           <div
             style={outerTicketMask}
@@ -102,7 +102,7 @@ export default async function LoginPage() {
                       width={210}
                       height={72}
                       priority
-                      className="h-auto w-[160px] object-contain sm:w-[185px]"
+                      className="h-auto w-40 object-contain sm:w-46.25"
                     />
                   </div>
 

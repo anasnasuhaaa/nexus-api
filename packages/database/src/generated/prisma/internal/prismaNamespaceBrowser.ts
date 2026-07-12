@@ -68,7 +68,8 @@ export const ModelName = {
   ProgramProgressUpdate: 'ProgramProgressUpdate',
   UserActivationEmailLog: 'UserActivationEmailLog',
   TevoSiteProfile: 'TevoSiteProfile',
-  TevoArticle: 'TevoArticle'
+  TevoArticle: 'TevoArticle',
+  MediaAsset: 'MediaAsset'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -366,6 +367,24 @@ export const TevoArticleScalarFieldEnum = {
 } as const
 
 export type TevoArticleScalarFieldEnum = (typeof TevoArticleScalarFieldEnum)[keyof typeof TevoArticleScalarFieldEnum]
+
+
+export const MediaAssetScalarFieldEnum = {
+  id: 'id',
+  fileName: 'fileName',
+  originalName: 'originalName',
+  mimeType: 'mimeType',
+  sizeBytes: 'sizeBytes',
+  url: 'url',
+  altText: 'altText',
+  category: 'category',
+  uploadedById: 'uploadedById',
+  uploadedByName: 'uploadedByName',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MediaAssetScalarFieldEnum = (typeof MediaAssetScalarFieldEnum)[keyof typeof MediaAssetScalarFieldEnum]
 
 
 export const SortOrder = {

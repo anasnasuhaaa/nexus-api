@@ -131,3 +131,8 @@ export type TevoSiteProfile = Prisma.TevoSiteProfileModel
  * 
  */
 export type TevoArticle = Prisma.TevoArticleModel
+/**
+ * Model MediaAsset
+ * 
+ */
+export type MediaAsset = Prisma.MediaAssetModel

@@ -59,6 +59,17 @@ enum TevoArticleStatus {
   @@schema("tevo")
 }
 
+enum MediaCategory {
+  GENERAL
+  PROGRAM
+  ARTICLE
+  MEMBER
+  ORGANIZATION
+  HERO
+
+  @@schema("nexus")
+}
+
 model CabinetPeriod {
   id        String   @id @default(uuid())
   name      String
@@ -409,4 +420,24 @@ model TevoArticle {
   @@index([publishedAt])
   @@index([createdAt])
   @@schema("tevo")
+}
+
+model MediaAsset {
+  id           String        @id @default(uuid())
+  fileName     String
+  originalName String
+  mimeType     String
+  sizeBytes    Int
+  url          String
+  altText      String?
+  category     MediaCategory @default(GENERAL)
+  uploadedById String?
+  uploadedByName String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([category])
+  @@index([uploadedById])
+  @@index([createdAt])
+  @@schema("nexus")
 }

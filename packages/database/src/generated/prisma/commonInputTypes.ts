@@ -260,6 +260,23 @@ export type EnumTevoArticleStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumTevoArticleStatusFilter<$PrismaModel>
 }
 
+export type EnumMediaCategoryFilter<$PrismaModel = never> = {
+  equals?: $Enums.MediaCategory | Prisma.EnumMediaCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.MediaCategory[] | Prisma.ListEnumMediaCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MediaCategory[] | Prisma.ListEnumMediaCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMediaCategoryFilter<$PrismaModel> | $Enums.MediaCategory
+}
+
+export type EnumMediaCategoryWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MediaCategory | Prisma.EnumMediaCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.MediaCategory[] | Prisma.ListEnumMediaCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MediaCategory[] | Prisma.ListEnumMediaCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMediaCategoryWithAggregatesFilter<$PrismaModel> | $Enums.MediaCategory
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMediaCategoryFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMediaCategoryFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -517,6 +534,23 @@ export type NestedEnumTevoArticleStatusWithAggregatesFilter<$PrismaModel = never
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumTevoArticleStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumTevoArticleStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumMediaCategoryFilter<$PrismaModel = never> = {
+  equals?: $Enums.MediaCategory | Prisma.EnumMediaCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.MediaCategory[] | Prisma.ListEnumMediaCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MediaCategory[] | Prisma.ListEnumMediaCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMediaCategoryFilter<$PrismaModel> | $Enums.MediaCategory
+}
+
+export type NestedEnumMediaCategoryWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MediaCategory | Prisma.EnumMediaCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.MediaCategory[] | Prisma.ListEnumMediaCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MediaCategory[] | Prisma.ListEnumMediaCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMediaCategoryWithAggregatesFilter<$PrismaModel> | $Enums.MediaCategory
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMediaCategoryFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMediaCategoryFilter<$PrismaModel>
 }
 
 

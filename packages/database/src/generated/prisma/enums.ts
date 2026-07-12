@@ -62,3 +62,15 @@ export const TevoArticleStatus = {
 } as const
 
 export type TevoArticleStatus = (typeof TevoArticleStatus)[keyof typeof TevoArticleStatus]
+
+
+export const MediaCategory = {
+  GENERAL: 'GENERAL',
+  PROGRAM: 'PROGRAM',
+  ARTICLE: 'ARTICLE',
+  MEMBER: 'MEMBER',
+  ORGANIZATION: 'ORGANIZATION',
+  HERO: 'HERO'
+} as const
+
+export type MediaCategory = (typeof MediaCategory)[keyof typeof MediaCategory]
