@@ -122,7 +122,7 @@ export default async function LoginPage() {
 
                   <p className="text-xs leading-5 text-[#746456]">
                     Halaman ini hanya tersedia bagi pengurus yang telah memiliki
-                    akun dari Super Admin.
+                    akun.
                   </p>
                 </div>
               </div>

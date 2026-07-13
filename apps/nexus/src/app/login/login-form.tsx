@@ -21,8 +21,8 @@ type LoginStatus = "idle" | "error" | "success";
 export function LoginForm() {
   const router = useRouter();
 
-  const [email, setEmail] = useState("superadmin@nexus.local");
-  const [password, setPassword] = useState("SuperAdmin12345!");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [status, setStatus] = useState<LoginStatus>("idle");
   const [isLoading, setIsLoading] = useState(false);
@@ -116,7 +116,7 @@ export function LoginForm() {
             disabled={isLoading}
             aria-invalid={status === "error"}
             className="h-full min-w-0 flex-1 bg-transparent text-sm text-[#34271F] outline-none placeholder:text-[#B9A993] disabled:cursor-not-allowed disabled:opacity-60"
-            placeholder="nama@nexus.local"
+            placeholder="Masukkan email"
             required
           />
 
