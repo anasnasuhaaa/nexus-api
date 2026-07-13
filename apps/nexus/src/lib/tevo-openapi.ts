@@ -1,14 +1,14 @@
 const appUrl =
   process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ??
-  "http://localhost:3000";
+  "https://nexus.ormawaeksekutifpku.com";
 
 export const tevoOpenApiSpec = {
   openapi: "3.1.0",
   info: {
     title: "Tevo Public API",
     version: "1.0.0",
-    description:
-      "Dokumentasi API publik Tevo untuk mengambil data profile, program kerja, artikel, struktur organisasi, dan anggota dari Nexus.",
+description:
+  "Dokumentasi API publik Tevo untuk mengambil data site profile, program kerja, artikel, Birdep, struktur organisasi, dan anggota dari Nexus.",
   },
   servers: [
     {
@@ -184,6 +184,27 @@ export const tevoOpenApiSpec = {
       },
     },
 
+        "/api/public/tevo/birdeps": {
+      get: {
+        tags: ["Organization"],
+        summary: "Get active Birdep data",
+        description:
+          "Mengambil daftar BPH, biro, dan departemen aktif pada cabinet period yang sedang aktif, termasuk deskripsi, fokus area, jumlah anggota, dan pimpinan unit.",
+        responses: {
+          "200": {
+            description: "Data Birdep berhasil diambil.",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/BirdepsResponse",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+
     "/api/public/tevo/organization-structure": {
       get: {
         tags: ["Organization"],
@@ -342,6 +363,116 @@ export const tevoOpenApiSpec = {
             example: "Biro",
           },
         },
+      },
+
+            BirdepLeader: {
+        type: "object",
+        properties: {
+          id: {
+            type: "string",
+          },
+          fullName: {
+            type: "string",
+            example: "Nama Anggota",
+          },
+          instagram: {
+            type: ["string", "null"],
+            example: "username_ig",
+          },
+          position: {
+            type: "string",
+            example: "KETUA_BIRDEP",
+          },
+          positionLabel: {
+            type: "string",
+            example: "Ketua Birdep",
+          },
+          internalTitle: {
+            type: ["string", "null"],
+          },
+          subdivision: {
+            type: ["string", "null"],
+          },
+        },
+      },
+
+      BirdepPublicItem: {
+        type: "object",
+        properties: {
+          id: {
+            type: "string",
+          },
+          name: {
+            type: "string",
+            example: "Biro Riset dan Teknologi",
+          },
+          code: {
+            type: "string",
+            example: "RISTEK",
+          },
+          slug: {
+            type: "string",
+            example: "riset-dan-teknologi",
+          },
+          unitType: {
+            type: "string",
+            example: "BIRO",
+          },
+          unitTypeLabel: {
+            type: "string",
+            example: "Biro",
+          },
+          description: {
+            type: "string",
+          },
+          focusArea: {
+            type: "string",
+          },
+          memberCount: {
+            type: "number",
+            example: 12,
+          },
+          leaders: {
+            type: "array",
+            items: {
+              $ref: "#/components/schemas/BirdepLeader",
+            },
+          },
+        },
+      },
+
+      BirdepsResponse: {
+        allOf: [
+          {
+            $ref: "#/components/schemas/SuccessBase",
+          },
+          {
+            type: "object",
+            properties: {
+              data: {
+                type: "object",
+                properties: {
+                  cabinet: {
+                    anyOf: [
+                      {
+                        $ref: "#/components/schemas/Cabinet",
+                      },
+                      {
+                        type: "null",
+                      },
+                    ],
+                  },
+                  birdeps: {
+                    type: "array",
+                    items: {
+                      $ref: "#/components/schemas/BirdepPublicItem",
+                    },
+                  },
+                },
+              },
+            },
+          },
+        ],
       },
 
       ProgramListItem: {
