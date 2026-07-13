@@ -41,7 +41,7 @@ services:
         "migrate",
         "deploy",
         "--schema",
-        "packages/database/prisma/schema.prisma"
+        "packages/database/prisma/schema.prisma",
       ]
     restart: "no"
 
@@ -66,14 +66,14 @@ services:
       postgres:
         condition: service_healthy
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     volumes:
       - nexus_media_uploads:/app/apps/nexus/public/uploads/media
     healthcheck:
       test:
         [
           "CMD-SHELL",
-          "wget -qO- http://127.0.0.1:3000/api/public/tevo/site-profile > /dev/null || exit 1"
+          "wget -qO- http://127.0.0.1:3000/api/public/tevo/site-profile > /dev/null || exit 1",
         ]
       interval: 30s
       timeout: 10s
