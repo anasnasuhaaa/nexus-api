@@ -13,6 +13,7 @@ build/
 .env
 .env.*
 !.env.example
+!.env.docker.example
 
 # Logs
 *.log
@@ -27,8 +28,8 @@ Thumbs.db
 .idea/
 
 # Uploads must not be stored inside repository
-uploads/
-public/uploads/
+apps/nexus/public/uploads/media/*
+!apps/nexus/public/uploads/media/.gitkeep
 
 # Temporary files
 tmp/

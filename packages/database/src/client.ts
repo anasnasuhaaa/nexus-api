@@ -7,7 +7,7 @@ const connectionString = process.env.DATABASE_URL;
 
 if (!connectionString) {
   throw new Error(
-    "DATABASE_URL belum dikonfigurasi. Pastikan file packages/database/.env tersedia.",
+    "DATABASE_URL belum dikonfigurasi. Pastikan environment variable DATABASE_URL tersedia.",
   );
 }
 

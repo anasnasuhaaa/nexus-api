@@ -1,7 +1,5 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 type SendEmailParams = {
   to: string;
   subject: string;
@@ -24,6 +22,8 @@ export async function sendEmail({
   if (!from) {
     throw new Error("EMAIL_FROM belum diatur.");
   }
+
+  const resend = new Resend(process.env.RESEND_API_KEY);
 
   return resend.emails.send({
     from,
