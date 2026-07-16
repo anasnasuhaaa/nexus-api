@@ -118,6 +118,7 @@ export function MediaPicker({
                 src={selectedMedia.url}
                 alt={selectedMedia.altText ?? selectedMedia.originalName}
                 fill
+                unoptimized
                 sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover"
               />
@@ -247,6 +248,7 @@ export function MediaPicker({
                             src={item.url}
                             alt={item.altText ?? item.originalName}
                             fill
+                            unoptimized
                             sizes="(max-width: 768px) 100vw, 33vw"
                             className="object-cover"
                           />

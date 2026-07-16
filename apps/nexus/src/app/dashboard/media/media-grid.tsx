@@ -121,6 +121,7 @@ export function MediaGrid({ media }: MediaGridProps) {
               src={item.url}
               alt={item.altText ?? item.originalName}
               fill
+              unoptimized
               sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
               className="object-cover"
             />
