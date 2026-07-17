@@ -122,12 +122,6 @@ export default async function MediaPage() {
             </p>
           </div>
 
-          <div className="rounded-2xl border bg-background px-4 py-3 text-sm text-muted-foreground">
-            Storage lokal:
-            <span className="ml-1 font-bold text-foreground">
-              /uploads/media
-            </span>
-          </div>
         </div>
       </section>
 

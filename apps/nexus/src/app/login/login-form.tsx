@@ -101,7 +101,7 @@ export function LoginForm() {
         >
           <Mail
             aria-hidden="true"
-            className={`mr-3 size-[17px] shrink-0 transition-colors ${iconStateClass}`}
+            className={`mr-3 size-4.25 shrink-0 transition-colors ${iconStateClass}`}
           />
 
           <input
@@ -123,7 +123,7 @@ export function LoginForm() {
           {status === "success" && (
             <CheckCircle2
               aria-hidden="true"
-              className="ml-2 size-[17px] shrink-0 text-lime-500"
+              className="ml-2 size-4.25 shrink-0 text-lime-500"
             />
           )}
         </div>
@@ -142,7 +142,7 @@ export function LoginForm() {
         >
           <KeyRound
             aria-hidden="true"
-            className={`mr-3 size-[17px] shrink-0 transition-colors ${iconStateClass}`}
+            className={`mr-3 size-4.25 shrink-0 transition-colors ${iconStateClass}`}
           />
 
           <input
@@ -171,9 +171,9 @@ export function LoginForm() {
             className="ml-2 flex size-8 shrink-0 items-center justify-center rounded-full text-[#A98B63] transition hover:bg-[#F3E4CA] hover:text-[#A51616] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B61D1D]/30 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {showPassword ? (
-              <EyeOff className="size-[17px]" />
+              <EyeOff className="size-4.25" />
             ) : (
-              <Eye className="size-[17px]" />
+              <Eye className="size-4.25" />
             )}
           </button>
         </div>

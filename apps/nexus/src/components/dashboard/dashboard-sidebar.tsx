@@ -19,6 +19,7 @@ import {
   Table2,
   Upload,
   UserCircle,
+  UserCog,
   UsersRound,
 } from "lucide-react";
 import { useState } from "react";
@@ -164,6 +165,11 @@ const dashboardMenus: DashboardMenu[] = [
       },
     ],
   },
+  {
+    title: "User Management",
+    href: "/dashboard/users",
+    icon: UserCog,
+  }
 ];
 
 const exactOnlySubmenuHrefs = [

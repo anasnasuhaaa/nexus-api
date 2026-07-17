@@ -14,6 +14,7 @@ const asimovian = Asimovian({
   subsets: ["latin"],
   weight: "400",
   display: "swap",
+  adjustFontFallback: false,
 });
 
 function createTicketMask(radius: string): CSSProperties {

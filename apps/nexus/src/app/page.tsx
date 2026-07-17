@@ -18,6 +18,7 @@ const asimovian = Asimovian({
   subsets: ["latin"],
   weight: "400",
   display: "swap",
+  adjustFontFallback: false,
 });
 
 function createTicketMask(radius: string): CSSProperties {
@@ -67,7 +68,7 @@ const features = [
 export default function HomePage() {
   return (
     <main
-      className="relative h-screen h-[100svh] max-h-[100svh] overflow-hidden bg-[#1b0d08] text-[#34271f] [color-scheme:light]"
+      className="relative h-screen max-h-svh overflow-hidden bg-[#1b0d08] text-[#34271f] [scheme-light"
       style={{ colorScheme: "light" }}
     >
       {/* Background */}
@@ -87,8 +88,8 @@ export default function HomePage() {
 
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,246,219,0.06)_0%,rgba(31,13,6,0.12)_45%,rgba(17,7,3,0.58)_100%)]" />
 
-        <div className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-black/35 to-transparent" />
-        <div className="absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-black/35 to-transparent" />
+        <div className="absolute inset-y-0 left-0 w-1/3 bg-linear-to-r from-black/35 to-transparent" />
+        <div className="absolute inset-y-0 right-0 w-1/3 bg-linear-to-l from-black/35 to-transparent" />
       </div>
 
 
@@ -103,7 +104,7 @@ export default function HomePage() {
               style={innerTicketMask}
               className="relative bg-[#fff9ee]/96 backdrop-blur-xl"
             >
-              <div className="grid min-h-[500px] items-center gap-8 px-7 py-8 sm:px-10 sm:py-10 lg:grid-cols-[1.18fr_0.82fr] lg:gap-12 lg:px-14 lg:py-12">
+              <div className="grid min-h-125 items-center gap-8 px-7 py-8 sm:px-10 sm:py-10 lg:grid-cols-[1.18fr_0.82fr] lg:gap-12 lg:px-14 lg:py-12">
                 {/* Konten utama */}
                 <div>
                   <Image
@@ -112,7 +113,7 @@ export default function HomePage() {
                     width={210}
                     height={72}
                     priority
-                    className="h-auto w-[155px] object-contain sm:w-[180px]"
+                    className="h-auto w-38.75 object-contain sm:w-45"
                   />
 
                   <p className="mt-6 text-[11px] font-bold uppercase tracking-[0.22em] text-[#b1833f]">
