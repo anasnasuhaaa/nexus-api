@@ -6,16 +6,17 @@ import {
   BadgeCheck,
   Building2,
   CalendarDays,
+  IdCard,
+  Landmark,
   Mail,
   Pencil,
-  ShieldCheck,
+  Phone,
   UserRound,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
 import { MemberLifecycleButton } from "./member-lifecycle-button";
-import { ResetPasswordButton } from "./reset-password-button";
 
 type MemberDetailPageProps = {
   params: Promise<{
@@ -51,6 +52,27 @@ function formatText(value: unknown) {
     .replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
+function getPositionLabel(position: string | null | undefined) {
+  if (!position) {
+    return "-";
+  }
+
+  const labels: Record<string, string> = {
+    KETUA_ORGANISASI: "Ketua Organisasi",
+    WAKIL_KETUA_ORGANISASI: "Wakil Ketua Organisasi",
+    SEKRETARIS_INTERNAL: "Sekretaris Internal",
+    SEKRETARIS_EKSTERNAL: "Sekretaris Eksternal",
+    BENDAHARA_INTERNAL: "Bendahara Internal",
+    BENDAHARA_EKSTERNAL: "Bendahara Eksternal",
+    KETUA_BIRDEP: "Ketua Birdep",
+    SEKRETARIS_BIRDEP: "Sekretaris Birdep",
+    BENDAHARA_BIRDEP: "Bendahara Birdep",
+    ANGGOTA_BIRDEP: "Anggota Birdep",
+  };
+
+  return labels[position] ?? formatText(position);
+}
+
 function getRecordValue(record: Record<string, unknown>, keys: string[]) {
   for (const key of keys) {
     const value = record[key];
@@ -61,21 +83,6 @@ function getRecordValue(record: Record<string, unknown>, keys: string[]) {
   }
 
   return "-";
-}
-
-function getObjectRecord(
-  record: Record<string, unknown>,
-  keys: string[],
-): Record<string, unknown> {
-  for (const key of keys) {
-    const value = record[key];
-
-    if (value && typeof value === "object" && !Array.isArray(value)) {
-      return value as Record<string, unknown>;
-    }
-  }
-
-  return {};
 }
 
 function InfoItem({ label, value }: InfoItemProps) {
@@ -92,7 +99,7 @@ function InfoItem({ label, value }: InfoItemProps) {
 }
 
 async function getMemberDetail(memberId: string) {
-  const member = await prisma.member.findUnique({
+  return prisma.member.findUnique({
     where: {
       id: memberId,
     },
@@ -114,65 +121,30 @@ async function getMemberDetail(memberId: string) {
             select: {
               name: true,
               code: true,
+              unitType: true,
+              description: true,
+              focusArea: true,
             },
           },
         },
       },
     },
   });
-
-  if (!member) {
-    return null;
-  }
-
-  const linkedUser = await prisma.user.findFirst({
-    where: {
-      memberId: member.id,
-    },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      role: true,
-      mustChangePassword: true,
-      banned: true,
-      createdAt: true,
-    },
-  });
-
-  const activeCabinetPeriod = await prisma.cabinetPeriod.findFirst({
-    where: {
-      isActive: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    select: {
-      name: true,
-      startDate: true,
-      endDate: true,
-      isActive: true,
-    },
-  });
-
-  return {
-    member,
-    linkedUser,
-    activeCabinetPeriod,
-  };
 }
 
 export default async function MemberDetailPage({
   params,
 }: MemberDetailPageProps) {
   const { id } = await params;
-  const result = await getMemberDetail(id);
+  const member = await getMemberDetail(id);
 
-  if (!result) {
+  if (!member) {
     notFound();
   }
 
-  const { member, linkedUser, activeCabinetPeriod } = result;
+  const latestMembership = member.memberships[0];
+  const latestBirdep = latestMembership?.primaryBirdep;
+  const latestCabinet = latestMembership?.cabinetPeriod;
 
   const memberRecord = member as unknown as Record<string, unknown>;
 
@@ -199,8 +171,21 @@ export default async function MemberDetailPage({
     getRecordValue(memberRecord, ["instagram", "instagramUsername"]),
   );
 
-  const activeCabinetRecord =
-    activeCabinetPeriod as unknown as Record<string, unknown> | null;
+  const latestPositionLabel = getPositionLabel(
+    latestMembership?.organizationalPosition,
+  );
+
+  const latestInternalTitle = latestMembership?.internalTitle ?? "-";
+  const latestBirdepName = latestBirdep?.name ?? "Belum ada Birdep";
+  const latestBirdepCode = latestBirdep?.code ?? "-";
+  const latestCabinetName = latestCabinet?.name ?? "-";
+
+  const latestCabinetRange =
+    latestCabinet?.startDate || latestCabinet?.endDate
+      ? `${formatDate(latestCabinet.startDate)} - ${formatDate(
+          latestCabinet.endDate,
+        )}`
+      : "-";
 
   return (
     <div className="space-y-6">
@@ -238,8 +223,9 @@ export default async function MemberDetailPage({
             </h1>
 
             <p className="mt-3 max-w-3xl text-sm leading-7 text-muted-foreground sm:text-base">
-              Detail data anggota, status keanggotaan, membership organisasi,
-              serta akun login yang terhubung dengan Nexus.
+              Detail identitas anggota dan perannya di organisasi. Pengaturan
+              akun login, aktivasi, reset password, role akses, dan ban user
+              dikelola melalui menu Akun & Akses.
             </p>
           </div>
 
@@ -257,7 +243,7 @@ export default async function MemberDetailPage({
         </div>
       </section>
 
-      <section className="grid gap-4 lg:grid-cols-3">
+      <section className="grid gap-4 lg:grid-cols-4">
         <div className="rounded-3xl border bg-card p-5 shadow-sm">
           <div className="mb-4 flex size-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
             <UserRound className="size-5" />
@@ -271,12 +257,26 @@ export default async function MemberDetailPage({
 
         <div className="rounded-3xl border bg-card p-5 shadow-sm">
           <div className="mb-4 flex size-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-            <Mail className="size-5" />
+            <IdCard className="size-5" />
           </div>
 
-          <p className="text-sm text-muted-foreground">Email</p>
-          <p className="mt-2 wrap-break-word text-lg font-black tracking-tight">
-            {memberEmail}
+          <p className="text-sm text-muted-foreground">NIM</p>
+          <p className="mt-2 text-lg font-black tracking-tight">
+            {memberNim}
+          </p>
+        </div>
+
+        <div className="rounded-3xl border bg-card p-5 shadow-sm">
+          <div className="mb-4 flex size-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+            <Landmark className="size-5" />
+          </div>
+
+          <p className="text-sm text-muted-foreground">Birdep Saat Ini</p>
+          <p className="mt-2 text-lg font-black tracking-tight">
+            {latestBirdepCode}
+          </p>
+          <p className="mt-1 text-xs leading-5 text-muted-foreground">
+            {latestBirdepName}
           </p>
         </div>
 
@@ -285,231 +285,195 @@ export default async function MemberDetailPage({
             <BadgeCheck className="size-5" />
           </div>
 
-          <p className="text-sm text-muted-foreground">NIM</p>
+          <p className="text-sm text-muted-foreground">Jabatan Saat Ini</p>
           <p className="mt-2 text-lg font-black tracking-tight">
-            {memberNim}
+            {latestPositionLabel}
           </p>
         </div>
       </section>
 
-      <section className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
-        <div className="rounded-3xl border bg-card p-6 shadow-sm">
-          <div className="mb-5">
-            <h2 className="font-black tracking-tight">Informasi Anggota</h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Data dasar anggota yang tersimpan di database Nexus.
-            </p>
-          </div>
+      <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+        <div className="space-y-6">
+          <section className="rounded-3xl border bg-card p-6 shadow-sm">
+            <div className="mb-5">
+              <h2 className="font-black tracking-tight">Informasi Anggota</h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Data identitas anggota yang tersimpan di database Nexus.
+              </p>
+            </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <InfoItem label="Nama" value={memberName} />
-            <InfoItem label="Email" value={memberEmail} />
-            <InfoItem label="NIM" value={memberNim} />
-            <InfoItem label="Nomor HP / WhatsApp" value={memberPhone} />
-            <InfoItem label="Instagram" value={memberInstagram} />
-            <InfoItem
-              label="Status Anggota"
-              value={member.isActive ? "Aktif" : "Nonaktif"}
-            />
-            <InfoItem
-              label="Dibuat Pada"
-              value={formatDate(member.createdAt)}
-            />
-            <InfoItem
-              label="Diperbarui Pada"
-              value={formatDate(member.updatedAt)}
-            />
-          </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <InfoItem label="Nama" value={memberName} />
+              <InfoItem label="NIM" value={memberNim} />
+              <InfoItem label="Email" value={memberEmail} />
+              <InfoItem label="Nomor HP / WhatsApp" value={memberPhone} />
+              <InfoItem label="Instagram" value={memberInstagram} />
+              <InfoItem
+                label="Status Anggota"
+                value={member.isActive ? "Aktif" : "Nonaktif"}
+              />
+              <InfoItem
+                label="Dibuat Pada"
+                value={formatDate(member.createdAt)}
+              />
+              <InfoItem
+                label="Diperbarui Pada"
+                value={formatDate(member.updatedAt)}
+              />
+            </div>
+          </section>
+
+          <section className="rounded-3xl border bg-card p-6 shadow-sm">
+            <div className="mb-5">
+              <h2 className="font-black tracking-tight">
+                Peran Organisasi Saat Ini
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Ringkasan membership terbaru anggota ini.
+              </p>
+            </div>
+
+            {latestMembership ? (
+              <div className="space-y-4">
+                <div className="rounded-2xl border bg-background p-4">
+                  <div className="flex items-start gap-4">
+                    <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                      <Building2 className="size-5" />
+                    </div>
+
+                    <div>
+                      <p className="font-black">{latestBirdepName}</p>
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        {latestBirdepCode}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid gap-4">
+                  <InfoItem label="Jabatan" value={latestPositionLabel} />
+                  <InfoItem
+                    label="Jabatan Internal"
+                    value={latestInternalTitle}
+                  />
+                  <InfoItem label="Periode Kabinet" value={latestCabinetName} />
+                  <InfoItem label="Rentang Periode" value={latestCabinetRange} />
+                  <InfoItem
+                    label="Periode Aktif"
+                    value={latestCabinet?.isActive ? "Ya" : "Tidak"}
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="rounded-2xl border border-dashed bg-card p-5 text-sm leading-7 text-muted-foreground">
+                Anggota ini belum memiliki membership organisasi. Tambahkan atau
+                edit data anggota untuk menghubungkan anggota ke Birdep dan
+                jabatan.
+              </div>
+            )}
+          </section>
         </div>
 
-        <div className="rounded-3xl border bg-card p-6 shadow-sm">
+        <section className="rounded-3xl border bg-card p-6 shadow-sm">
           <div className="mb-5">
-            <h2 className="font-black tracking-tight">Akun Login</h2>
+            <h2 className="font-black tracking-tight">Riwayat Membership</h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              Akun Better Auth yang terhubung dengan anggota ini.
+              Riwayat peran anggota dalam periode kabinet dan Birdep.
             </p>
           </div>
 
-          {linkedUser ? (
-            <div className="space-y-4">
-              <div className="flex items-start gap-4 rounded-2xl border bg-card p-4">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <ShieldCheck className="size-5" />
-                </div>
+          {member.memberships.length ? (
+            <div className="space-y-3">
+              {member.memberships.map((membership) => {
+                const birdep = membership.primaryBirdep;
+                const cabinet = membership.cabinetPeriod;
 
-                <div className="min-w-0">
-                  <p className="font-bold">{linkedUser.name}</p>
-                  <p className="mt-1 wrap-break-word text-sm text-muted-foreground">
-                    {linkedUser.email}
-                  </p>
-                </div>
-              </div>
+                const birdepName = birdep?.name ?? "Belum ada Birdep";
+                const birdepCode = birdep?.code ?? "-";
+                const positionLabel = getPositionLabel(
+                  membership.organizationalPosition,
+                );
 
-              <div className="grid gap-3">
-                <InfoItem
-                  label="Role Utama"
-                  value={formatText(linkedUser.role)}
-                />
-                <InfoItem
-                  label="Wajib Ganti Password"
-                  value={linkedUser.mustChangePassword ? "Ya" : "Tidak"}
-                />
-                <InfoItem
-                  label="Status Login"
-                  value={linkedUser.banned ? "Dibekukan" : "Aktif"}
-                />
-                <InfoItem
-                  label="Akun Dibuat"
-                  value={formatDate(linkedUser.createdAt)}
-                />
-              </div>
+                const cabinetName = cabinet?.name ?? "-";
+                const cabinetRange =
+                  cabinet?.startDate || cabinet?.endDate
+                    ? `${formatDate(cabinet.startDate)} - ${formatDate(
+                        cabinet.endDate,
+                      )}`
+                    : "-";
 
-              <ResetPasswordButton
-                memberId={member.id}
-                userId={linkedUser.id}
-                userEmail={linkedUser.email}
-              />
+                return (
+                  <div
+                    key={membership.id}
+                    className="rounded-2xl border bg-card p-4"
+                  >
+                    <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                      <div className="flex items-start gap-4">
+                        <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                          <Building2 className="size-5" />
+                        </div>
+
+                        <div>
+                          <p className="font-bold">{birdepName}</p>
+                          <p className="mt-1 text-sm text-muted-foreground">
+                            {birdepCode}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex w-fit items-center gap-2 rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground">
+                        <CalendarDays className="size-3.5" />
+                        {cabinetName}
+                      </div>
+                    </div>
+
+                    <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                      <InfoItem label="Jabatan" value={positionLabel} />
+
+                      <InfoItem
+                        label="Jabatan Internal"
+                        value={membership.internalTitle ?? "-"}
+                      />
+
+                      <InfoItem label="Rentang Periode" value={cabinetRange} />
+
+                      <InfoItem
+                        label="Periode Aktif"
+                        value={cabinet?.isActive ? "Ya" : "Tidak"}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           ) : (
             <div className="rounded-2xl border border-dashed bg-card p-5 text-sm leading-7 text-muted-foreground">
-              Belum ada akun login yang terhubung dengan anggota ini.
+              Belum ada data membership untuk anggota ini.
             </div>
           )}
-        </div>
+        </section>
       </section>
 
-      <section className="rounded-3xl border bg-card p-6 shadow-sm">
-        <div className="mb-5">
-          <h2 className="font-black tracking-tight">Membership Organisasi</h2>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Riwayat keanggotaan anggota dalam periode kabinet dan Birdep.
-          </p>
+      <section className="rounded-3xl border bg-muted/40 p-5">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+          <div>
+            <h2 className="font-black tracking-tight">
+              Informasi akun login tidak ditampilkan di halaman ini
+            </h2>
+            <p className="mt-1 max-w-3xl text-sm leading-7 text-muted-foreground">
+              Halaman ini hanya berfokus pada data anggota dan peran organisasi.
+              Untuk mengelola akun login, aktivasi, reset password, role akses,
+              dan ban user, gunakan menu Akun & Akses.
+            </p>
+          </div>
+
+          <Link href="/dashboard/users">
+            <Button variant="outline">
+              <UserRound className="size-4" />
+              Buka Akun & Akses
+            </Button>
+          </Link>
         </div>
-
-        {member.memberships.length ? (
-          <div className="space-y-3">
-            {member.memberships.map((membership) => {
-              const membershipRecord =
-                membership as unknown as Record<string, unknown>;
-
-              const primaryBirdepRecord = getObjectRecord(membershipRecord, [
-                "primaryBirdep",
-              ]);
-
-              const cabinetPeriodRecord = getObjectRecord(membershipRecord, [
-                "cabinetPeriod",
-                "period",
-              ]);
-
-              const birdepName = String(
-                getRecordValue(primaryBirdepRecord, ["name"]),
-              );
-
-              const birdepCode = String(
-                getRecordValue(primaryBirdepRecord, ["code"]),
-              );
-
-              const fallbackCabinetName = activeCabinetRecord
-                ? getRecordValue(activeCabinetRecord, ["name"])
-                : "-";
-
-              const fallbackCabinetPeriodRange = activeCabinetPeriod
-                ? `${formatDate(activeCabinetPeriod.startDate)} - ${formatDate(
-                    activeCabinetPeriod.endDate,
-                  )}`
-                : "-";
-
-              const cabinetPeriodName = String(
-                getRecordValue(cabinetPeriodRecord, ["name"]) === "-"
-                  ? fallbackCabinetName
-                  : getRecordValue(cabinetPeriodRecord, ["name"]),
-              );
-
-              const cabinetStartDate = getRecordValue(cabinetPeriodRecord, [
-                "startDate",
-              ]);
-              const cabinetEndDate = getRecordValue(cabinetPeriodRecord, [
-                "endDate",
-              ]);
-
-              const cabinetPeriodRange =
-                cabinetStartDate === "-"
-                  ? fallbackCabinetPeriodRange
-                  : `${formatDate(cabinetStartDate as Date)} - ${formatDate(
-                      cabinetEndDate as Date,
-                    )}`;
-
-              const cabinetPeriodIsActive =
-                getRecordValue(cabinetPeriodRecord, ["isActive"]) === true ||
-                getRecordValue(activeCabinetRecord ?? {}, ["isActive"]) ===
-                  true;
-
-              const membershipId = String(
-                getRecordValue(membershipRecord, ["id"]),
-              );
-
-              return (
-                <div
-                  key={membershipId}
-                  className="rounded-2xl border bg-card p-4"
-                >
-                  <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
-                    <div className="flex items-start gap-4">
-                      <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                        <Building2 className="size-5" />
-                      </div>
-
-                      <div>
-                        <p className="font-bold">{birdepName}</p>
-                        <p className="mt-1 text-sm text-muted-foreground">
-                          {birdepCode}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex w-fit items-center gap-2 rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground">
-                      <CalendarDays className="size-3.5" />
-                      {cabinetPeriodName} · {cabinetPeriodRange}
-                    </div>
-                  </div>
-
-                  <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                    <InfoItem
-                      label="Posisi"
-                      value={formatText(
-                        getRecordValue(membershipRecord, [
-                          "organizationalPosition",
-                          "position",
-                          "memberPosition",
-                        ]),
-                      )}
-                    />
-
-                    <InfoItem
-                      label="Jabatan Internal"
-                      value={formatText(
-                        getRecordValue(membershipRecord, [
-                          "internalTitle",
-                          "title",
-                          "positionTitle",
-                        ]),
-                      )}
-                    />
-
-                    <InfoItem
-                      label="Periode Aktif"
-                      value={cabinetPeriodIsActive ? "Ya" : "Tidak"}
-                    />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="rounded-2xl border border-dashed bg-card p-5 text-sm leading-7 text-muted-foreground">
-            Belum ada data membership untuk anggota ini.
-          </div>
-        )}
       </section>
     </div>
   );

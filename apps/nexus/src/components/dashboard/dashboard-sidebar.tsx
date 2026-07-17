@@ -1,7 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import type { LucideIcon } from "lucide-react";
 import {
   BarChart3,
   ChevronDown,
@@ -22,8 +21,9 @@ import {
   UserCog,
   UsersRound,
 } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
-import type { LucideIcon } from "lucide-react";
 
 import { LogoutButton } from "@/components/dashboard/logout-button";
 import { cn } from "@/lib/utils";
@@ -46,28 +46,6 @@ const dashboardMenus: DashboardMenu[] = [
     title: "Dashboard",
     href: "/dashboard",
     icon: LayoutDashboard,
-  },
-  {
-    title: "Data Anggota",
-    href: "/dashboard/members",
-    icon: UsersRound,
-    children: [
-      {
-        title: "Tabel Anggota",
-        href: "/dashboard/members",
-        icon: Table2,
-      },
-      {
-        title: "Import XLSX",
-        href: "/dashboard/members/import",
-        icon: Upload,
-      },
-      {
-        title: "Aktivasi & Log Email",
-        href: "/dashboard/members/activation",
-        icon: MailCheck,
-      },
-    ],
   },
   {
     title: "Birdep",
@@ -166,37 +144,165 @@ const dashboardMenus: DashboardMenu[] = [
     ],
   },
   {
-    title: "User Management",
+    title: "Data Anggota",
+    href: "/dashboard/members",
+    icon: UsersRound,
+    children: [
+      {
+        title: "Tabel Anggota",
+        href: "/dashboard/members",
+        icon: Table2,
+      },
+      {
+        title: "Import XLSX",
+        href: "/dashboard/members/import",
+        icon: Upload,
+      },
+    ],
+  },
+  {
+    title: "Akun & Akses",
     href: "/dashboard/users",
     icon: UserCog,
-  }
+    children: [
+      {
+        title: "Daftar Akun",
+        href: "/dashboard/users",
+        icon: Table2,
+      },
+      {
+        title: "Aktivasi Akun",
+        href: "/dashboard/users/activation",
+        icon: MailCheck,
+      },
+    ],
+  },
 ];
 
-const exactOnlySubmenuHrefs = [
-  "/dashboard/members",
-  "/dashboard/programs",
-  "/dashboard/progress",
-  "/dashboard/tevo",
-];
+function isNestedPath(pathname: string, href: string) {
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
 
-function isActivePath(pathname: string, href: string) {
+function isDashboardSubMenuActive(pathname: string, href: string) {
   if (href === "/dashboard") {
     return pathname === "/dashboard";
   }
 
-  return pathname === href || pathname.startsWith(`${href}/`);
-}
-
-function isExactOrNestedPath(pathname: string, href: string) {
-  return pathname === href || pathname.startsWith(`${href}/`);
-}
-
-function isActiveSubmenuPath(pathname: string, href: string) {
-  if (exactOnlySubmenuHrefs.includes(href)) {
-    return pathname === href;
+  /**
+   * Akun & Akses
+   *
+   * /dashboard/users             => Daftar Akun active
+   * /dashboard/users/[id]        => Daftar Akun active
+   * /dashboard/users/activation  => Aktivasi Akun active only
+   */
+  if (href === "/dashboard/users") {
+    return (
+      pathname === "/dashboard/users" ||
+      (pathname.startsWith("/dashboard/users/") &&
+        !pathname.startsWith("/dashboard/users/activation"))
+    );
   }
 
-  return isExactOrNestedPath(pathname, href);
+  if (href === "/dashboard/users/activation") {
+    return isNestedPath(pathname, "/dashboard/users/activation");
+  }
+
+  /**
+   * Data Anggota
+   *
+   * /dashboard/members             => Tabel Anggota active
+   * /dashboard/members/[id]        => Tabel Anggota active
+   * /dashboard/members/[id]/edit   => Tabel Anggota active
+   * /dashboard/members/import      => Import XLSX active only
+   */
+  if (href === "/dashboard/members") {
+    return (
+      pathname === "/dashboard/members" ||
+      (pathname.startsWith("/dashboard/members/") &&
+        !pathname.startsWith("/dashboard/members/import"))
+    );
+  }
+
+  if (href === "/dashboard/members/import") {
+    return isNestedPath(pathname, "/dashboard/members/import");
+  }
+
+  /**
+   * Program Kerja
+   *
+   * /dashboard/programs            => Tabel Program active
+   * /dashboard/programs/[id]       => Tabel Program active
+   * /dashboard/programs/new        => Tambah Program active only
+   * /dashboard/programs/import     => Import XLSX active only
+   */
+  if (href === "/dashboard/programs") {
+    return (
+      pathname === "/dashboard/programs" ||
+      (pathname.startsWith("/dashboard/programs/") &&
+        !pathname.startsWith("/dashboard/programs/new") &&
+        !pathname.startsWith("/dashboard/programs/import"))
+    );
+  }
+
+  if (href === "/dashboard/programs/new") {
+    return isNestedPath(pathname, "/dashboard/programs/new");
+  }
+
+  if (href === "/dashboard/programs/import") {
+    return isNestedPath(pathname, "/dashboard/programs/import");
+  }
+
+  /**
+   * Progress
+   *
+   * /dashboard/progress            => Tabel Progress active
+   * /dashboard/progress/[id]       => Tabel Progress active
+   * /dashboard/progress/new        => Tambah Progress active only
+   * /dashboard/progress/import     => Import XLSX active only
+   */
+  if (href === "/dashboard/progress") {
+    return (
+      pathname === "/dashboard/progress" ||
+      (pathname.startsWith("/dashboard/progress/") &&
+        !pathname.startsWith("/dashboard/progress/new") &&
+        !pathname.startsWith("/dashboard/progress/import"))
+    );
+  }
+
+  if (href === "/dashboard/progress/new") {
+    return isNestedPath(pathname, "/dashboard/progress/new");
+  }
+
+  if (href === "/dashboard/progress/import") {
+    return isNestedPath(pathname, "/dashboard/progress/import");
+  }
+
+  /**
+   * Konten Tevo
+   *
+   * /dashboard/tevo                => Overview active only
+   * /dashboard/tevo/programs       => Program Kerja active
+   * /dashboard/tevo/news           => CMS / Berita active
+   */
+  if (href === "/dashboard/tevo") {
+    return pathname === "/dashboard/tevo";
+  }
+
+  return isNestedPath(pathname, href);
+}
+
+function isDashboardMenuActive(pathname: string, menu: DashboardMenu) {
+  if (menu.href === "/dashboard") {
+    return pathname === "/dashboard";
+  }
+
+  if (menu.children?.length) {
+    return menu.children.some((child) =>
+      isDashboardSubMenuActive(pathname, child.href),
+    );
+  }
+
+  return isNestedPath(pathname, menu.href);
 }
 
 export function DashboardSidebar() {
@@ -206,11 +312,15 @@ export function DashboardSidebar() {
     {},
   );
 
-  function toggleMenu(href: string) {
-    setExpandedMenus((current) => ({
-      ...current,
-      [href]: !current[href],
-    }));
+  function toggleMenu(href: string, defaultExpanded: boolean) {
+    setExpandedMenus((current) => {
+      const currentExpanded = current[href] ?? defaultExpanded;
+
+      return {
+        ...current,
+        [href]: !currentExpanded,
+      };
+    });
   }
 
   return (
@@ -222,9 +332,7 @@ export function DashboardSidebar() {
 
         <div>
           <p className="font-black leading-none">Nexus</p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Astana Angkasa
-          </p>
+          <p className="mt-1 text-xs text-muted-foreground">Astana Angkasa</p>
         </div>
       </div>
 
@@ -232,7 +340,7 @@ export function DashboardSidebar() {
         {dashboardMenus.map((menu) => {
           const Icon = menu.icon;
           const hasChildren = Boolean(menu.children?.length);
-          const active = isActivePath(pathname, menu.href);
+          const active = isDashboardMenuActive(pathname, menu);
           const expanded = expandedMenus[menu.href] ?? active;
 
           if (!hasChildren) {
@@ -257,7 +365,7 @@ export function DashboardSidebar() {
             <div key={menu.href} className="space-y-1">
               <button
                 type="button"
-                onClick={() => toggleMenu(menu.href)}
+                onClick={() => toggleMenu(menu.href, active)}
                 className={cn(
                   "flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-left text-sm font-medium transition",
                   active
@@ -281,7 +389,7 @@ export function DashboardSidebar() {
                 <div className="ml-4 space-y-1 border-l border-border pl-3">
                   {menu.children?.map((child) => {
                     const ChildIcon = child.icon;
-                    const childActive = isActiveSubmenuPath(
+                    const childActive = isDashboardSubMenuActive(
                       pathname,
                       child.href,
                     );
@@ -312,7 +420,12 @@ export function DashboardSidebar() {
       <div className="shrink-0 border-t p-3">
         <Link
           href="/dashboard/profile"
-          className="mb-2 flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground"
+          className={cn(
+            "mb-2 flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium transition",
+            pathname === "/dashboard/profile"
+              ? "bg-primary text-primary-foreground shadow-sm"
+              : "text-muted-foreground hover:bg-muted hover:text-foreground",
+          )}
         >
           <UserCircle className="size-4" />
           Profil Saya

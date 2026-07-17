@@ -1,16 +1,10 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, Eye } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-
-export type MemberActivationStatus =
-  | "NO_ACCOUNT"
-  | "PENDING_ACTIVATION"
-  | "ACTIVE"
-  | "BANNED";
 
 export type MemberTableRow = {
   id: string;
@@ -19,76 +13,27 @@ export type MemberTableRow = {
   nim: string;
   instagram: string | null;
   birdepName: string;
+  birdepCode: string;
   cabinetName: string;
   position: string;
+  positionLabel: string;
   internalTitle: string | null;
-  email: string | null;
-  role: string | null;
   isActive: boolean;
-  activationStatus: MemberActivationStatus;
+  membershipCount: number;
 };
 
-function getPositionLabel(position: string) {
-  const labels: Record<string, string> = {
-    KETUA_ORGANISASI: "Ketua Organisasi",
-    WAKIL_KETUA_ORGANISASI: "Wakil Ketua Organisasi",
-    SEKRETARIS_INTERNAL: "Sekretaris Internal",
-    SEKRETARIS_EKSTERNAL: "Sekretaris Eksternal",
-    BENDAHARA_INTERNAL: "Bendahara Internal",
-    BENDAHARA_EKSTERNAL: "Bendahara Eksternal",
-    KETUA_BIRDEP: "Ketua Birdep",
-    SEKRETARIS_BIRDEP: "Sekretaris Birdep",
-    BENDAHARA_BIRDEP: "Bendahara Birdep",
-    ANGGOTA_BIRDEP: "Anggota Birdep",
-  };
-
-  return labels[position] ?? position;
-}
-
-function getRoleLabel(role: string | null) {
-  if (!role) return "-";
-
-  const labels: Record<string, string> = {
-    SUPER_ADMIN: "Super Admin",
-    TEVO_ADMIN: "Tevo Admin",
-    BPH: "BPH",
-    KETUA_BIRDEP: "Ketua Birdep",
-    SEKRETARIS_BIRDEP: "Sekretaris Birdep",
-    BENDAHARA_BIRDEP: "Bendahara Birdep",
-    ANGGOTA_BIRDEP: "Anggota Birdep",
-  };
-
-  return labels[role] ?? role.replaceAll("_", " ");
-}
-
-function getActivationBadge(status: MemberActivationStatus) {
-  if (status === "NO_ACCOUNT") {
+function getStatusBadge(isActive: boolean) {
+  if (isActive) {
     return (
-      <span className="inline-flex rounded-full bg-muted px-2.5 py-1 text-xs font-semibold text-muted-foreground">
-        Belum Punya Akun
-      </span>
-    );
-  }
-
-  if (status === "PENDING_ACTIVATION") {
-    return (
-      <span className="inline-flex rounded-full bg-yellow-100 px-2.5 py-1 text-xs font-semibold text-yellow-700 dark:bg-yellow-950/40 dark:text-yellow-300">
-        Belum Aktivasi
-      </span>
-    );
-  }
-
-  if (status === "BANNED") {
-    return (
-      <span className="inline-flex rounded-full bg-status-inactive-soft px-2.5 py-1 text-xs font-semibold text-status-inactive">
-        Dibekukan
+      <span className="inline-flex rounded-full bg-status-active-soft px-2.5 py-1 text-xs font-semibold text-status-active">
+        Aktif
       </span>
     );
   }
 
   return (
-    <span className="inline-flex rounded-full bg-status-active-soft px-2.5 py-1 text-xs font-semibold text-status-active">
-      Aktif
+    <span className="inline-flex rounded-full bg-status-inactive-soft px-2.5 py-1 text-xs font-semibold text-status-inactive">
+      Nonaktif
     </span>
   );
 }
@@ -115,7 +60,7 @@ export const memberColumns: ColumnDef<MemberTableRow>[] = [
       </Button>
     ),
     cell: ({ row }) => (
-      <div className="min-w-52">
+      <div className="min-w-56">
         <Link
           href={`/dashboard/members/${row.original.id}`}
           className="font-semibold text-foreground transition hover:text-primary"
@@ -123,45 +68,44 @@ export const memberColumns: ColumnDef<MemberTableRow>[] = [
           {row.original.fullName}
         </Link>
 
-        {row.original.instagram ? (
-          <div className="mt-1 text-xs text-muted-foreground">
-            @{row.original.instagram}
-          </div>
-        ) : null}
+        <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+          <span>{row.original.nim}</span>
+
+          {row.original.instagram ? (
+            <>
+              <span>•</span>
+              <span>@{row.original.instagram}</span>
+            </>
+          ) : null}
+        </div>
       </div>
-    ),
-  },
-  {
-    accessorKey: "nim",
-    header: "NIM",
-    cell: ({ row }) => (
-      <span className="whitespace-nowrap text-muted-foreground">
-        {row.original.nim}
-      </span>
     ),
   },
   {
     accessorKey: "birdepName",
     header: "Birdep",
     cell: ({ row }) => (
-      <div className="min-w-40">
-        <div className="font-medium">{row.original.birdepName}</div>
-        <div className="mt-1 text-xs text-muted-foreground">
-          {row.original.cabinetName}
+      <div className="min-w-48">
+        <div className="font-semibold">{row.original.birdepName}</div>
+
+        <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+          <span>{row.original.birdepCode}</span>
+          <span>•</span>
+          <span>{row.original.cabinetName}</span>
         </div>
       </div>
     ),
   },
   {
     accessorKey: "position",
-    header: "Jabatan",
+    header: "Jabatan Organisasi",
     cell: ({ row }) =>
       row.original.position === "-" ? (
-        <span className="text-muted-foreground">-</span>
+        <span className="text-muted-foreground">Belum ada jabatan</span>
       ) : (
-        <div className="min-w-44">
+        <div className="min-w-52">
           <span className="inline-flex rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary">
-            {getPositionLabel(row.original.position)}
+            {row.original.positionLabel}
           </span>
 
           {row.original.internalTitle ? (
@@ -172,38 +116,32 @@ export const memberColumns: ColumnDef<MemberTableRow>[] = [
         </div>
       ),
   },
-  {
-    accessorKey: "email",
-    header: "Akun",
-    cell: ({ row }) =>
-      row.original.email ? (
-        <div className="min-w-56">
-          <div className="wrap-break-word font-medium">{row.original.email}</div>
-          <div className="mt-1 text-xs text-muted-foreground">
-            Role: {getRoleLabel(row.original.role)}
-          </div>
-        </div>
-      ) : (
-        <span className="text-muted-foreground">Belum punya akun</span>
-      ),
-  },
-  {
-    accessorKey: "activationStatus",
-    header: "Aktivasi",
-    cell: ({ row }) => getActivationBadge(row.original.activationStatus),
-  },
+  // {
+  //   accessorKey: "membershipCount",
+  //   header: "Riwayat",
+  //   cell: ({ row }) => (
+  //     <div className="min-w-28 text-sm text-muted-foreground">
+  //       {row.original.membershipCount > 0
+  //         ? `${row.original.membershipCount} membership`
+  //         : "Belum ada"}
+  //     </div>
+  //   ),
+  // },
   {
     accessorKey: "isActive",
     header: "Status Anggota",
-    cell: ({ row }) =>
-      row.original.isActive ? (
-        <span className="inline-flex rounded-full bg-status-active-soft px-2.5 py-1 text-xs font-semibold text-status-active">
-          Aktif
-        </span>
-      ) : (
-        <span className="inline-flex rounded-full bg-status-inactive-soft px-2.5 py-1 text-xs font-semibold text-status-inactive">
-          Nonaktif
-        </span>
-      ),
+    cell: ({ row }) => getStatusBadge(row.original.isActive),
+  },
+  {
+    id: "actions",
+    header: "Aksi",
+    cell: ({ row }) => (
+      <Link href={`/dashboard/members/${row.original.id}`}>
+        <Button variant="outline" size="sm">
+          <Eye className="size-4" />
+          Detail
+        </Button>
+      </Link>
+    ),
   },
 ];
